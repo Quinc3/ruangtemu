@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | The Invitation</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="min-h-screen bg-surface font-body-md text-on-surface antialiased">
+    <!-- Login -->
+    <div
+      id="login-screen"
+      class="flex min-h-screen items-center justify-center px-margin-mobile"
+    >
+      <div
+        class="w-full max-w-md rounded-2xl border border-white/20 bg-white/80 p-10 shadow-[0_40px_40px_-15px_rgba(0,0,0,0.04)] backdrop-blur-xl"
+      >
+        <div class="mb-8 text-center">
+          <span class="material-symbols-outlined mb-3 text-4xl text-tertiary">lock</span>
+          <h1 class="font-display-lg text-headline-md text-secondary">Admin Panel</h1>
+          <p class="mt-2 text-sm text-on-surface-variant">
+            Masukkan password untuk melihat data tamu
+          </p>
+        </div>
+        <form id="login-form" class="space-y-6">
+          <div>
+            <label
+              class="mb-2 block font-label-caps text-xs text-on-surface-variant"
+              for="admin-password"
+              >Password</label
+            >
+            <input
+              class="w-full rounded-lg border border-outline-variant bg-white/50 px-4 py-3 outline-none transition-all focus:border-tertiary focus:ring-0"
+              id="admin-password"
+              type="password"
+              placeholder="••••••••"
+              required
+              autocomplete="current-password"
+            />
+          </div>
+          <button
+            class="w-full rounded-full bg-secondary py-3 font-button text-button text-white transition-all hover:bg-tertiary"
+            type="submit"
+          >
+            Masuk
+          </button>
+        </form>
+        <a
+          href="/"
+          class="mt-6 block text-center text-sm text-on-surface-variant transition-colors hover:text-tertiary"
+        >
+          ← Kembali ke undangan
+        </a>
+      </div>
+    </div>
+
+    <!-- Admin App -->
+    <div id="admin-app" class="hidden min-h-screen lg:flex">
+      <!-- Sidebar -->
+      <aside
+        class="fixed inset-y-0 left-0 z-40 hidden w-64 flex-col border-r border-outline-variant/30 bg-white/80 backdrop-blur-md lg:flex"
+      >
+        <div class="border-b border-outline-variant/30 p-6">
+          <h1 class="font-display-lg text-headline-sm text-secondary">Admin</h1>
+          <p class="mt-1 text-xs text-on-surface-variant">The Invitation</p>
+        </div>
+        <nav class="flex-1 space-y-1 p-4">
+          <button
+            type="button"
+            class="admin-nav-item flex w-full items-center gap-3 rounded-xl bg-secondary px-4 py-3 text-left text-sm font-medium text-white transition-all"
+            data-panel="panel-guests"
+          >
+            <span class="material-symbols-outlined text-lg">group</span>
+            Daftar Tamu
+          </button>
+          <button
+            type="button"
+            class="admin-nav-item flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium text-on-surface-variant transition-all hover:bg-surface-container"
+            data-panel="panel-attendance"
+          >
+            <span class="material-symbols-outlined text-lg">event_available</span>
+            Daftar Kehadiran
+          </button>
+          <button
+            type="button"
+            class="admin-nav-item flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium text-on-surface-variant transition-all hover:bg-surface-container"
+            data-panel="panel-wishes"
+          >
+            <span class="material-symbols-outlined text-lg">mail</span>
+            Kesan &amp; Pesan
+          </button>
+        </nav>
+        <div class="space-y-2 border-t border-outline-variant/30 p-4">
+          <a
+            href="/"
+            class="flex w-full items-center gap-3 rounded-xl px-4 py-2 text-sm text-on-surface-variant transition-colors hover:text-tertiary"
+          >
+            <span class="material-symbols-outlined text-lg">arrow_back</span>
+            Undangan
+          </a>
+          <button
+            id="logout-btn"
+            type="button"
+            class="flex w-full items-center gap-3 rounded-xl px-4 py-2 text-sm text-error transition-colors hover:bg-error-container/30"
+          >
+            <span class="material-symbols-outlined text-lg">logout</span>
+            Keluar
+          </button>
+        </div>
+      </aside>
+
+      <!-- Main -->
+      <div class="min-w-0 flex-1 lg:ml-64">
+        <!-- Top bar -->
+        <header
+          class="sticky top-0 z-30 border-b border-outline-variant/30 bg-white/80 px-margin-mobile py-4 backdrop-blur-md md:px-8"
+        >
+          <div class="flex items-center justify-between gap-4">
+            <div>
+              <h2 class="font-display-lg text-headline-sm">Dashboard Tamu</h2>
+              <p class="text-xs text-on-surface-variant">Kelola RSVP dan ucapan tamu</p>
+            </div>
+            <button
+              id="refresh-btn"
+              type="button"
+              class="flex items-center gap-2 rounded-full bg-secondary px-4 py-2 font-button text-xs text-button text-white transition-all hover:bg-tertiary"
+            >
+              <span class="material-symbols-outlined text-sm">refresh</span>
+              Refresh
+            </button>
+          </div>
+
+          <!-- Mobile nav -->
+          <nav class="mt-4 flex gap-2 overflow-x-auto lg:hidden [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <button
+              type="button"
+              class="admin-nav-item flex shrink-0 items-center gap-2 rounded-full bg-secondary px-4 py-2 text-xs font-medium text-white transition-all"
+              data-panel="panel-guests"
+            >
+              <span class="material-symbols-outlined text-sm">group</span>
+              Tamu
+            </button>
+            <button
+              type="button"
+              class="admin-nav-item flex shrink-0 items-center gap-2 rounded-full bg-surface-container px-4 py-2 text-xs font-medium text-on-surface-variant transition-all"
+              data-panel="panel-attendance"
+            >
+              <span class="material-symbols-outlined text-sm">event_available</span>
+              Kehadiran
+            </button>
+            <button
+              type="button"
+              class="admin-nav-item flex shrink-0 items-center gap-2 rounded-full bg-surface-container px-4 py-2 text-xs font-medium text-on-surface-variant transition-all"
+              data-panel="panel-wishes"
+            >
+              <span class="material-symbols-outlined text-sm">mail</span>
+              Pesan
+            </button>
+            <button
+              id="logout-btn-mobile"
+              type="button"
+              class="ml-auto flex shrink-0 items-center gap-2 rounded-full border border-error/20 px-4 py-2 text-xs font-medium text-error transition-all"
+            >
+              Keluar
+            </button>
+          </nav>
+        </header>
+
+        <main class="space-y-6 p-margin-mobile md:p-8">
+          <!-- Stats -->
+          <div class="grid grid-cols-2 gap-4 md:grid-cols-5">
+            <div
+              class="rounded-xl border border-white/20 bg-white/80 p-4 shadow-[0_40px_40px_-15px_rgba(0,0,0,0.04)] backdrop-blur-xl"
+            >
+              <p class="font-label-caps text-[10px] text-on-surface-variant">TOTAL RSVP</p>
+              <p class="mt-1 font-display-lg text-2xl text-secondary" id="stat-total-rsvp">0</p>
+            </div>
+            <div
+              class="rounded-xl border border-white/20 bg-white/80 p-4 shadow-[0_40px_40px_-15px_rgba(0,0,0,0.04)] backdrop-blur-xl"
+            >
+              <p class="font-label-caps text-[10px] text-on-surface-variant">KONFIRMASI HADIR</p>
+              <p class="mt-1 font-display-lg text-2xl text-tertiary" id="stat-attending">0</p>
+            </div>
+            <div
+              class="rounded-xl border border-white/20 bg-white/80 p-4 shadow-[0_40px_40px_-15px_rgba(0,0,0,0.04)] backdrop-blur-xl"
+            >
+              <p class="font-label-caps text-[10px] text-on-surface-variant">TOTAL TAMU</p>
+              <p class="mt-1 font-display-lg text-2xl text-secondary" id="stat-guest-count">0</p>
+            </div>
+            <div
+              class="rounded-xl border border-white/20 bg-white/80 p-4 shadow-[0_40px_40px_-15px_rgba(0,0,0,0.04)] backdrop-blur-xl"
+            >
+              <p class="font-label-caps text-[10px] text-on-surface-variant">TIDAK HADIR</p>
+              <p class="mt-1 font-display-lg text-2xl text-error" id="stat-declined">0</p>
+            </div>
+            <div
+              class="col-span-2 rounded-xl border border-white/20 bg-white/80 p-4 shadow-[0_40px_40px_-15px_rgba(0,0,0,0.04)] backdrop-blur-xl md:col-span-1"
+            >
+              <p class="font-label-caps text-[10px] text-on-surface-variant">KESAN &amp; PESAN</p>
+              <p class="mt-1 font-display-lg text-2xl text-secondary" id="stat-wishes">0</p>
+            </div>
+          </div>
+
+          <!-- Panel: Daftar Tamu -->
+          <section class="block" data-panel-id id="panel-guests">
+            <div
+              class="overflow-hidden rounded-2xl border border-white/20 bg-white/80 shadow-[0_40px_40px_-15px_rgba(0,0,0,0.04)] backdrop-blur-xl"
+            >
+              <div
+                class="flex flex-col justify-between gap-4 border-b border-outline-variant/30 p-6 sm:flex-row sm:items-center"
+              >
+                <div>
+                  <h3 class="font-headline-sm text-headline-sm">Daftar Tamu</h3>
+                  <p class="text-sm text-on-surface-variant">Semua respons RSVP dari tamu</p>
+                </div>
+                <div class="relative">
+                  <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm text-on-surface-variant"
+                    >search</span
+                  >
+                  <input
+                    id="search-guests"
+                    type="search"
+                    placeholder="Cari nama..."
+                    class="w-full rounded-full border border-outline-variant bg-white/50 py-2 pl-9 pr-4 text-sm outline-none focus:border-tertiary sm:w-56"
+                  />
+                </div>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm font-body-md">
+                  <thead>
+                    <tr>
+                      <th
+                        class="border-b border-outline-variant px-4 py-3 text-left font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant whitespace-nowrap"
+                      >
+                        Nama
+                      </th>
+                      <th
+                        class="border-b border-outline-variant px-4 py-3 text-left font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant whitespace-nowrap"
+                      >
+                        Status
+                      </th>
+                      <th
+                        class="border-b border-outline-variant px-4 py-3 text-left font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant whitespace-nowrap"
+                      >
+                        Jumlah
+                      </th>
+                      <th
+                        class="border-b border-outline-variant px-4 py-3 text-left font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant whitespace-nowrap"
+                      >
+                        Menu
+                      </th>
+                      <th
+                        class="border-b border-outline-variant px-4 py-3 text-left font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant whitespace-nowrap"
+                      >
+                        Tanggal RSVP
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="guests-tbody">
+                    <tr>
+                      <td colspan="5" class="py-8 text-center text-sm italic text-on-surface-variant">
+                        Memuat data...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- Panel: Daftar Kehadiran -->
+          <section class="hidden" data-panel-id id="panel-attendance">
+            <div
+              class="overflow-hidden rounded-2xl border border-white/20 bg-white/80 shadow-[0_40px_40px_-15px_rgba(0,0,0,0.04)] backdrop-blur-xl"
+            >
+              <div
+                class="flex flex-col justify-between gap-4 border-b border-outline-variant/30 p-6 sm:flex-row sm:items-center"
+              >
+                <div>
+                  <h3 class="font-headline-sm text-headline-sm">Daftar Kehadiran</h3>
+                  <p class="text-sm text-on-surface-variant">Tamu yang konfirmasi hadir</p>
+                </div>
+                <div class="relative">
+                  <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm text-on-surface-variant"
+                    >search</span
+                  >
+                  <input
+                    id="search-attendance"
+                    type="search"
+                    placeholder="Cari nama..."
+                    class="w-full rounded-full border border-outline-variant bg-white/50 py-2 pl-9 pr-4 text-sm outline-none focus:border-tertiary sm:w-56"
+                  />
+                </div>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm font-body-md">
+                  <thead>
+                    <tr>
+                      <th
+                        class="border-b border-outline-variant px-4 py-3 text-left font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant whitespace-nowrap"
+                      >
+                        No
+                      </th>
+                      <th
+                        class="border-b border-outline-variant px-4 py-3 text-left font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant whitespace-nowrap"
+                      >
+                        Nama
+                      </th>
+                      <th
+                        class="border-b border-outline-variant px-4 py-3 text-left font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant whitespace-nowrap"
+                      >
+                        Jumlah Tamu
+                      </th>
+                      <th
+                        class="border-b border-outline-variant px-4 py-3 text-left font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant whitespace-nowrap"
+                      >
+                        Menu
+                      </th>
+                      <th
+                        class="border-b border-outline-variant px-4 py-3 text-left font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant whitespace-nowrap"
+                      >
+                        Tanggal Konfirmasi
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="attendance-tbody">
+                    <tr>
+                      <td colspan="5" class="py-8 text-center text-sm italic text-on-surface-variant">
+                        Memuat data...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- Panel: Kesan & Pesan -->
+          <section class="hidden" data-panel-id id="panel-wishes">
+            <div
+              class="overflow-hidden rounded-2xl border border-white/20 bg-white/80 shadow-[0_40px_40px_-15px_rgba(0,0,0,0.04)] backdrop-blur-xl"
+            >
+              <div
+                class="flex flex-col justify-between gap-4 border-b border-outline-variant/30 p-6 sm:flex-row sm:items-center"
+              >
+                <div>
+                  <h3 class="font-headline-sm text-headline-sm">Kesan &amp; Pesan</h3>
+                  <p class="text-sm text-on-surface-variant">Ucapan dari guestbook tamu</p>
+                </div>
+                <div class="relative">
+                  <span
+                    class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-sm text-on-surface-variant"
+                    >search</span
+                  >
+                  <input
+                    id="search-wishes"
+                    type="search"
+                    placeholder="Cari nama atau pesan..."
+                    class="w-full rounded-full border border-outline-variant bg-white/50 py-2 pl-9 pr-4 text-sm outline-none focus:border-tertiary sm:w-56"
+                  />
+                </div>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm font-body-md">
+                  <thead>
+                    <tr>
+                      <th
+                        class="border-b border-outline-variant px-4 py-3 text-left font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant whitespace-nowrap"
+                      >
+                        No
+                      </th>
+                      <th
+                        class="border-b border-outline-variant px-4 py-3 text-left font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant whitespace-nowrap"
+                      >
+                        Nama
+                      </th>
+                      <th
+                        class="border-b border-outline-variant px-4 py-3 text-left font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant whitespace-nowrap"
+                      >
+                        Pesan
+                      </th>
+                      <th
+                        class="border-b border-outline-variant px-4 py-3 text-left font-label-caps text-[11px] uppercase tracking-wider text-on-surface-variant whitespace-nowrap"
+                      >
+                        Tanggal
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody id="wishes-tbody">
+                    <tr>
+                      <td colspan="4" class="py-8 text-center text-sm italic text-on-surface-variant">
+                        Memuat data...
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div
+      id="toast"
+      role="status"
+      aria-live="polite"
+      class="pointer-events-none fixed bottom-20 left-1/2 z-[100] -translate-x-1/2 opacity-0 transition-all duration-300 md:bottom-8"
+    ></div>
+
+    <script type="module" src="/src/admin.js"></script>
+  </body>
+</html>
