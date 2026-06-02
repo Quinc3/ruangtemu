@@ -35,9 +35,9 @@ Itu untuk AWS CLI / backend / script server, **bukan** untuk panel admin Vite in
 
 `/admin.html` → **Pengaturan Undangan** → pilih file → **Simpan**.
 
-File tersimpan di bucket `ruangtemu`, folder `settings/`:
+File tersimpan di bucket `ruangtemu`, folder `settings/`, dengan nama unik dari file asli, misalnya:
 
-- `settings/hero.jpg`
-- `settings/description.jpg`
+- `settings/hero-1712345678901-foto-aula.jpg`
+- `settings/description-1712345678902-kenangan-kelas.png`
 
-Path itu disimpan di kolom `hero_image_path` / `description_image_path`.
+Path itu disimpan di kolom `hero_image_path` / `description_image_path`. Upload baru menghapus file lama di bucket.

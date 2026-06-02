@@ -10,7 +10,8 @@ import { iconSelectField, bindIconSelectPreview } from './lib/material-icons.js'
 import {
   INVITATION_IMAGES_BUCKET,
   resolveImageUrl,
-  uploadInvitationImage,
+  uploadSettingsImage,
+  removeInvitationImage,
   checkStorageBucket,
 } from './lib/storage.js'
 
@@ -22,7 +23,7 @@ const TD = 'py-3.5 px-4 align-top border-b border-surface-container'
 const TR = 'hover:bg-surface-container-low'
 const BADGE_OK = 'inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold bg-green-100 text-green-800'
 const BADGE_NO = 'inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold bg-error-container text-on-error-container'
-const NAV_ACTIVE = 'admin-nav-item flex w-full items-center gap-3 rounded-xl bg-secondary px-4 py-3 text-left text-sm font-medium text-white'
+const NAV_ACTIVE = 'admin-nav-item flex w-full items-center gap-3 rounded-xl bg-primary-2 px-4 py-3 text-left text-sm font-medium text-white'
 const NAV_INACTIVE = 'admin-nav-item flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm text-on-surface-variant hover:bg-surface-container'
 
 let invitedGuests = []
@@ -58,7 +59,7 @@ function formatDate(iso) {
 function showToast(msg, type = 'success') {
   const t = document.getElementById('toast')
   if (!t) return
-  const bg = type === 'success' ? 'bg-secondary text-white' : 'bg-error text-white'
+  const bg = type === 'success' ? 'bg-primary-2 text-white' : 'bg-error text-white'
   t.textContent = msg
   t.className = `fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-[300] px-6 py-3 rounded-full text-sm shadow-lg opacity-100 ${bg}`
   setTimeout(() => t.classList.add('opacity-0'), 3500)
@@ -92,7 +93,7 @@ function buildMobileNav() {
   const nav = document.getElementById('mobile-nav')
   if (!nav) return
   nav.innerHTML = PANELS.map((p, i) => `
-    <button type="button" class="admin-nav-item shrink-0 flex items-center gap-1 rounded-full px-3 py-2 text-xs ${i === 0 ? 'bg-secondary text-white' : 'bg-surface-container text-on-surface-variant'}" data-panel="${p.id}">
+    <button type="button" class="admin-nav-item shrink-0 flex items-center gap-1 rounded-full px-3 py-2 text-xs ${i === 0 ? 'bg-primary-2 text-white' : 'bg-surface-container text-on-surface-variant'}" data-panel="${p.id}">
       <span class="material-symbols-outlined text-sm">${p.icon}</span>${p.label}
     </button>
   `).join('') + `<button id="logout-btn-mobile" type="button" class="ml-auto shrink-0 rounded-full border border-error/20 px-3 py-2 text-xs text-error">Keluar</button>`
@@ -106,7 +107,7 @@ function updateNav(panelId) {
     const mobile = btn.closest('#mobile-nav')
     if (mobile) {
       btn.className = active
-        ? 'admin-nav-item shrink-0 flex items-center gap-1 rounded-full px-3 py-2 text-xs bg-secondary text-white'
+        ? 'admin-nav-item shrink-0 flex items-center gap-1 rounded-full px-3 py-2 text-xs bg-primary-2 text-white'
         : 'admin-nav-item shrink-0 flex items-center gap-1 rounded-full px-3 py-2 text-xs bg-surface-container text-on-surface-variant'
     } else {
       btn.className = active ? NAV_ACTIVE : NAV_INACTIVE
@@ -189,10 +190,10 @@ function renderInvitedGuests() {
       <td class="${TD} text-sm text-on-surface-variant">${escapeHtml(g.slug)}</td>
       <td class="${TD}">${escapeHtml(g.category || '-')}</td>
       <td class="${TD}">
-        <button type="button" data-copy="${escapeHtml(getGuestLink(g.slug))}" class="copy-link text-xs text-tertiary hover:underline">Salin Link</button>
+        <button type="button" data-copy="${escapeHtml(getGuestLink(g.slug))}" class="copy-link text-xs text-primary-3 hover:underline">Salin Link</button>
       </td>
       <td class="${TD}">
-        <button type="button" data-edit-guest="${g.id}" class="text-xs text-secondary mr-2">Edit</button>
+        <button type="button" data-edit-guest="${g.id}" class="text-xs text-primary-2 mr-2">Edit</button>
         <button type="button" data-del-guest="${g.id}" class="text-xs text-error">Hapus</button>
       </td>
     </tr>
@@ -217,7 +218,7 @@ function renderAttendance() {
       <td class="${TD}"><span class="${r.will_attend ? BADGE_OK : BADGE_NO}">${r.will_attend ? 'Hadir' : 'Tidak'}</span></td>
       <td class="${TD}">${r.guest_count}</td>
       <td class="${TD}">${escapeHtml(r.meal_preference)}</td>
-      <td class="${TD} text-sm">${r.guest_id ? '<span class="text-tertiary">Personal</span>' : 'Publik'}</td>
+      <td class="${TD} text-sm">${r.guest_id ? '<span class="text-primary-3">Personal</span>' : 'Publik'}</td>
       <td class="${TD} text-sm text-on-surface-variant whitespace-nowrap">${formatDate(r.created_at)}</td>
     </tr>
   `).join('')
@@ -251,13 +252,13 @@ function renderRundown() {
   tbody.innerHTML = rundown.map((r) => `
     <tr class="${TR}">
       <td class="${TD}">${r.sort_order}</td>
-      <td class="${TD}"><span class="material-symbols-outlined text-tertiary">${escapeHtml(r.icon)}</span></td>
+      <td class="${TD}"><span class="material-symbols-outlined text-primary-3">${escapeHtml(r.icon)}</span></td>
       <td class="${TD} font-medium">${escapeHtml(r.title)}</td>
       <td class="${TD}">${escapeHtml(r.time_range || '-')}</td>
       <td class="${TD} text-sm">${escapeHtml(r.note || '-')}</td>
       <td class="${TD}">${r.is_active ? 'Ya' : 'Tidak'}</td>
       <td class="${TD}">
-        <button type="button" data-edit-rundown="${r.id}" class="text-xs text-secondary mr-2">Edit</button>
+        <button type="button" data-edit-rundown="${r.id}" class="text-xs text-primary-2 mr-2">Edit</button>
         <button type="button" data-del-rundown="${r.id}" class="text-xs text-error">Hapus</button>
       </td>
     </tr>
@@ -276,12 +277,12 @@ function renderGuidelinesAdmin() {
   tbody.innerHTML = guidelines.map((g) => `
     <tr class="${TR}">
       <td class="${TD}">${g.sort_order}</td>
-      <td class="${TD}"><span class="material-symbols-outlined text-tertiary">${escapeHtml(g.icon)}</span></td>
+      <td class="${TD}"><span class="material-symbols-outlined text-primary-3">${escapeHtml(g.icon)}</span></td>
       <td class="${TD} font-medium">${escapeHtml(g.title)}</td>
       <td class="${TD} text-sm max-w-xs">${escapeHtml(g.description)}</td>
       <td class="${TD}">${g.is_active ? 'Ya' : 'Tidak'}</td>
       <td class="${TD}">
-        <button type="button" data-edit-gl="${g.id}" class="text-xs text-secondary mr-2">Edit</button>
+        <button type="button" data-edit-gl="${g.id}" class="text-xs text-primary-2 mr-2">Edit</button>
         <button type="button" data-del-gl="${g.id}" class="text-xs text-error">Hapus</button>
       </td>
     </tr>
@@ -374,8 +375,8 @@ async function loadSettings() {
 
 function guestFormFields(g = {}) {
   return `
-    <div><label class="text-xs text-on-surface-variant">Nama Lengkap</label><input name="full_name" required value="${escapeHtml(g.full_name || '')}" class="mt-1 w-full border-b py-2 outline-none focus:border-tertiary" /></div>
-    <div><label class="text-xs text-on-surface-variant">Slug URL</label><input name="slug" value="${escapeHtml(g.slug || '')}" placeholder="Terisi otomatis dari nama" class="mt-1 w-full border-b py-2 outline-none focus:border-tertiary" /><p class="mt-1 text-[10px] text-on-surface-variant">Otomatis dari nama. Jika slug sama, ditambah angka (mis. nama-2).</p></div>
+    <div><label class="text-xs text-on-surface-variant">Nama Lengkap</label><input name="full_name" required value="${escapeHtml(g.full_name || '')}" class="mt-1 w-full border-b py-2 outline-none focus:border-primary-3" /></div>
+    <div><label class="text-xs text-on-surface-variant">Slug URL</label><input name="slug" value="${escapeHtml(g.slug || '')}" placeholder="Terisi otomatis dari nama" class="mt-1 w-full border-b py-2 outline-none focus:border-primary-3" /><p class="mt-1 text-[10px] text-on-surface-variant">Otomatis dari nama. Jika slug sama, ditambah angka (mis. nama-2).</p></div>
     <div><label class="text-xs text-on-surface-variant">Kategori</label>
       <select name="category" class="mt-1 w-full border-b py-2">
         <option value="">-</option>
@@ -552,11 +553,24 @@ async function saveSettings(e) {
   payload.hero_image_path = fd.get('hero_image_path')?.toString() || ''
   payload.description_image_path = fd.get('description_image_path')?.toString() || ''
 
+  const prevHeroPath = payload.hero_image_path
+  const prevDescPath = payload.description_image_path
+
   try {
     const heroFile = document.getElementById('hero_image_file')?.files?.[0]
     const descFile = document.getElementById('description_image_file')?.files?.[0]
-    if (heroFile) payload.hero_image_path = await uploadInvitationImage(heroFile, 'settings/hero')
-    if (descFile) payload.description_image_path = await uploadInvitationImage(descFile, 'settings/description')
+    if (heroFile) {
+      payload.hero_image_path = await uploadSettingsImage(heroFile, 'hero')
+      if (prevHeroPath && prevHeroPath !== payload.hero_image_path) {
+        await removeInvitationImage(prevHeroPath)
+      }
+    }
+    if (descFile) {
+      payload.description_image_path = await uploadSettingsImage(descFile, 'description')
+      if (prevDescPath && prevDescPath !== payload.description_image_path) {
+        await removeInvitationImage(prevDescPath)
+      }
+    }
   } catch (err) {
     showToast(err.message || 'Gagal mengunggah gambar', 'error')
     return
@@ -592,6 +606,7 @@ async function loadData() {
     db.from('event_rundown').select('*').order('sort_order'),
     db.from('guidelines').select('*').order('sort_order'),
   ])
+
 
   invitedGuests = gRes.data ?? []
   rsvps = rRes.data ?? []

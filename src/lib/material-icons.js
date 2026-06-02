@@ -152,11 +152,11 @@ function iconOptionButton(icon, selected) {
       <button
         type="button"
         data-icon-option="${icon}"
-        class="icon-select-option group flex w-full cursor-pointer items-center gap-3 px-3 py-2.5 text-left text-sm text-on-surface hover:bg-surface-container-low ${isSelected ? 'bg-secondary/10' : ''}"
+        class="icon-select-option group flex w-full cursor-pointer items-center gap-3 px-3 py-2.5 text-left text-sm text-on-surface hover:bg-surface-container-low ${isSelected ? 'bg-primary-2/10' : ''}"
       >
-        <span class="material-symbols-outlined shrink-0 text-xl text-tertiary">${icon}</span>
+        <span class="material-symbols-outlined shrink-0 text-xl text-primary-3">${icon}</span>
         <span class="min-w-0 flex-1 truncate font-medium">${icon}</span>
-        <span class="material-symbols-outlined shrink-0 text-lg text-secondary ${isSelected ? 'opacity-100' : 'opacity-0'}">check</span>
+        <span class="material-symbols-outlined shrink-0 text-lg text-primary-2 ${isSelected ? 'opacity-100' : 'opacity-0'}">check</span>
       </button>
     </li>`
 }
@@ -176,10 +176,10 @@ export function iconSelectField(name, selected, fallback = 'event', label = 'Ico
         data-icon-trigger
         aria-haspopup="listbox"
         aria-expanded="false"
-        class="icon-select-trigger relative mt-1 grid w-full cursor-pointer grid-cols-1 rounded-lg border border-outline-variant bg-white py-2.5 pl-3 pr-10 text-left shadow-sm outline-none hover:border-tertiary/50 focus:border-tertiary focus:ring-2 focus:ring-tertiary/20"
+        class="icon-select-trigger relative mt-1 grid w-full cursor-pointer grid-cols-1 rounded-lg border border-outline-variant bg-white py-2.5 pl-3 pr-10 text-left shadow-sm outline-none hover:border-primary-3/50 focus:border-primary-3 focus:ring-2 focus:ring-primary-3/20"
       >
         <span class="flex min-w-0 items-center gap-2.5">
-          <span class="material-symbols-outlined shrink-0 text-2xl text-tertiary" data-icon-trigger-icon>${value}</span>
+          <span class="material-symbols-outlined shrink-0 text-2xl text-primary-3" data-icon-trigger-icon>${value}</span>
           <span class="block truncate text-sm font-medium text-on-surface" data-icon-trigger-label>${value}</span>
         </span>
         <span class="material-symbols-outlined pointer-events-none absolute inset-y-0 right-2 my-auto text-xl text-on-surface-variant icon-select-chevron transition-transform">expand_more</span>
@@ -204,7 +204,7 @@ function setIconSelectValue(wrap, icon) {
 
   wrap.querySelectorAll('[data-icon-option]').forEach((btn) => {
     const active = btn.dataset.iconOption === icon
-    btn.classList.toggle('bg-secondary/10', active)
+    btn.classList.toggle('bg-primary-2/10', active)
     const check = btn.querySelector('.material-symbols-outlined:last-child')
     if (check) check.classList.toggle('opacity-0', !active)
     check?.classList.toggle('opacity-100', active)

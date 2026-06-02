@@ -40,18 +40,43 @@ function imageExtension(file) {
   return byType[file.type] || '.jpg'
 }
 
-export async function uploadInvitationImage(file, basePath) {
+/** Nama aman dari nama file asli (tanpa ekstensi) */
+export function sanitizeFileBaseName(filename) {
+  const base = filename.replace(/\.[^.]+$/, '').trim()
+  const safe = base
+    .toLowerCase()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+  return (safe || 'gambar').slice(0, 48)
+}
+
+/**
+ * Path unik: settings/{slot}-{timestamp}-{nama-asli}.ext
+ * slot: 'hero' | 'description' (hanya label folder logis, bukan nama file tetap)
+ */
+export function buildSettingsImagePath(file, slot) {
+  const ext = imageExtension(file)
+  const base = sanitizeFileBaseName(file.name)
+  return `${STORAGE_SETTINGS_PREFIX}/${slot}-${Date.now()}-${base}${ext}`
+}
+
+export async function uploadSettingsImage(file, slot) {
   if (!supabase) throw new Error('Supabase belum dikonfigurasi')
   validateImageFile(file)
-  const prefix = basePath.startsWith(`${STORAGE_SETTINGS_PREFIX}/`)
-    ? ''
-    : `${STORAGE_SETTINGS_PREFIX}/`
-  const objectPath = `${prefix}${basePath}${imageExtension(file)}`
+  const objectPath = buildSettingsImagePath(file, slot)
   const { error } = await supabase.storage
     .from(INVITATION_IMAGES_BUCKET)
-    .upload(objectPath, file, { upsert: true, contentType: file.type })
+    .upload(objectPath, file, { upsert: false, contentType: file.type })
   if (error) throw error
   return objectPath
+}
+
+/** Hapus file lama di bucket saat diganti upload baru */
+export async function removeInvitationImage(path) {
+  if (!path?.trim() || !supabase || /^https?:\/\//i.test(path)) return
+  await supabase.storage.from(INVITATION_IMAGES_BUCKET).remove([path.trim()])
 }
 
 /** Cek bucket siap dipakai (untuk panel admin) */
