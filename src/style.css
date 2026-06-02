@@ -178,7 +178,7 @@
   z-index: 60;
   background: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(4px);
-  display: flex;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 1.25rem;
@@ -188,8 +188,51 @@
 }
 
 .modal-overlay.open {
+  display: flex;
   opacity: 1;
   pointer-events: auto;
+}
+
+#page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  background: var(--color-surface);
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+#page-loader.loaded {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+#page-loader .loader-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--color-surface-container);
+  border-top-color: var(--color-tertiary);
+  border-radius: 50%;
+  animation: spin 0.9s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+body.is-loading {
+  overflow: hidden;
+}
+
+body.is-loading #app-content {
+  visibility: hidden;
 }
 
 .modal-content {

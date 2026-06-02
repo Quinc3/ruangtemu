@@ -1,0 +1,5 @@
+icon,title,description,sort_order,is_active
+checkroom,Pakaian,"Siswa: seragam sekolah lengkap. Tamu undangan: batik atau pakaian formal rapi.",1,true
+badge,Registrasi,"Mohon datang 30 menit sebelum acara dimulai dan menunjukkan undangan digital saat registrasi di meja penerima tamu.",2,true
+photo_camera,Dokumentasi,"Foto dan video diperbolehkan selama tidak mengganggu jalannya upacara wisuda.",3,true
+restaurant,Konsumsi,"Snack dan minuman disediakan panitia. Informasikan alergi makanan saat konfirmasi kehadiran.",4,true

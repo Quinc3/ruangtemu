@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Undangan Perpisahan | SMA Ruang Temu</title>
+    <title id="page-title">Undangan Perpisahan</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link
       href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap"
@@ -14,8 +14,13 @@
       rel="stylesheet"
     />
   </head>
-  <body class="bg-surface font-body-md text-on-surface antialiased overflow-x-hidden pb-20 md:pb-0">
-    <!-- TopNavBar -->
+  <body class="bg-surface font-body-md text-on-surface antialiased overflow-x-hidden pb-20 md:pb-0 is-loading">
+    <div id="page-loader" aria-live="polite" aria-busy="true">
+      <div class="loader-spinner" aria-hidden="true"></div>
+      <p class="font-label-caps text-label-caps text-on-surface-variant tracking-widest">Memuat undangan...</p>
+    </div>
+
+    <div id="app-content">
     <nav
       class="fixed top-0 w-full bg-white/80 dark:bg-surface-container/80 backdrop-blur-md z-50 border-b border-white/10 shadow-[0_40px_40px_-15px_rgba(0,0,0,0.04)]"
     >
@@ -23,31 +28,16 @@
         class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto"
       >
         <div
+          id="nav-org-name"
           class="font-display-lg-mobile text-display-lg-mobile text-secondary dark:text-secondary-fixed tracking-tight"
         >
-          SMA Ruang Temu
+          ...
         </div>
         <div class="hidden md:flex items-center gap-8">
-          <a
-            class="font-body-md text-body-md text-on-surface-variant hover:text-tertiary transition-colors duration-300"
-            href="#story"
-            >Kenangan</a
-          >
-          <a
-            class="font-body-md text-body-md text-on-surface-variant hover:text-tertiary transition-colors duration-300"
-            href="#details"
-            >Acara</a
-          >
-          <a
-            class="font-body-md text-body-md text-on-surface-variant hover:text-tertiary transition-colors duration-300"
-            href="#guidelines"
-            >Panduan</a
-          >
-          <a
-            class="bg-secondary text-white px-6 py-2 rounded-full font-button text-button hover:bg-tertiary transition-all duration-300"
-            href="#rsvp"
-            >Konfirmasi Kehadiran</a
-          >
+          <a class="font-body-md text-body-md text-on-surface-variant hover:text-tertiary transition-colors duration-300" href="#story">Kenangan</a>
+          <a class="font-body-md text-body-md text-on-surface-variant hover:text-tertiary transition-colors duration-300" href="#details">Acara</a>
+          <a id="nav-guidelines-link" class="font-body-md text-body-md text-on-surface-variant hover:text-tertiary transition-colors duration-300" href="#guidelines">Panduan</a>
+          <a class="bg-secondary text-white px-6 py-2 rounded-full font-button text-button hover:bg-tertiary transition-all duration-300" href="#rsvp">Konfirmasi Kehadiran</a>
         </div>
         <div class="md:hidden">
           <span class="material-symbols-outlined text-secondary">school</span>
@@ -55,222 +45,91 @@
       </div>
     </nav>
 
-    <!-- Hero -->
     <header class="relative h-screen flex items-center justify-center overflow-hidden">
-      <img
-        alt="Gedung sekolah saat senja"
-        class="absolute inset-0 w-full h-full object-cover scale-105"
-        src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=1920&q=80"
-      />
+      <img id="hero-image" alt="Hero background" class="absolute inset-0 w-full h-full object-cover scale-105" src="" />
       <div class="absolute inset-0 bg-secondary/50 backdrop-blur-[2px]"></div>
       <div class="relative z-10 text-center text-white px-margin-mobile max-w-4xl">
-        <p class="font-label-caps text-label-caps uppercase tracking-[0.3em] mb-4 opacity-90">
-          Dengan penuh sukacita, kami mengundang
-        </p>
-        <h1 class="font-display-lg text-display-lg md:text-7xl mb-4 leading-none">
-          Acara Perpisahan &amp; Wisuda
-        </h1>
-        <p class="font-headline-sm text-headline-sm mb-8 opacity-90">Angkatan XII — Tahun Ajaran 2025/2026</p>
+        <p id="hero-label" class="font-label-caps text-label-caps uppercase tracking-[0.3em] mb-4 opacity-90"></p>
+        <p id="guest-greeting" class="font-headline-sm text-headline-sm mb-4 opacity-95 hidden"></p>
+        <h1 id="hero-title" class="font-display-lg text-display-lg md:text-7xl mb-4 leading-none"></h1>
+        <p id="hero-subtitle" class="font-headline-sm text-headline-sm mb-8 opacity-90"></p>
         <div class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 mb-12">
           <div class="h-px w-12 bg-white/40 hidden md:block"></div>
-          <span class="font-headline-md text-headline-md font-light italic">Sabtu, 14 Juni 2026</span>
+          <span id="hero-date" class="font-headline-md text-headline-md font-light italic"></span>
           <div class="h-px w-12 bg-white/40 hidden md:block"></div>
         </div>
-        <a
-          class="inline-block border border-white px-10 py-4 font-button text-button uppercase tracking-widest hover:bg-white hover:text-secondary transition-all duration-500 rounded-full"
-          href="#rsvp"
-          >Konfirmasi Kehadiran</a
-        >
+        <a class="inline-block border border-white px-10 py-4 font-button text-button uppercase tracking-widest hover:bg-white hover:text-secondary transition-all duration-500 rounded-full" href="#rsvp">Konfirmasi Kehadiran</a>
       </div>
     </header>
 
-    <main
-      class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop space-y-stack-lg py-stack-lg"
-    >
-      <!-- Kenangan -->
+    <main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop space-y-stack-lg py-stack-lg">
       <section class="reveal grid md:grid-cols-2 gap-gutter items-center" id="story">
         <div class="space-y-6">
-          <span class="font-label-caps text-label-caps text-tertiary tracking-widest"
-            >KENANGAN KITA</span
-          >
-          <h2 class="font-display-lg text-display-lg">Tiga Tahun Berjalan Bersama</h2>
-          <p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg">
-            Dari hari pertama masuk kelas hingga momen terakhir berkumpul di aula, setiap langkah
-            di SMA Ruang Temu membentuk cerita yang tak terlupakan. Kami tumbuh, belajar, dan
-            saling mendukung — kini saatnya merayakan perjalanan ini sebelum melangkah ke bab
-            berikutnya.
-          </p>
-          <p class="font-body-md text-body-md text-on-surface-variant italic">
-            "Sekolah hanya berakhir, tetapi persahabatan dan kenangan akan selalu kita bawa."
-          </p>
+          <span id="description-label" class="font-label-caps text-label-caps text-tertiary tracking-widest"></span>
+          <h2 id="description-title" class="font-display-lg text-display-lg"></h2>
+          <p id="description-body" class="font-body-lg text-body-lg text-on-surface-variant max-w-lg"></p>
+          <p id="description-quote" class="font-body-md text-body-md text-on-surface-variant italic hidden"></p>
         </div>
         <div class="relative group">
-          <div
-            class="absolute -inset-4 border border-outline-variant/30 rounded-xl group-hover:inset-0 transition-all duration-700"
-          ></div>
-          <img
-            alt="Siswa berfoto bersama"
-            class="rounded-xl w-full aspect-[4/5] object-cover shadow-2xl relative z-10"
-            src="https://images.unsplash.com/photo-1529397939244-4020333c4e8a?auto=format&fit=crop&w=800&q=80"
-          />
+          <div class="absolute -inset-4 border border-outline-variant/30 rounded-xl group-hover:inset-0 transition-all duration-700"></div>
+          <img id="description-image" alt="Kenangan sekolah" class="rounded-xl w-full aspect-[4/5] object-cover shadow-2xl relative z-10" src="" />
         </div>
       </section>
 
-      <!-- Event Details -->
       <section class="reveal space-y-gutter" id="details">
         <div class="text-center mb-stack-md">
           <h2 class="font-display-lg text-display-lg">Detail Acara</h2>
           <div class="w-12 h-1 bg-tertiary mx-auto mt-4"></div>
         </div>
-        <div class="grid md:grid-cols-3 gap-gutter">
-          <div class="glass-card p-10 text-center space-y-4 rounded-xl">
-            <span class="material-symbols-outlined text-4xl text-tertiary">school</span>
-            <h3 class="font-headline-sm text-headline-sm">Upacara Wisuda</h3>
-            <p class="font-body-md text-body-md text-on-surface-variant">08.00 — 10.00 WIB</p>
-            <p class="font-label-caps text-label-caps opacity-60">AULA UTAMA</p>
-          </div>
-          <div class="glass-card p-10 text-center space-y-4 rounded-xl">
-            <span class="material-symbols-outlined text-4xl text-tertiary">celebration</span>
-            <h3 class="font-headline-sm text-headline-sm">Perpisahan &amp; Hiburan</h3>
-            <p class="font-body-md text-body-md text-on-surface-variant">10.30 — 14.00 WIB</p>
-            <p class="font-label-caps text-label-caps opacity-60">PELEPASAN ANGKATAN XII</p>
-          </div>
-          <div class="glass-card p-10 text-center space-y-4 rounded-xl">
-            <span class="material-symbols-outlined text-4xl text-tertiary">location_on</span>
-            <h3 class="font-headline-sm text-headline-sm">SMA Ruang Temu</h3>
-            <p class="font-body-md text-body-md text-on-surface-variant">
-              Jl. Pendidikan No. 12, Jakarta Selatan
-            </p>
-            <p class="font-label-caps text-label-caps opacity-60">AREA PARKIR TERSEDIA</p>
-          </div>
-        </div>
+        <div id="rundown-grid" class="grid md:grid-cols-3 gap-gutter"></div>
         <div class="mt-gutter h-[400px] rounded-xl overflow-hidden glass-card relative">
-          <div class="absolute inset-0 bg-surface-container-highest/20 flex items-center justify-center">
-            <div
-              class="text-center p-8 bg-white/90 backdrop-blur-md rounded-lg shadow-xl z-10 max-w-sm"
-            >
+          <div id="map-fallback" class="absolute inset-0 bg-surface-container-highest/20 flex items-center justify-center">
+            <div class="text-center p-8 bg-white/90 backdrop-blur-md rounded-lg shadow-xl z-10 max-w-sm">
               <span class="material-symbols-outlined text-3xl mb-2 text-secondary">map</span>
               <p class="font-body-md mb-4">Klik di bawah untuk membuka Google Maps</p>
-              <a
-                class="bg-secondary text-white px-6 py-2 rounded-full font-button text-button inline-flex items-center gap-2"
-                href="https://maps.google.com"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a id="gmaps-link-btn" class="bg-secondary text-white px-6 py-2 rounded-full font-button text-button inline-flex items-center gap-2" href="#" target="_blank" rel="noopener noreferrer">
                 Buka Peta
                 <span class="material-symbols-outlined text-sm">open_in_new</span>
               </a>
             </div>
-            <img
-              class="absolute inset-0 w-full h-full object-cover opacity-50 grayscale"
-              alt="Peta lokasi sekolah"
-              src="https://images.unsplash.com/photo-1562774053-701939374585?auto=format&fit=crop&w=1200&q=80"
-            />
           </div>
+          <iframe id="gmaps-embed" class="absolute inset-0 w-full h-full border-0 hidden" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Peta lokasi acara"></iframe>
         </div>
         <div class="text-center pt-8">
-          <button
-            class="font-button text-button text-tertiary border border-tertiary px-8 py-3 rounded-full hover:bg-tertiary hover:text-white transition-all"
-          >
-            Tambahkan ke Kalender
-          </button>
+          <button class="font-button text-button text-tertiary border border-tertiary px-8 py-3 rounded-full hover:bg-tertiary hover:text-white transition-all">Tambahkan ke Kalender</button>
         </div>
       </section>
 
-      <!-- Panduan -->
-      <section
-        class="reveal py-stack-md bg-secondary-container/10 rounded-3xl px-margin-mobile md:px-margin-desktop"
-        id="guidelines"
-      >
+      <section class="reveal py-stack-md bg-secondary-container/10 rounded-3xl px-margin-mobile md:px-margin-desktop hidden" id="guidelines">
         <div class="flex flex-col md:flex-row gap-gutter">
           <div class="flex-1 space-y-8">
             <h2 class="font-display-lg text-display-lg">Panduan Acara</h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-              <div class="flex gap-4">
-                <span class="material-symbols-outlined text-tertiary">checkroom</span>
-                <div>
-                  <h4 class="font-headline-sm text-lg mb-1">Pakaian</h4>
-                  <p class="text-on-surface-variant text-sm">
-                    Siswa: seragam sekolah lengkap. Tamu undangan: batik atau pakaian formal
-                    rapi.
-                  </p>
-                </div>
-              </div>
-              <div class="flex gap-4">
-                <span class="material-symbols-outlined text-tertiary">badge</span>
-                <div>
-                  <h4 class="font-headline-sm text-lg mb-1">Registrasi</h4>
-                  <p class="text-on-surface-variant text-sm">
-                    Mohon datang 30 menit sebelum acara dimulai dan menunjukkan undangan digital
-                    saat registrasi di meja penerima tamu.
-                  </p>
-                </div>
-              </div>
-              <div class="flex gap-4">
-                <span class="material-symbols-outlined text-tertiary">photo_camera</span>
-                <div>
-                  <h4 class="font-headline-sm text-lg mb-1">Dokumentasi</h4>
-                  <p class="text-on-surface-variant text-sm">
-                    Foto dan video diperbolehkan selama tidak mengganggu jalannya upacara wisuda.
-                  </p>
-                </div>
-              </div>
-              <div class="flex gap-4">
-                <span class="material-symbols-outlined text-tertiary">restaurant</span>
-                <div>
-                  <h4 class="font-headline-sm text-lg mb-1">Konsumsi</h4>
-                  <p class="text-on-surface-variant text-sm">
-                    Snack dan minuman disediakan panitia. Informasikan alergi makanan saat konfirmasi
-                    kehadiran.
-                  </p>
-                </div>
-              </div>
-            </div>
+            <div id="guidelines-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-8"></div>
           </div>
           <div class="w-full md:w-1/3">
             <div class="glass-card p-8 rounded-xl space-y-4">
-              <h4 class="font-label-caps text-label-caps text-secondary">WARNA ANGKATAN</h4>
+              <h4 id="guidelines-palette-title" class="font-label-caps text-label-caps text-secondary"></h4>
               <div class="grid grid-cols-2 gap-2">
                 <div class="h-24 rounded" style="background-color: #585e6c"></div>
                 <div class="h-24 rounded" style="background-color: #775a19"></div>
                 <div class="h-24 rounded" style="background-color: #dde2f3"></div>
                 <div class="h-24 rounded" style="background-color: #1a1b22"></div>
               </div>
-              <p class="text-xs text-on-surface-variant italic">
-                Palet resmi: Slate, Gold, Sky Blue, dan Midnight.
-              </p>
+              <p id="guidelines-palette-note" class="text-xs text-on-surface-variant italic"></p>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- Kas Angkatan -->
       <section class="reveal max-w-2xl mx-auto text-center">
         <div class="glass-card p-12 rounded-2xl relative overflow-hidden">
-          <div
-            class="absolute top-0 right-0 w-32 h-32 bg-tertiary/5 rounded-full -translate-y-16 translate-x-16"
-          ></div>
+          <div class="absolute top-0 right-0 w-32 h-32 bg-tertiary/5 rounded-full -translate-y-16 translate-x-16"></div>
           <span class="material-symbols-outlined text-5xl text-tertiary mb-6">volunteer_activism</span>
-          <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-4">
-            Kas Kenangan Angkatan
-          </h2>
-          <p class="font-body-md text-body-md text-on-surface-variant mb-8">
-            Kehadiran Anda adalah hadiah terindah di hari perpisahan kami. Bagi yang ingin
-            berpartisipasi dalam kas kenangan angkatan untuk album digital dan plakat sekolah,
-            berikut informasi rekening panitia.
-          </p>
+          <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-4">Kas Kenangan Angkatan</h2>
+          <p class="font-body-md text-body-md text-on-surface-variant mb-8">Kehadiran Anda adalah hadiah terindah di hari perpisahan kami. Bagi yang ingin berpartisipasi dalam kas kenangan angkatan, berikut informasi rekening panitia.</p>
           <div class="flex flex-col gap-4">
-            <button
-              id="toggle-bank"
-              type="button"
-              class="bg-secondary text-white px-8 py-3 rounded-full font-button text-button w-full hover:bg-tertiary transition-all"
-            >
-              Lihat Rekening Panitia
-            </button>
-            <div
-              class="hidden overflow-hidden transition-all duration-500 py-6 border-t border-outline-variant mt-4"
-              id="bank-details"
-            >
+            <button id="toggle-bank" type="button" class="bg-secondary text-white px-8 py-3 rounded-full font-button text-button w-full hover:bg-tertiary transition-all">Lihat Rekening Panitia</button>
+            <div class="hidden overflow-hidden transition-all duration-500 py-6 border-t border-outline-variant mt-4" id="bank-details">
               <div class="grid md:grid-cols-2 gap-8 text-left">
                 <div class="space-y-2">
                   <p class="font-label-caps text-xs opacity-60">ATAS NAMA</p>
@@ -281,9 +140,7 @@
                   <p class="font-body-md font-semibold">Bank BCA</p>
                 </div>
                 <div class="flex flex-col items-center justify-center p-4 bg-white rounded-lg">
-                  <span class="material-symbols-outlined text-6xl text-on-surface-variant/20"
-                    >qr_code_2</span
-                  >
+                  <span class="material-symbols-outlined text-6xl text-on-surface-variant/20">qr_code_2</span>
                   <p class="text-[10px] mt-2 text-on-surface-variant">SCAN UNTUK TRANSFER</p>
                 </div>
               </div>
@@ -292,81 +149,39 @@
         </div>
       </section>
 
-      <!-- RSVP & Guestbook -->
       <section class="reveal grid md:grid-cols-2 gap-gutter" id="rsvp">
         <div class="glass-card p-10 rounded-2xl">
           <h2 class="font-display-lg text-headline-md mb-8">Konfirmasi Kehadiran</h2>
           <form class="space-y-6" id="rsvp-form">
             <div>
-              <label class="font-label-caps text-xs mb-2 block text-on-surface-variant" for="full_name"
-                >Nama Lengkap</label
-              >
-              <input
-                class="w-full border-0 border-b border-outline-variant bg-transparent focus:ring-0 focus:border-tertiary py-2 transition-all outline-none"
-                id="full_name"
-                name="full_name"
-                placeholder="Masukkan nama Anda"
-                type="text"
-                required
-              />
+              <label class="font-label-caps text-xs mb-2 block text-on-surface-variant" for="full_name">Nama Lengkap</label>
+              <input class="w-full border-0 border-b border-outline-variant bg-transparent focus:ring-0 focus:border-tertiary py-2 transition-all outline-none" id="full_name" name="full_name" placeholder="Masukkan nama Anda" type="text" required />
             </div>
             <div>
-              <span class="font-label-caps text-xs mb-2 block text-on-surface-variant"
-                >Apakah Anda akan hadir?</span
-              >
+              <span class="font-label-caps text-xs mb-2 block text-on-surface-variant">Apakah Anda akan hadir?</span>
               <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 mt-2">
                 <label class="flex items-center gap-2 cursor-pointer group">
-                  <input
-                    class="text-tertiary focus:ring-tertiary border-outline-variant"
-                    name="attend"
-                    type="radio"
-                    value="yes"
-                  />
-                  <span class="font-body-md group-hover:text-tertiary transition-colors"
-                    >Ya, saya hadir</span
-                  >
+                  <input class="text-tertiary focus:ring-tertiary border-outline-variant" name="attend" type="radio" value="yes" />
+                  <span class="font-body-md group-hover:text-tertiary transition-colors">Ya, saya hadir</span>
                 </label>
                 <label class="flex items-center gap-2 cursor-pointer group">
-                  <input
-                    class="text-tertiary focus:ring-tertiary border-outline-variant"
-                    name="attend"
-                    type="radio"
-                    value="no"
-                  />
-                  <span class="font-body-md group-hover:text-tertiary transition-colors"
-                    >Maaf, tidak bisa hadir</span
-                  >
+                  <input class="text-tertiary focus:ring-tertiary border-outline-variant" name="attend" type="radio" value="no" />
+                  <span class="font-body-md group-hover:text-tertiary transition-colors">Maaf, tidak bisa hadir</span>
                 </label>
               </div>
             </div>
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label
-                  class="font-label-caps text-xs mb-2 block text-on-surface-variant"
-                  for="guest_count"
-                  >Jumlah Orang</label
-                >
-                <select
-                  class="w-full border-0 border-b border-outline-variant bg-transparent focus:ring-0 focus:border-tertiary py-2 transition-all outline-none"
-                  id="guest_count"
-                  name="guest_count"
-                >
+                <label class="font-label-caps text-xs mb-2 block text-on-surface-variant" for="guest_count">Jumlah Orang</label>
+                <select class="w-full border-0 border-b border-outline-variant bg-transparent focus:ring-0 focus:border-tertiary py-2 transition-all outline-none" id="guest_count" name="guest_count">
                   <option value="1">1 Orang</option>
                   <option value="2">2 Orang</option>
                   <option value="3">3 Orang</option>
                 </select>
               </div>
               <div>
-                <label
-                  class="font-label-caps text-xs mb-2 block text-on-surface-variant"
-                  for="meal_preference"
-                  >Sebagai</label
-                >
-                <select
-                  class="w-full border-0 border-b border-outline-variant bg-transparent focus:ring-0 focus:border-tertiary py-2 transition-all outline-none"
-                  id="meal_preference"
-                  name="meal_preference"
-                >
+                <label class="font-label-caps text-xs mb-2 block text-on-surface-variant" for="meal_preference">Sebagai</label>
+                <select class="w-full border-0 border-b border-outline-variant bg-transparent focus:ring-0 focus:border-tertiary py-2 transition-all outline-none" id="meal_preference" name="meal_preference">
                   <option>Siswa</option>
                   <option>Guru</option>
                   <option>Orang Tua</option>
@@ -375,160 +190,74 @@
                 </select>
               </div>
             </div>
-            <button
-              class="w-full bg-secondary text-white py-4 rounded-full font-button text-button hover:bg-tertiary transition-all mt-8"
-              type="submit"
-            >
-              Kirim Konfirmasi
-            </button>
-            <p class="text-center text-xs text-on-surface-variant italic mt-4">
-              Mohon konfirmasi sebelum 1 Juni 2026
-            </p>
+            <button class="w-full bg-secondary text-white py-4 rounded-full font-button text-button hover:bg-tertiary transition-all mt-8" type="submit">Kirim Konfirmasi</button>
+            <p id="rsvp-deadline" class="text-center text-xs text-on-surface-variant italic mt-4"></p>
           </form>
         </div>
-
         <div class="flex flex-col">
           <h3 class="font-display-lg text-headline-md mb-8">Ucapan &amp; Doa</h3>
-          <div
-            class="flex-grow space-y-4 max-h-[500px] overflow-y-auto pr-4 scrollbar-hide"
-            id="guestbook-list"
-          >
-            <div class="glass-card p-6 rounded-xl text-center text-on-surface-variant text-sm italic">
-              Memuat ucapan...
-            </div>
+          <div class="flex-grow space-y-4 max-h-[500px] overflow-y-auto pr-4 scrollbar-hide" id="guestbook-list">
+            <div class="glass-card p-6 rounded-xl text-center text-on-surface-variant text-sm italic">Memuat ucapan...</div>
           </div>
-          <button
-            id="open-guestbook"
-            type="button"
-            class="mt-8 text-tertiary font-button text-button flex items-center justify-center gap-2 group"
-          >
+          <button id="open-guestbook" type="button" class="mt-8 text-tertiary font-button text-button flex items-center justify-center gap-2 group">
             Tulis Ucapan
-            <span
-              class="material-symbols-outlined transition-transform group-hover:translate-x-1"
-              >edit</span
-            >
+            <span class="material-symbols-outlined transition-transform group-hover:translate-x-1">edit</span>
           </button>
         </div>
       </section>
     </main>
 
-    <!-- Footer -->
-    <footer
-      class="bg-surface-bright dark:bg-surface-dim border-t border-outline-variant w-full py-stack-lg flex flex-col items-center gap-4 text-center px-margin-mobile md:px-margin-desktop mt-stack-lg"
-    >
-      <div class="font-display-lg text-display-lg text-secondary">SMA Ruang Temu</div>
+    <footer class="bg-surface-bright dark:bg-surface-dim border-t border-outline-variant w-full py-stack-lg flex flex-col items-center gap-4 text-center px-margin-mobile md:px-margin-desktop mt-stack-lg">
+      <div id="footer-org-name" class="font-display-lg text-display-lg text-secondary"></div>
       <div class="flex gap-8 my-4">
-        <a
-          class="font-body-md text-body-md text-on-surface-variant hover:text-tertiary transition-colors"
-          href="#details"
-          >Acara</a
-        >
-        <a
-          class="font-body-md text-body-md text-on-surface-variant hover:text-tertiary transition-colors"
-          href="#guidelines"
-          >Panduan</a
-        >
-        <a
-          class="font-body-md text-body-md text-on-surface-variant hover:text-tertiary transition-colors"
-          href="#rsvp"
-          >Kontak Panitia</a
-        >
+        <a class="font-body-md text-body-md text-on-surface-variant hover:text-tertiary transition-colors" href="#details">Acara</a>
+        <a class="font-body-md text-body-md text-on-surface-variant hover:text-tertiary transition-colors" href="#guidelines">Panduan</a>
+        <a class="font-body-md text-body-md text-on-surface-variant hover:text-tertiary transition-colors" href="#rsvp">Kontak Panitia</a>
       </div>
-      <p class="font-body-md text-body-md text-on-surface-variant opacity-60">
-        Merajut kenangan, melangkah ke masa depan
-      </p>
-      <p class="text-[10px] tracking-[0.2em] uppercase mt-8 opacity-40">
-        Angkatan XII SMA Ruang Temu • 2026
-      </p>
+      <p id="footer-tagline" class="font-body-md text-body-md text-on-surface-variant opacity-60"></p>
+      <p id="footer-copyright" class="text-[10px] tracking-[0.2em] uppercase mt-8 opacity-40"></p>
     </footer>
 
-    <!-- BottomNavBar (Mobile) -->
-    <nav
-      class="fixed bottom-0 w-full z-50 flex justify-around items-center py-3 px-6 md:hidden bg-white/80 dark:bg-surface-container/80 backdrop-blur-md border-t border-white/10 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] rounded-t-full"
-    >
-      <a
-        class="flex flex-col items-center justify-center text-tertiary dark:text-tertiary-fixed active:scale-95 transition-all"
-        href="#"
-      >
+    <nav class="fixed bottom-0 w-full z-50 flex justify-around items-center py-3 px-6 md:hidden bg-white/80 dark:bg-surface-container/80 backdrop-blur-md border-t border-white/10 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] rounded-t-full">
+      <a class="flex flex-col items-center justify-center text-tertiary dark:text-tertiary-fixed active:scale-95 transition-all" href="#">
         <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1">home</span>
         <span class="font-label-caps text-[8px] uppercase mt-1">Beranda</span>
       </a>
-      <a
-        class="flex flex-col items-center justify-center text-on-surface-variant/60 active:scale-95 transition-all"
-        href="#story"
-      >
+      <a class="flex flex-col items-center justify-center text-on-surface-variant/60 active:scale-95 transition-all" href="#story">
         <span class="material-symbols-outlined">history_edu</span>
         <span class="font-label-caps text-[8px] uppercase mt-1">Kenangan</span>
       </a>
-      <a
-        class="flex flex-col items-center justify-center text-on-surface-variant/60 active:scale-95 transition-all"
-        href="#details"
-      >
+      <a class="flex flex-col items-center justify-center text-on-surface-variant/60 active:scale-95 transition-all" href="#details">
         <span class="material-symbols-outlined">event</span>
         <span class="font-label-caps text-[8px] uppercase mt-1">Acara</span>
       </a>
-      <a
-        class="flex flex-col items-center justify-center text-on-surface-variant/60 active:scale-95 transition-all"
-        href="#rsvp"
-      >
+      <a class="flex flex-col items-center justify-center text-on-surface-variant/60 active:scale-95 transition-all" href="#rsvp">
         <span class="material-symbols-outlined">how_to_reg</span>
         <span class="font-label-caps text-[8px] uppercase mt-1">Daftar</span>
       </a>
     </nav>
+    </div>
 
-    <!-- Guestbook Modal -->
-    <div class="modal-overlay" id="guestbook-modal">
+    <div class="modal-overlay" id="guestbook-modal" aria-hidden="true">
       <div class="modal-content glass-card p-8 rounded-2xl w-full max-w-md">
         <div class="flex justify-between items-center mb-6">
           <h3 class="font-display-lg text-headline-sm">Tulis Ucapan</h3>
-          <button
-            id="close-guestbook"
-            type="button"
-            class="material-symbols-outlined text-on-surface-variant hover:text-tertiary"
-          >
-            close
-          </button>
+          <button id="close-guestbook" type="button" class="material-symbols-outlined text-on-surface-variant hover:text-tertiary">close</button>
         </div>
         <form class="space-y-6" id="wish-form">
           <div>
-            <label class="font-label-caps text-xs mb-2 block text-on-surface-variant" for="wish_name"
-              >Nama</label
-            >
-            <input
-              class="w-full border-0 border-b border-outline-variant bg-transparent focus:ring-0 focus:border-tertiary py-2 transition-all outline-none"
-              id="wish_name"
-              name="wish_name"
-              placeholder="Nama Anda"
-              type="text"
-              required
-            />
+            <label class="font-label-caps text-xs mb-2 block text-on-surface-variant" for="wish_name">Nama</label>
+            <input class="w-full border-0 border-b border-outline-variant bg-transparent focus:ring-0 focus:border-tertiary py-2 transition-all outline-none" id="wish_name" name="wish_name" placeholder="Nama Anda" type="text" required />
           </div>
           <div>
-            <label
-              class="font-label-caps text-xs mb-2 block text-on-surface-variant"
-              for="wish_message"
-              >Ucapan</label
-            >
-            <textarea
-              class="w-full border border-outline-variant bg-transparent focus:ring-0 focus:border-tertiary p-3 rounded-lg transition-all outline-none resize-none"
-              id="wish_message"
-              name="wish_message"
-              placeholder="Tulis ucapan untuk angkatan XII..."
-              rows="4"
-              required
-            ></textarea>
+            <label class="font-label-caps text-xs mb-2 block text-on-surface-variant" for="wish_message">Ucapan</label>
+            <textarea class="w-full border border-outline-variant bg-transparent focus:ring-0 focus:border-tertiary p-3 rounded-lg transition-all outline-none resize-none" id="wish_message" name="wish_message" placeholder="Tulis ucapan untuk angkatan XII..." rows="4" required></textarea>
           </div>
-          <button
-            class="w-full bg-secondary text-white py-3 rounded-full font-button text-button hover:bg-tertiary transition-all"
-            type="submit"
-          >
-            Kirim Ucapan
-          </button>
+          <button class="w-full bg-secondary text-white py-3 rounded-full font-button text-button hover:bg-tertiary transition-all" type="submit">Kirim Ucapan</button>
         </form>
       </div>
     </div>
 
-    <!-- Toast -->
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
     <script type="module" src="/src/main.js"></script>
