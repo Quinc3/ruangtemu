@@ -249,3 +249,17 @@ body.is-loading #app-content {
     bottom: 2rem;
   }
 }
+
+/* Custom icon select (Tailwind UI listbox pattern) */
+.icon-select-list {
+  scrollbar-width: thin;
+}
+
+.icon-select-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.icon-select-list::-webkit-scrollbar-thumb {
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--color-outline-variant) 60%, transparent);
+}

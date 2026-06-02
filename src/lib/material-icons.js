@@ -138,47 +138,142 @@ export const MATERIAL_ICONS = [
   'workspace_premium',
 ].sort((a, b) => a.localeCompare(b))
 
+let iconSelectDocBound = false
+
 export function getIconOptions(selected, fallback = 'event') {
   const value = selected || fallback
-  const icons = [...new Set([value, ...MATERIAL_ICONS])].sort((a, b) => a.localeCompare(b))
-  return icons
+  return [...new Set([value, ...MATERIAL_ICONS])].sort((a, b) => a.localeCompare(b))
 }
 
+function iconOptionButton(icon, selected) {
+  const isSelected = icon === selected
+  return `
+    <li role="option" aria-selected="${isSelected}">
+      <button
+        type="button"
+        data-icon-option="${icon}"
+        class="icon-select-option group flex w-full cursor-pointer items-center gap-3 px-3 py-2.5 text-left text-sm text-on-surface hover:bg-surface-container-low ${isSelected ? 'bg-secondary/10' : ''}"
+      >
+        <span class="material-symbols-outlined shrink-0 text-xl text-tertiary">${icon}</span>
+        <span class="min-w-0 flex-1 truncate font-medium">${icon}</span>
+        <span class="material-symbols-outlined shrink-0 text-lg text-secondary ${isSelected ? 'opacity-100' : 'opacity-0'}">check</span>
+      </button>
+    </li>`
+}
+
+/** Custom select (Tailwind UI listbox) — ikon di trigger & tiap opsi */
 export function iconSelectField(name, selected, fallback = 'event', label = 'Icon') {
   const value = selected || fallback
   const icons = getIconOptions(value, fallback)
-
-  const options = icons
-    .map(
-      (icon) =>
-        `<option value="${icon}" ${value === icon ? 'selected' : ''}>${icon}</option>`
-    )
-    .join('')
+  const options = icons.map((icon) => iconOptionButton(icon, value)).join('')
 
   return `
-    <div class="icon-select-wrap">
+    <div class="icon-select-wrap relative mt-1" data-icon-select>
       <label class="text-xs text-on-surface-variant">${label}</label>
-      <select name="${name}" class="icon-select mt-1 w-full max-h-40 border border-outline-variant rounded-lg py-2 px-2 text-sm bg-white outline-none focus:border-tertiary">
+      <input type="hidden" name="${name}" value="${value}" data-icon-input />
+      <button
+        type="button"
+        data-icon-trigger
+        aria-haspopup="listbox"
+        aria-expanded="false"
+        class="icon-select-trigger relative mt-1 grid w-full cursor-pointer grid-cols-1 rounded-lg border border-outline-variant bg-white py-2.5 pl-3 pr-10 text-left shadow-sm outline-none hover:border-tertiary/50 focus:border-tertiary focus:ring-2 focus:ring-tertiary/20"
+      >
+        <span class="flex min-w-0 items-center gap-2.5">
+          <span class="material-symbols-outlined shrink-0 text-2xl text-tertiary" data-icon-trigger-icon>${value}</span>
+          <span class="block truncate text-sm font-medium text-on-surface" data-icon-trigger-label>${value}</span>
+        </span>
+        <span class="material-symbols-outlined pointer-events-none absolute inset-y-0 right-2 my-auto text-xl text-on-surface-variant icon-select-chevron transition-transform">expand_more</span>
+      </button>
+      <ul
+        data-icon-list
+        role="listbox"
+        class="icon-select-list absolute z-[260] mt-1 hidden max-h-60 w-full overflow-auto rounded-lg bg-white py-1 text-sm shadow-lg ring-1 ring-black/5 focus:outline-none"
+      >
         ${options}
-      </select>
-      <div class="mt-2 flex items-center gap-2 rounded-lg bg-surface-container-low px-3 py-2">
-        <span class="material-symbols-outlined text-2xl text-tertiary icon-preview">${value}</span>
-        <span class="text-xs text-on-surface-variant icon-preview-label">${value}</span>
-      </div>
+      </ul>
     </div>`
 }
 
-export function bindIconSelectPreview(container = document) {
-  const select = container.querySelector('.icon-select')
-  const preview = container.querySelector('.icon-preview')
-  const label = container.querySelector('.icon-preview-label')
-  if (!select || !preview) return
+function setIconSelectValue(wrap, icon) {
+  const input = wrap.querySelector('[data-icon-input]')
+  const triggerIcon = wrap.querySelector('[data-icon-trigger-icon]')
+  const triggerLabel = wrap.querySelector('[data-icon-trigger-label]')
+  if (input) input.value = icon
+  if (triggerIcon) triggerIcon.textContent = icon
+  if (triggerLabel) triggerLabel.textContent = icon
 
-  const update = () => {
-    preview.textContent = select.value
-    if (label) label.textContent = select.value
-  }
-  select.removeEventListener('change', select._iconPreviewHandler)
-  select._iconPreviewHandler = update
-  select.addEventListener('change', update)
+  wrap.querySelectorAll('[data-icon-option]').forEach((btn) => {
+    const active = btn.dataset.iconOption === icon
+    btn.classList.toggle('bg-secondary/10', active)
+    const check = btn.querySelector('.material-symbols-outlined:last-child')
+    if (check) check.classList.toggle('opacity-0', !active)
+    check?.classList.toggle('opacity-100', active)
+    btn.closest('[role="option"]')?.setAttribute('aria-selected', String(active))
+  })
+}
+
+function closeIconSelect(wrap) {
+  if (!wrap) return
+  wrap.dataset.open = 'false'
+  const trigger = wrap.querySelector('[data-icon-trigger]')
+  const list = wrap.querySelector('[data-icon-list]')
+  trigger?.setAttribute('aria-expanded', 'false')
+  list?.classList.add('hidden')
+  wrap.querySelector('.icon-select-chevron')?.classList.remove('rotate-180')
+}
+
+function openIconSelect(wrap) {
+  document.querySelectorAll('[data-icon-select][data-open="true"]').forEach((other) => {
+    if (other !== wrap) closeIconSelect(other)
+  })
+  wrap.dataset.open = 'true'
+  const trigger = wrap.querySelector('[data-icon-trigger]')
+  const list = wrap.querySelector('[data-icon-list]')
+  trigger?.setAttribute('aria-expanded', 'true')
+  list?.classList.remove('hidden')
+  wrap.querySelector('.icon-select-chevron')?.classList.add('rotate-180')
+  list?.querySelector('[aria-selected="true"]')?.scrollIntoView({ block: 'nearest' })
+}
+
+function bindIconSelectWrap(wrap) {
+  if (wrap.dataset.bound) return
+  wrap.dataset.bound = '1'
+
+  const trigger = wrap.querySelector('[data-icon-trigger]')
+  const list = wrap.querySelector('[data-icon-list]')
+
+  trigger?.addEventListener('click', (e) => {
+    e.stopPropagation()
+    if (wrap.dataset.open === 'true') closeIconSelect(wrap)
+    else openIconSelect(wrap)
+  })
+
+  list?.querySelectorAll('[data-icon-option]').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation()
+      setIconSelectValue(wrap, btn.dataset.iconOption)
+      closeIconSelect(wrap)
+      wrap.dispatchEvent(new CustomEvent('icon-select-change', { bubbles: true, detail: { value: btn.dataset.iconOption } }))
+    })
+  })
+}
+
+function bindIconSelectDocument() {
+  if (iconSelectDocBound) return
+  iconSelectDocBound = true
+
+  document.addEventListener('click', () => {
+    document.querySelectorAll('[data-icon-select][data-open="true"]').forEach(closeIconSelect)
+  })
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('[data-icon-select][data-open="true"]').forEach(closeIconSelect)
+    }
+  })
+}
+
+export function bindIconSelectPreview(container = document) {
+  bindIconSelectDocument()
+  container.querySelectorAll('[data-icon-select]').forEach(bindIconSelectWrap)
 }
