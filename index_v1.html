@@ -1,16 +1,18 @@
 <!doctype html>
-<html class="scroll-smooth" lang="id">
+<html class="scroll-smooth" lang="id" data-invitation="v1">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title id="page-title">Undangan Perpisahan</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link href="https://fonts.googleapis.com/css2?family=Dongle&family=Gelasio:ital,wght@0,400..700;1,400..700&family=Lexend:wght@100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dongle&family=Gelasio:ital,wght@0,400..700;1,400..700&family=Lexend:wght@100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
     <link
       href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
       rel="stylesheet"
     />
-   
   </head>
   <body
     class="bg-surface font-body-md text-on-surface antialiased overflow-x-hidden pb-20 is-loading"
@@ -24,9 +26,9 @@
       </p>
     </div>
 
-    <div id="app-content">
-      <nav
-        class="fixed top-0 w-full bg-white/80 dark:bg-surface-container/80 backdrop-blur-md z-50 border-b border-white/10 shadow-[0_40px_40px_-15px_rgba(0,0,0,0.04)]"
+    <div id="app-content" class="overflow-x-hidden">
+      <!-- <nav
+        class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-container-max bg-white/80 dark:bg-surface-container/80 backdrop-blur-md z-50 border-b border-white/10 shadow-[0_40px_40px_-15px_rgba(0,0,0,0.04)]"
       >
         <div
           class="flex justify-between items-center px-margin-mobile py-4 max-w-container-max mx-auto"
@@ -39,20 +41,22 @@
           </div>
           <span class="material-symbols-outlined text-primary-2">school</span>
         </div>
-      </nav>
+      </nav> -->
 
       <header
-        class="relative h-screen flex items-center justify-center overflow-hidden"
+        class="hero relative flex h-[min(100dvh,640px)] items-center justify-center overflow-hidden"
       >
-        <img
-          id="hero-image"
-          alt="Hero background"
-          class="absolute inset-0 w-full h-full object-cover scale-105"
-          src=""
-        />
-        <div class="absolute inset-0 bg-black/50 backdrop-blur-[2px]"></div>
+        <div class="hero-media" aria-hidden="true">
+          <img
+            id="hero-image"
+            alt="Hero background"
+            class="h-full w-full object-cover object-center"
+            src=""
+          />
+        </div>
+        <div class="hero-overlay absolute inset-0 backdrop-blur-[1px]"></div>
         <div
-          class="relative z-10 text-center text-primary-1 px-margin-mobile max-w-5xl"
+          class="relative z-10 text-center text-primary-1 px-margin-mobile w-full"
         >
           <p
             id="hero-label"
@@ -64,21 +68,17 @@
           ></p>
           <h1
             id="hero-title"
-            class="font-display-lg text-display-lg md:text-7xl mb-4 leading-none"
+            class="font-display-lg-mobile text-display-lg-mobile mb-4 leading-none"
           ></h1>
           <p
             id="hero-subtitle"
             class="font-headline-sm text-headline-sm mb-8 opacity-90"
           ></p>
-          <div
-            class="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 mb-12"
-          >
-            <div class="h-px w-12 bg-white/40 hidden md:block"></div>
+          <div class="flex flex-col items-center justify-center gap-6 mb-12">
             <span
               id="hero-date"
               class="font-headline-md text-headline-md font-light italic"
             ></span>
-            <div class="h-px w-12 bg-white/40 hidden md:block"></div>
           </div>
           <a
             class="inline-block bg-primary-2 px-10 py-4 font-button text-inverse-primary-2 uppercase tracking-widest hover:bg-white hover:text-primary-2 transition-all duration-500 rounded-full"
@@ -89,10 +89,10 @@
       </header>
 
       <main
-        class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop space-y-stack-lg py-stack-lg"
+        class="max-w-container-max mx-auto px-margin-mobile space-y-stack-lg py-stack-lg"
       >
         <section
-          class="reveal grid md:grid-cols-2 gap-gutter items-center"
+          class="reveal grid grid-cols-1 gap-gutter items-center"
           id="story"
         >
           <div class="space-y-6">
@@ -102,7 +102,7 @@
             ></span>
             <h2
               id="description-title"
-              class="font-display-lg text-display-lg"
+              class="font-display-lg-mobile text-display-lg-mobile"
             ></h2>
             <p
               id="description-body"
@@ -128,10 +128,12 @@
 
         <section class="reveal space-y-gutter" id="details">
           <div class="text-center mb-stack-md">
-            <h2 class="font-display-lg text-display-lg">Detail Acara</h2>
+            <h2 class="font-display-lg-mobile text-display-lg-mobile">
+              Detail Acara
+            </h2>
             <div class="w-12 h-1 bg-primary-2 mx-auto mt-4"></div>
           </div>
-          <div id="rundown-grid" class="grid md:grid-cols-3 gap-gutter"></div>
+          <div id="rundown-grid" class="grid grid-cols-1 gap-gutter"></div>
           <div
             class="mt-gutter h-[400px] rounded-xl overflow-hidden glass-card relative"
           >
@@ -171,28 +173,27 @@
               title="Peta lokasi acara"
             ></iframe>
           </div>
-          <div class="text-center pt-8">
+          <!-- <div class="text-center pt-8">
             <button
               class="font-button text-button text-primary-2 border border-primary-2 px-8 py-3 rounded-full hover:bg-primary-2 hover:text-inverse-primary-2 transition-all"
             >
               Tambahkan ke Kalender
             </button>
-          </div>
+          </div> -->
         </section>
 
         <section
-          class="reveal py-stack-md bg-primary-2-container/10 rounded-3xl px-margin-mobile md:px-margin-desktop hidden"
+          class="reveal py-stack-md bg-primary-2-container/10 rounded-3xl px-margin-mobile hidden"
           id="guidelines"
         >
-          <div class="flex flex-col md:flex-row gap-gutter">
+          <div class="flex flex-col gap-gutter">
             <div class="flex-1 space-y-8">
-              <h2 class="font-display-lg text-display-lg">Panduan Acara</h2>
-              <div
-                id="guidelines-grid"
-                class="grid grid-cols-1 sm:grid-cols-2 gap-8"
-              ></div>
+              <h2 class="font-display-lg-mobile text-display-lg-mobile">
+                Panduan Acara
+              </h2>
+              <div id="guidelines-grid" class="grid grid-cols-1 gap-8"></div>
             </div>
-            <div class="w-full md:w-1/3">
+            <div class="w-full">
               <div class="glass-card !bg-primary-1 p-8 rounded-xl space-y-4">
                 <h4
                   id="guidelines-palette-title"
@@ -235,7 +236,7 @@
               >volunteer_activism</span
             >
             <h2
-              class="font-display-lg text-display-lg-mobile md:text-display-lg mb-4 text-inverse-primary-2"
+              class="font-display-lg-mobile text-display-lg-mobile mb-4 text-inverse-primary-2"
             >
               Kas Kenangan Angkatan
             </h2>
@@ -256,7 +257,7 @@
                 class="hidden overflow-hidden transition-all duration-500 py-6 border-t border-outline-variant mt-4"
                 id="bank-details"
               >
-                <div class="grid md:grid-cols-2 gap-8 text-left">
+                <div class="grid grid-cols-1 gap-8 text-left">
                   <div class="space-y-2">
                     <p class="font-label-caps text-xs opacity-60">ATAS NAMA</p>
                     <p class="font-body-md font-semibold">
@@ -286,10 +287,10 @@
           </div>
         </section> -->
 
-        <section class="reveal grid md:grid-cols-2 gap-gutter" id="rsvp">
+        <section class="reveal grid grid-cols-1 gap-gutter" id="rsvp">
           <div class="glass-card !bg-primary-2-container/10 p-10 rounded-2xl">
             <h2
-              class="font-display-lg text-headline-md mb-8 text-inverse-primary-1"
+              class="font-display-lg-mobile text-headline-sm mb-8 text-inverse-primary-1"
             >
               Konfirmasi Kehadiran
             </h2>
@@ -314,7 +315,7 @@
                   class="font-label-caps text-xs mb-2 block text-inverse-primary-1"
                   >Apakah Anda akan hadir?</span
                 >
-                <div class="flex flex-col sm:flex-row gap-4 sm:gap-8 mt-2">
+                <div class="flex flex-col gap-4 mt-2">
                   <label class="flex items-center gap-2 cursor-pointer group">
                     <input
                       class="text-primary-2 focus:ring-primary-3 border-outline-variant"
@@ -391,7 +392,7 @@
           </div>
           <div class="flex flex-col">
             <h3
-              class="font-display-lg text-headline-md mb-8 text-inverse-primary-1"
+              class="font-display-lg-mobile text-headline-sm mb-8 text-inverse-primary-1"
             >
               Ucapan &amp; Doa
             </h3>
@@ -421,11 +422,11 @@
       </main>
 
       <footer
-        class="bg-primary-2-container/10 dark:bg-primary-2 border-t border-outline-variant w-full py-stack-lg flex flex-col items-center gap-4 text-center px-margin-mobile md:px-margin-desktop mt-stack-lg"
+        class="bg-primary-2-container/10 dark:bg-primary-2 border-t border-outline-variant w-full py-stack-lg flex flex-col items-center gap-4 text-center px-margin-mobile mt-stack-lg"
       >
         <div
           id="footer-org-name"
-          class="font-display-lg text-display-lg text-inverse-primary-2"
+          class="font-display-lg-mobile text-display-lg-mobile text-inverse-primary-2"
         ></div>
         <div class="flex gap-8 my-4">
           <a
@@ -455,7 +456,7 @@
       </footer>
 
       <nav
-        class="fixed bottom-0 w-full z-50 flex justify-around items-center py-3 px-6 md:hidden bg-white/80 dark:bg-surface-container/80 backdrop-blur-md border-t border-white/10 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] rounded-t-full"
+        class="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-container-max z-50 flex justify-around items-center py-3 px-6 bg-primary-2/80 dark:bg-primary-2/80 backdrop-blur-md border-t border-white/10 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] rounded-t-full"
       >
         <a
           class="flex flex-col items-center justify-center text-primary-2 dark:text-primary-2-fixed active:scale-95 transition-all"
@@ -469,7 +470,7 @@
           <span class="font-label-caps text-[8px] uppercase mt-1">Beranda</span>
         </a>
         <a
-          class="flex flex-col items-center justify-center text-on-surface-variant/60 active:scale-95 transition-all"
+          class="flex flex-col items-center justify-center text-inverse-primary-2 active:scale-95 active:bg-primary-2-container/10 transition-all"
           href="#story"
         >
           <span class="material-symbols-outlined">history_edu</span>
@@ -478,17 +479,17 @@
           >
         </a>
         <a
-          class="flex flex-col items-center justify-center text-on-surface-variant/60 active:scale-95 transition-all"
+          class="flex flex-col items-center justify-center text-inverse-primary-2 active:scale-95 transition-all"
           href="#details"
         >
           <span class="material-symbols-outlined">event</span>
           <span class="font-label-caps text-[8px] uppercase mt-1">Acara</span>
         </a>
         <a
-          class="flex flex-col items-center justify-center text-on-surface-variant/60 active:scale-95 transition-all"
+          class="flex flex-col items-center justify-center text-inverse-primary-2 active:scale-95 transition-all"
           href="#rsvp"
         >
-          <span class="material-symbols-outlined">how_to_reg</span>
+          <span class="material-symbols-outlined text-inverse-primary-2">how_to_reg</span>
           <span class="font-label-caps text-[8px] uppercase mt-1">Daftar</span>
         </a>
       </nav>
@@ -497,7 +498,7 @@
     <div class="modal-overlay" id="guestbook-modal" aria-hidden="true">
       <div class="modal-content glass-card p-8 rounded-2xl w-full max-w-md">
         <div class="flex justify-between items-center mb-6">
-          <h3 class="font-display-lg text-headline-sm">Tulis Ucapan</h3>
+          <h3 class="font-display-lg-mobile text-headline-sm">Tulis Ucapan</h3>
           <button
             id="close-guestbook"
             type="button"
@@ -549,6 +550,6 @@
 
     <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/main-v1.js"></script>
   </body>
 </html>
