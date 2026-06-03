@@ -7,6 +7,116 @@ function isMobileInvitation() {
   return document.documentElement.dataset.invitation === "v1";
 }
 
+let countdownInterval = null;
+
+function padCountdown(n) {
+  return String(Math.max(0, n)).padStart(2, "0");
+}
+
+function stopCountdown() {
+  if (countdownInterval) {
+    clearInterval(countdownInterval);
+    countdownInterval = null;
+  }
+}
+
+function initCountdown(targetIso, enabled = true) {
+  stopCountdown();
+  const section = document.getElementById("countdown-section");
+  const wrap = document.getElementById("event-countdown");
+  const ended = document.getElementById("countdown-ended");
+
+  const hideAll = () => {
+    section?.classList.add("hidden");
+    wrap?.classList.add("hidden");
+    ended?.classList.add("hidden");
+  };
+
+  if (!wrap || !targetIso || !enabled) {
+    hideAll();
+    return;
+  }
+
+  const target = new Date(targetIso).getTime();
+  if (Number.isNaN(target)) {
+    hideAll();
+    return;
+  }
+
+  const units = {
+    days: document.getElementById("countdown-days"),
+    hours: document.getElementById("countdown-hours"),
+    minutes: document.getElementById("countdown-minutes"),
+    seconds: document.getElementById("countdown-seconds"),
+  };
+
+  function tick() {
+    const diff = target - Date.now();
+    section?.classList.remove("hidden");
+
+    if (diff <= 0) {
+      stopCountdown();
+      wrap.classList.add("hidden");
+      ended?.classList.remove("hidden");
+      return;
+    }
+    ended?.classList.add("hidden");
+    wrap.classList.remove("hidden");
+    const totalSec = Math.floor(diff / 1000);
+    const days = Math.floor(totalSec / 86400);
+    const hours = Math.floor((totalSec % 86400) / 3600);
+    const minutes = Math.floor((totalSec % 3600) / 60);
+    const seconds = totalSec % 60;
+    if (units.days) units.days.textContent = padCountdown(days);
+    if (units.hours) units.hours.textContent = padCountdown(hours);
+    if (units.minutes) units.minutes.textContent = padCountdown(minutes);
+    if (units.seconds) units.seconds.textContent = padCountdown(seconds);
+  }
+
+  tick();
+  countdownInterval = setInterval(tick, 1000);
+}
+
+function openGalleryLightbox(src, caption) {
+  const lb = document.getElementById("gallery-lightbox");
+  const img = document.getElementById("gallery-lightbox-img");
+  const cap = document.getElementById("gallery-lightbox-caption");
+  if (!lb || !img) return;
+  img.src = src;
+  img.alt = caption || "Galeri";
+  if (cap) {
+    if (caption) {
+      cap.textContent = caption;
+      cap.classList.remove("hidden");
+    } else {
+      cap.classList.add("hidden");
+    }
+  }
+  lb.classList.add("open");
+  lb.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+}
+
+function closeGalleryLightbox() {
+  const lb = document.getElementById("gallery-lightbox");
+  if (!lb) return;
+  lb.classList.remove("open");
+  lb.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+function initGalleryLightbox() {
+  document.getElementById("gallery-lightbox-close")?.addEventListener("click", closeGalleryLightbox);
+  document.getElementById("gallery-lightbox")?.addEventListener("click", (e) => {
+    if (e.target.id === "gallery-lightbox") closeGalleryLightbox();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape" && document.getElementById("gallery-lightbox")?.classList.contains("open")) {
+      closeGalleryLightbox();
+    }
+  });
+}
+
 function showToast(message, type = "success") {
   const toast = document.getElementById("toast");
   if (!toast) return;
@@ -107,7 +217,6 @@ function applyGuestToForm(guest) {
 
 function renderSettings(s) {
   document.title = `Undangan Perpisahan | ${s.org_name}`;
-  setText("nav-org-name", s.org_name);
   setText("footer-org-name", s.org_name);
   setText("hero-label", s.hero_label);
   setText("hero-title", s.event_title);
@@ -160,14 +269,13 @@ function renderSettings(s) {
   }
 
   const guidelinesSection = document.getElementById("guidelines");
-  const navGuidelines = document.getElementById("nav-guidelines-link");
   if (!s.guidelines_section_enabled) {
     guidelinesSection?.classList.add("hidden");
-    navGuidelines?.classList.add("hidden");
   } else {
     guidelinesSection?.classList.remove("hidden");
-    navGuidelines?.classList.remove("hidden");
   }
+
+  initCountdown(s.event_starts_at, s.countdown_enabled !== false);
 
   return {
     heroUrl: heroSrc,
@@ -224,13 +332,42 @@ function renderGuidelines(items) {
     .join("");
 }
 
+function renderGallery(items) {
+  const grid = document.getElementById("gallery-grid");
+  const section = document.getElementById("gallery");
+  if (!grid) return;
+
+  if (!items?.length) {
+    section?.classList.add("hidden");
+    return;
+  }
+
+  section?.classList.remove("hidden");
+  grid.innerHTML = items
+    .map((item) => {
+      const url = resolveImageUrl(item.image_path);
+      if (!url) return "";
+      return `
+    <button type="button" class="gallery-item block w-full text-left" data-gallery-src="${escapeHtml(url)}" data-gallery-caption="${escapeHtml(item.caption || "")}">
+      <img src="${escapeHtml(url)}" alt="${escapeHtml(item.caption || "Foto galeri")}" loading="lazy" />
+    </button>`;
+    })
+    .join("");
+
+  grid.querySelectorAll("[data-gallery-src]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      openGalleryLightbox(btn.dataset.gallerySrc, btn.dataset.galleryCaption);
+    });
+  });
+}
+
 async function loadInvitationData() {
   if (!isSupabaseConfigured) return { heroUrl: null, descUrl: null };
 
   currentGuest = await resolveGuest();
   if (currentGuest) applyGuestToForm(currentGuest);
 
-  const [settingsRes, rundownRes, guidelinesRes] = await Promise.all([
+  const [settingsRes, rundownRes, guidelinesRes, galleryRes] = await Promise.all([
     supabase.from("invitation_settings").select("*").eq("id", 1).maybeSingle(),
     supabase
       .from("event_rundown")
@@ -242,12 +379,18 @@ async function loadInvitationData() {
       .select("*")
       .eq("is_active", true)
       .order("sort_order"),
+    supabase
+      .from("gallery_images")
+      .select("*")
+      .eq("is_active", true)
+      .order("sort_order"),
   ]);
 
   let urls = { heroUrl: null, descUrl: null };
   if (settingsRes.data) urls = renderSettings(settingsRes.data) ?? urls;
   renderRundown(rundownRes.data);
   renderGuidelines(guidelinesRes.data);
+  if (!galleryRes.error) renderGallery(galleryRes.data);
   return urls;
 }
 
@@ -402,6 +545,7 @@ async function handleWishSubmit(e) {
 }
 
 function initForms() {
+  initGalleryLightbox();
   document
     .getElementById("rsvp-form")
     ?.addEventListener("submit", handleRsvpSubmit);
@@ -446,6 +590,7 @@ async function boot() {
 }
 
 export function startInvitation() {
+  window.addEventListener("beforeunload", stopCountdown);
   window.addEventListener("scroll", reveal);
 
   boot().catch(() => {

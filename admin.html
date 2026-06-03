@@ -46,6 +46,9 @@
           <button type="button" class="admin-nav-item flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm text-on-surface-variant hover:bg-surface-container" data-panel="panel-settings">
             <span class="material-symbols-outlined text-lg">settings</span> Pengaturan Undangan
           </button>
+          <button type="button" class="admin-nav-item flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm text-on-surface-variant hover:bg-surface-container" data-panel="panel-gallery">
+            <span class="material-symbols-outlined text-lg">photo_library</span> Galeri Foto
+          </button>
           <button type="button" class="admin-nav-item flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm text-on-surface-variant hover:bg-surface-container" data-panel="panel-rundown">
             <span class="material-symbols-outlined text-lg">schedule</span> Rundown Acara
           </button>
@@ -185,6 +188,11 @@
                 <div><label class="text-xs font-label-caps text-on-surface-variant">Judul Acara</label><input name="event_title" class="mt-1 w-full border-b border-outline-variant py-2 outline-none focus:border-primary-3" /></div>
                 <div><label class="text-xs font-label-caps text-on-surface-variant">Subjudul Acara</label><input name="event_subtitle" class="mt-1 w-full border-b border-outline-variant py-2 outline-none focus:border-primary-3" /></div>
                 <div><label class="text-xs font-label-caps text-on-surface-variant">Tanggal Tampil</label><input name="event_date_display" class="mt-1 w-full border-b border-outline-variant py-2 outline-none focus:border-primary-3" /></div>
+                <div><label class="text-xs font-label-caps text-on-surface-variant">Waktu Mulai Acara (countdown)</label><input name="event_starts_at" type="datetime-local" class="mt-1 w-full border-b border-outline-variant py-2 outline-none focus:border-primary-3" /></div>
+                <div class="flex items-center gap-2">
+                  <input type="checkbox" name="countdown_enabled" id="countdown_enabled" class="rounded border-outline-variant text-primary-3" />
+                  <label for="countdown_enabled" class="text-sm">Tampilkan countdown di undangan</label>
+                </div>
                 <div class="md:col-span-2">
                   <label class="text-xs font-label-caps text-on-surface-variant">Gambar Hero</label>
                   <input type="hidden" name="hero_image_path" />
@@ -219,6 +227,30 @@
               </div>
               <button type="submit" class="rounded-full bg-primary-2 px-8 py-3 text-white hover:bg-primary-3">Simpan Pengaturan</button>
             </form>
+          </section>
+
+          <!-- Galeri -->
+          <section class="hidden" data-panel-id id="panel-gallery">
+            <div class="overflow-hidden rounded-2xl border border-white/20 bg-white/80 backdrop-blur-xl">
+              <div class="flex justify-between items-center border-b border-outline-variant/30 p-6">
+                <h3 class="font-headline-sm">Galeri Foto</h3>
+                <button id="btn-add-gallery" type="button" class="rounded-full bg-primary-2 px-4 py-2 text-sm text-white hover:bg-primary-3">+ Tambah Foto</button>
+              </div>
+              <div class="overflow-x-auto">
+                <table class="w-full border-collapse text-sm">
+                  <thead>
+                    <tr>
+                      <th class="border-b px-4 py-3 text-left text-[11px] uppercase text-on-surface-variant">Urut</th>
+                      <th class="border-b px-4 py-3 text-left text-[11px] uppercase text-on-surface-variant">Foto</th>
+                      <th class="border-b px-4 py-3 text-left text-[11px] uppercase text-on-surface-variant">Caption</th>
+                      <th class="border-b px-4 py-3 text-left text-[11px] uppercase text-on-surface-variant">Aktif</th>
+                      <th class="border-b px-4 py-3 text-left text-[11px] uppercase text-on-surface-variant">Aksi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="gallery-tbody"></tbody>
+                </table>
+              </div>
+            </div>
           </section>
 
           <!-- Rundown -->

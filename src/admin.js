@@ -11,6 +11,7 @@ import {
   INVITATION_IMAGES_BUCKET,
   resolveImageUrl,
   uploadSettingsImage,
+  uploadGalleryImage,
   removeInvitationImage,
   checkStorageBucket,
 } from './lib/storage.js'
@@ -31,6 +32,7 @@ let rsvps = []
 let wishes = []
 let rundown = []
 let guidelines = []
+let gallery = []
 let modalMode = null
 let modalId = null
 
@@ -39,6 +41,7 @@ const PANELS = [
   { id: 'panel-attendance', label: 'Hadir', icon: 'event_available' },
   { id: 'panel-wishes', label: 'Pesan', icon: 'mail' },
   { id: 'panel-settings', label: 'Setting', icon: 'settings' },
+  { id: 'panel-gallery', label: 'Galeri', icon: 'photo_library' },
   { id: 'panel-rundown', label: 'Rundown', icon: 'schedule' },
   { id: 'panel-guidelines', label: 'Panduan', icon: 'checklist' },
 ]
@@ -54,6 +57,13 @@ function formatDate(iso) {
   return new Date(iso).toLocaleString('id-ID', {
     day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit',
   })
+}
+
+function toDatetimeLocalValue(iso) {
+  if (!iso) return ''
+  const d = new Date(iso)
+  const pad = (n) => String(n).padStart(2, '0')
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
 }
 
 function showToast(msg, type = 'success') {
@@ -339,7 +349,7 @@ function bindSettingsImageFileInputs() {
 function fillSettingsForm(s) {
   const form = document.getElementById('settings-form')
   if (!form || !s) return
-  const skip = new Set(['hero_image_path', 'description_image_path'])
+  const skip = new Set(['hero_image_path', 'description_image_path', 'event_starts_at'])
   Object.keys(s).forEach((key) => {
     if (skip.has(key)) return
     const el = form.elements[key]
@@ -347,6 +357,8 @@ function fillSettingsForm(s) {
     if (el.type === 'checkbox') el.checked = !!s[key]
     else el.value = s[key] ?? ''
   })
+  const startsAt = form.elements.event_starts_at
+  if (startsAt) startsAt.value = toDatetimeLocalValue(s.event_starts_at)
   setSettingsImagePreview('hero', s.hero_image_path || s.hero_image_url)
   setSettingsImagePreview('description', s.description_image_path || s.description_image_url)
 }
@@ -402,6 +414,58 @@ function guidelineFormFields(g = {}) {
     <div><label class="text-xs text-on-surface-variant">Deskripsi</label><textarea name="description" required rows="3" class="mt-1 w-full border rounded-lg p-2">${escapeHtml(g.description || '')}</textarea></div>
     <div><label class="text-xs text-on-surface-variant">Urutan</label><input name="sort_order" type="number" value="${g.sort_order ?? 0}" class="mt-1 w-full border-b py-2" /></div>
     <div class="flex items-center gap-2"><input type="checkbox" name="is_active" ${g.is_active !== false ? 'checked' : ''} /><label class="text-sm">Aktif</label></div>`
+}
+
+function galleryFormFields(item = {}) {
+  const previewUrl = resolveImageUrl(item.image_path)
+  return `
+    <input type="hidden" name="image_path" value="${escapeHtml(item.image_path || '')}" />
+    <div>
+      <label class="text-xs text-on-surface-variant">Foto ${item.id ? '(kosongkan jika tidak ganti)' : '(wajib)'}</label>
+      <input type="file" id="gallery_image_file" name="gallery_image_file" accept="image/jpeg,image/png,image/webp,image/gif" class="mt-2 block w-full text-sm" ${item.id ? '' : 'required'} />
+      ${previewUrl ? `<img src="${escapeHtml(previewUrl)}" alt="" class="mt-3 max-h-32 rounded-lg object-cover" data-gallery-preview />` : '<img alt="" class="mt-3 max-h-32 rounded-lg object-cover hidden" data-gallery-preview />'}
+    </div>
+    <div><label class="text-xs text-on-surface-variant">Caption (opsional)</label><input name="caption" value="${escapeHtml(item.caption || '')}" class="mt-1 w-full border-b py-2 outline-none focus:border-primary-3" /></div>
+    <div><label class="text-xs text-on-surface-variant">Urutan</label><input name="sort_order" type="number" value="${item.sort_order ?? 0}" class="mt-1 w-full border-b py-2" /></div>
+    <div class="flex items-center gap-2"><input type="checkbox" name="is_active" ${item.is_active !== false ? 'checked' : ''} /><label class="text-sm">Aktif</label></div>`
+}
+
+function renderGalleryAdmin() {
+  const tbody = document.getElementById('gallery-tbody')
+  if (!tbody) return
+  if (!gallery.length) {
+    tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center italic text-on-surface-variant">Belum ada foto di galeri.</td></tr>`
+    return
+  }
+  tbody.innerHTML = gallery.map((item) => {
+    const url = resolveImageUrl(item.image_path)
+    return `
+    <tr class="${TR}">
+      <td class="${TD}">${item.sort_order}</td>
+      <td class="${TD}">${url ? `<img src="${escapeHtml(url)}" alt="" class="h-14 w-14 rounded-lg object-cover" />` : '-'}</td>
+      <td class="${TD} text-sm">${escapeHtml(item.caption || '-')}</td>
+      <td class="${TD}">${item.is_active ? 'Ya' : 'Tidak'}</td>
+      <td class="${TD}">
+        <button type="button" data-edit-gallery="${item.id}" class="text-xs text-primary-2 mr-2">Edit</button>
+        <button type="button" data-del-gallery="${item.id}" class="text-xs text-error">Hapus</button>
+      </td>
+    </tr>`
+  }).join('')
+  tbody.querySelectorAll('[data-edit-gallery]').forEach((b) => b.addEventListener('click', () => editGallery(b.dataset.editGallery)))
+  tbody.querySelectorAll('[data-del-gallery]').forEach((b) => b.addEventListener('click', () => deleteGallery(b.dataset.delGallery)))
+}
+
+function bindGalleryFilePreview() {
+  const input = document.getElementById('gallery_image_file')
+  const img = document.querySelector('[data-gallery-preview]')
+  if (!input || !img || input.dataset.bound) return
+  input.dataset.bound = '1'
+  input.addEventListener('change', () => {
+    const file = input.files?.[0]
+    if (!file) return
+    img.src = URL.createObjectURL(file)
+    img.classList.remove('hidden')
+  })
 }
 
 function addGuest() {
@@ -537,6 +601,71 @@ async function deleteGuideline(id) {
   loadData()
 }
 
+function addGallery() {
+  modalMode = 'gallery-add'
+  openModal('Tambah Foto Galeri', galleryFormFields({ sort_order: gallery.length + 1 }))
+  bindGalleryFilePreview()
+}
+
+function editGallery(id) {
+  const item = gallery.find((x) => x.id === id)
+  if (!item) return
+  modalMode = 'gallery-edit'
+  modalId = id
+  openModal('Edit Foto Galeri', galleryFormFields(item))
+  bindGalleryFilePreview()
+}
+
+async function saveGalleryModal() {
+  const form = document.getElementById('modal-form')
+  const fd = new FormData(form)
+  const prevPath = fd.get('image_path')?.toString() || ''
+  let image_path = prevPath
+  const file = document.getElementById('gallery_image_file')?.files?.[0]
+
+  try {
+    if (file) {
+      image_path = await uploadGalleryImage(file)
+      if (prevPath && prevPath !== image_path) await removeInvitationImage(prevPath)
+    } else if (modalMode === 'gallery-add') {
+      showToast('Pilih foto untuk diunggah', 'error')
+      return
+    }
+  } catch (err) {
+    showToast(err.message || 'Gagal mengunggah foto', 'error')
+    return
+  }
+
+  const payload = {
+    image_path,
+    caption: fd.get('caption')?.toString().trim() || null,
+    sort_order: parseInt(fd.get('sort_order')?.toString() || '0', 10),
+    is_active: fd.get('is_active') === 'on',
+  }
+  if (!payload.image_path) { showToast('Path gambar tidak valid', 'error'); return }
+
+  let err
+  if (modalMode === 'gallery-edit') {
+    ;({ error: err } = await db.from('gallery_images').update(payload).eq('id', modalId))
+  } else {
+    ;({ error: err } = await db.from('gallery_images').insert(payload))
+  }
+  if (err) { showToast(err.message, 'error'); return }
+  closeModal()
+  showToast('Foto galeri disimpan')
+  loadData()
+}
+
+async function deleteGallery(id) {
+  if (!confirm('Hapus foto ini?')) return
+  const item = gallery.find((x) => x.id === id)
+  const { error } = await db.from('gallery_images').delete().eq('id', id)
+  if (error) { showToast(error.message, 'error'); return }
+  if (item?.image_path) await removeInvitationImage(item.image_path)
+  showToast('Foto dihapus')
+  loadData()
+}
+
 async function saveSettings(e) {
   e.preventDefault()
   const form = e.target
@@ -545,10 +674,15 @@ async function saveSettings(e) {
   const skip = new Set(['hero_image_path', 'description_image_path'])
   for (const [key, val] of fd.entries()) {
     if (skip.has(key)) continue
-    if (key === 'guidelines_section_enabled') payload[key] = true
+    if (key === 'guidelines_section_enabled' || key === 'countdown_enabled') payload[key] = true
+    else if (key === 'event_starts_at') continue
     else payload[key] = val
   }
   if (!fd.has('guidelines_section_enabled')) payload.guidelines_section_enabled = false
+  if (!fd.has('countdown_enabled')) payload.countdown_enabled = false
+
+  const startsRaw = fd.get('event_starts_at')?.toString().trim()
+  payload.event_starts_at = startsRaw ? new Date(startsRaw).toISOString() : null
 
   payload.hero_image_path = fd.get('hero_image_path')?.toString() || ''
   payload.description_image_path = fd.get('description_image_path')?.toString() || ''
@@ -591,6 +725,7 @@ async function handleModalSave() {
   if (modalMode?.startsWith('guest')) return saveGuestModal()
   if (modalMode?.startsWith('rundown')) return saveRundownModal()
   if (modalMode?.startsWith('guideline')) return saveGuidelineModal()
+  if (modalMode?.startsWith('gallery')) return saveGalleryModal()
 }
 
 async function loadData() {
@@ -599,12 +734,13 @@ async function loadData() {
   //   return
   // }
 
-  const [gRes, rRes, wRes, rdRes, glRes] = await Promise.all([
+  const [gRes, rRes, wRes, rdRes, glRes, galRes] = await Promise.all([
     db.from('guests').select('*').order('full_name'),
     db.from('rsvps').select('*').order('created_at', { ascending: false }),
     db.from('wishes').select('*').order('created_at', { ascending: false }),
     db.from('event_rundown').select('*').order('sort_order'),
     db.from('guidelines').select('*').order('sort_order'),
+    db.from('gallery_images').select('*').order('sort_order'),
   ])
 
 
@@ -613,6 +749,7 @@ async function loadData() {
   wishes = wRes.data ?? []
   rundown = rdRes.data ?? []
   guidelines = glRes.data ?? []
+  gallery = galRes.data ?? []
 
   updateStats()
   renderInvitedGuests()
@@ -620,6 +757,7 @@ async function loadData() {
   renderWishes()
   renderRundown()
   renderGuidelinesAdmin()
+  renderGalleryAdmin()
   await loadSettings()
 }
 
@@ -631,6 +769,7 @@ function initNavigation() {
   document.getElementById('refresh-btn')?.addEventListener('click', loadData)
   document.getElementById('copy-public-link')?.addEventListener('click', () => copyText(getPublicLink()))
   document.getElementById('btn-add-guest')?.addEventListener('click', addGuest)
+  document.getElementById('btn-add-gallery')?.addEventListener('click', addGallery)
   document.getElementById('btn-add-rundown')?.addEventListener('click', addRundown)
   document.getElementById('btn-add-guideline')?.addEventListener('click', addGuideline)
   document.getElementById('settings-form')?.addEventListener('submit', saveSettings)

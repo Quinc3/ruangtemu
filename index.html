@@ -13,7 +13,7 @@
    
   </head>
   <body
-    class="bg-surface font-body-md text-on-surface antialiased overflow-x-hidden pb-20 is-loading"
+    class="bg-surface font-body-md text-on-surface antialiased overflow-x-hidden is-loading"
   >
     <div id="page-loader" aria-live="polite" aria-busy="true">
       <div class="loader-spinner" aria-hidden="true"></div>
@@ -25,22 +25,6 @@
     </div>
 
     <div id="app-content">
-      <nav
-        class="fixed top-0 w-full bg-white/80 dark:bg-surface-container/80 backdrop-blur-md z-50 border-b border-white/10 shadow-[0_40px_40px_-15px_rgba(0,0,0,0.04)]"
-      >
-        <div
-          class="flex justify-between items-center px-margin-mobile py-4 max-w-container-max mx-auto"
-        >
-          <div
-            id="nav-org-name"
-            class="font-display-lg-mobile text-display-lg-mobile text-primary-2 dark:text-primary-2 tracking-tight"
-          >
-            ...
-          </div>
-          <span class="material-symbols-outlined text-primary-2">school</span>
-        </div>
-      </nav>
-
       <header
         class="relative h-screen flex items-center justify-center overflow-hidden"
       >
@@ -80,6 +64,15 @@
             ></span>
             <div class="h-px w-12 bg-white/40 hidden md:block"></div>
           </div>
+          <div id="event-countdown" class="event-countdown hidden mb-8" aria-live="polite">
+            <div class="event-countdown__grid">
+              <div class="event-countdown__unit"><span id="countdown-days">00</span><span class="event-countdown__label">Hari</span></div>
+              <div class="event-countdown__unit"><span id="countdown-hours">00</span><span class="event-countdown__label">Jam</span></div>
+              <div class="event-countdown__unit"><span id="countdown-minutes">00</span><span class="event-countdown__label">Menit</span></div>
+              <div class="event-countdown__unit"><span id="countdown-seconds">00</span><span class="event-countdown__label">Detik</span></div>
+            </div>
+          </div>
+          <p id="countdown-ended" class="hidden font-label-caps text-label-caps mb-8 opacity-90">Acara telah dimulai</p>
           <a
             class="inline-block bg-primary-2 px-10 py-4 font-button text-inverse-primary-2 uppercase tracking-widest hover:bg-white hover:text-primary-2 transition-all duration-500 rounded-full"
             href="#rsvp"
@@ -124,6 +117,14 @@
               src=""
             />
           </div>
+        </section>
+
+        <section class="reveal hidden" id="gallery">
+          <div class="text-center mb-stack-md">
+            <h2 class="font-display-lg text-display-lg">Galeri Kenangan</h2>
+            <div class="w-12 h-1 bg-primary-2 mx-auto mt-4"></div>
+          </div>
+          <div id="gallery-grid" class="grid grid-cols-2 gap-3 md:grid-cols-3"></div>
         </section>
 
         <section class="reveal space-y-gutter" id="details">
@@ -453,45 +454,14 @@
           class="text-[10px] tracking-[0.2em] uppercase mt-8 text-inverse-primary-2"
         ></p>
       </footer>
+    </div>
 
-      <nav
-        class="fixed bottom-0 w-full z-50 flex justify-around items-center py-3 px-6 md:hidden bg-white/80 dark:bg-surface-container/80 backdrop-blur-md border-t border-white/10 shadow-[0_-10px_30px_rgba(0,0,0,0.03)] rounded-t-full"
-      >
-        <a
-          class="flex flex-col items-center justify-center text-primary-2 dark:text-primary-2-fixed active:scale-95 transition-all"
-          href="#"
-        >
-          <span
-            class="material-symbols-outlined"
-            style="font-variation-settings: &quot;FILL&quot; 1"
-            >home</span
-          >
-          <span class="font-label-caps text-[8px] uppercase mt-1">Beranda</span>
-        </a>
-        <a
-          class="flex flex-col items-center justify-center text-on-surface-variant/60 active:scale-95 transition-all"
-          href="#story"
-        >
-          <span class="material-symbols-outlined">history_edu</span>
-          <span class="font-label-caps text-[8px] uppercase mt-1"
-            >Kenangan</span
-          >
-        </a>
-        <a
-          class="flex flex-col items-center justify-center text-on-surface-variant/60 active:scale-95 transition-all"
-          href="#details"
-        >
-          <span class="material-symbols-outlined">event</span>
-          <span class="font-label-caps text-[8px] uppercase mt-1">Acara</span>
-        </a>
-        <a
-          class="flex flex-col items-center justify-center text-on-surface-variant/60 active:scale-95 transition-all"
-          href="#rsvp"
-        >
-          <span class="material-symbols-outlined">how_to_reg</span>
-          <span class="font-label-caps text-[8px] uppercase mt-1">Daftar</span>
-        </a>
-      </nav>
+    <div id="gallery-lightbox" class="gallery-lightbox" aria-hidden="true">
+      <button id="gallery-lightbox-close" type="button" class="gallery-lightbox__close material-symbols-outlined" aria-label="Tutup">close</button>
+      <div class="text-center px-4">
+        <img id="gallery-lightbox-img" alt="" />
+        <p id="gallery-lightbox-caption" class="mt-4 text-sm text-white/90 hidden"></p>
+      </div>
     </div>
 
     <div class="modal-overlay" id="guestbook-modal" aria-hidden="true">
