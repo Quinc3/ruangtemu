@@ -1,0 +1,569 @@
+<!doctype html>
+<html class="scroll-smooth" lang="id" data-invitation="v1">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title id="page-title">Undangan Perpisahan</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Dongle&family=Gelasio:ital,wght@0,400..700;1,400..700&family=Lexend:wght@100..900&family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body
+    class="bg-surface font-body-md text-on-surface antialiased overflow-x-hidden is-loading"
+  >
+    <div id="page-loader" aria-live="polite" aria-busy="true">
+      <div class="loader-spinner" aria-hidden="true"></div>
+      <p
+        class="font-label-caps text-label-caps text-on-surface-variant tracking-widest"
+      >
+        Memuat undangan...
+      </p>
+    </div>
+
+    <div id="app-content" class="overflow-x-hidden">
+      <header
+        class="hero relative flex h-[min(100dvh,640px)] items-center justify-center overflow-hidden"
+      >
+        <div class="hero-media" aria-hidden="true">
+          <img
+            id="hero-image"
+            alt="Hero background"
+            class="h-full w-full object-cover object-center"
+            src=""
+          />
+        </div>
+        <div class="hero-overlay absolute inset-0 backdrop-blur-[1px]"></div>
+        <div
+          class="relative z-10 text-center text-primary-1 px-margin-mobile w-full"
+        >
+          <p
+            id="hero-label"
+            class="font-label-caps text-label-caps uppercase tracking-[0.3em] mb-4 opacity-90"
+          ></p>
+          <p
+            id="guest-greeting"
+            class="font-headline-sm text-headline-sm mb-4 opacity-95 hidden"
+          ></p>
+          <h1
+            id="hero-title"
+            class="font-display-lg-mobile text-display-lg-mobile mb-4 leading-none"
+          ></h1>
+          <p
+            id="hero-subtitle"
+            class="font-headline-sm text-headline-sm mb-8 opacity-90"
+          ></p>
+          <div class="flex flex-col items-center justify-center gap-6 mb-8">
+            <span
+              id="hero-date"
+              class="font-headline-md text-headline-md font-light italic"
+            ></span>
+          </div>
+          <a
+            class="inline-block bg-primary-2 px-10 py-4 font-button text-inverse-primary-2 uppercase tracking-widest hover:bg-white hover:text-primary-2 transition-all duration-500 rounded-full"
+            href="#rsvp"
+            >Konfirmasi Kehadiran</a
+          >
+        </div>
+      </header>
+
+      <section
+        id="countdown-section"
+        class="countdown-section hidden max-w-container-max mx-auto px-margin-mobile py-stack-md text-center"
+        aria-labelledby="countdown-heading"
+      >
+        <p
+          id="countdown-heading"
+          class="font-label-caps text-label-caps text-primary-2 tracking-widest mb-4"
+        >
+          Menuju Hari Bahagia
+        </p>
+        <div id="event-countdown" class="event-countdown hidden" aria-live="polite">
+          <div class="event-countdown__grid">
+            <div class="event-countdown__unit">
+              <span id="countdown-days">00</span>
+              <span class="event-countdown__label">Hari</span>
+            </div>
+            <div class="event-countdown__unit">
+              <span id="countdown-hours">00</span>
+              <span class="event-countdown__label">Jam</span>
+            </div>
+            <div class="event-countdown__unit">
+              <span id="countdown-minutes">00</span>
+              <span class="event-countdown__label">Menit</span>
+            </div>
+            <div class="event-countdown__unit">
+              <span id="countdown-seconds">00</span>
+              <span class="event-countdown__label">Detik</span>
+            </div>
+          </div>
+        </div>
+        <p
+          id="countdown-ended"
+          class="hidden font-label-caps text-label-caps text-on-surface-variant"
+        >
+          Acara telah dimulai
+        </p>
+      </section>
+
+      <main
+        class="max-w-container-max mx-auto px-margin-mobile space-y-stack-lg py-stack-lg"
+      >
+        <section
+          class="reveal grid grid-cols-1 gap-gutter items-center"
+          id="story"
+        >
+          <div class="space-y-6">
+            <span
+              id="description-label"
+              class="font-label-caps text-label-caps text-primary-2 tracking-widest"
+            ></span>
+            <h2
+              id="description-title"
+              class="font-display-lg-mobile text-display-lg-mobile"
+            ></h2>
+            <p
+              id="description-body"
+              class="font-body-lg text-body-lg text-inverse-primary-1 max-w-lg"
+            ></p>
+            <p
+              id="description-quote"
+              class="font-body-md text-body-md text-inverse-primary-1 italic hidden"
+            ></p>
+          </div>
+          <div class="relative group">
+            <div
+              class="absolute -inset-4 border border-outline-variant/30 rounded-xl group-hover:inset-0 transition-all duration-700"
+            ></div>
+            <img
+              id="description-image"
+              alt="Kenangan sekolah"
+              class="rounded-xl w-full aspect-[4/5] object-cover shadow-2xl relative z-10"
+              src=""
+            />
+          </div>
+        </section>
+
+        <section class="reveal hidden" id="gallery">
+          <div class="text-center mb-stack-md">
+            <h2 class="font-display-lg-mobile text-display-lg-mobile">
+              Galeri Kenangan
+            </h2>
+            <div class="w-12 h-1 bg-primary-2 mx-auto mt-4"></div>
+          </div>
+          <div id="gallery-grid" class="grid grid-cols-2 gap-3"></div>
+        </section>
+
+        <section class="reveal space-y-gutter" id="details">
+          <div class="text-center mb-stack-md">
+            <h2 class="font-display-lg-mobile text-display-lg-mobile">
+              Detail Acara
+            </h2>
+            <div class="w-12 h-1 bg-primary-2 mx-auto mt-4"></div>
+          </div>
+          <div id="rundown-grid" class="grid grid-cols-1 gap-gutter"></div>
+          <div
+            class="mt-gutter h-[400px] rounded-xl overflow-hidden glass-card relative"
+          >
+            <div
+              id="map-fallback"
+              class="absolute inset-0 bg-surface-container-highest/20 flex items-center justify-center"
+            >
+              <div
+                class="text-center p-8 bg-white/90 backdrop-blur-md rounded-lg shadow-xl z-10 max-w-sm"
+              >
+                <span
+                  class="material-symbols-outlined text-3xl mb-2 text-inverse-primary-2"
+                  >map</span
+                >
+                <p class="font-body-md mb-4">
+                  Klik di bawah untuk membuka Google Maps
+                </p>
+                <a
+                  id="gmaps-link-btn"
+                  class="bg-primary-2 text-inverse-primary-2 px-6 py-2 rounded-full font-button text-button inline-flex items-center gap-2"
+                  href="#"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Buka Peta
+                  <span class="material-symbols-outlined text-sm"
+                    >open_in_new</span
+                  >
+                </a>
+              </div>
+            </div>
+            <iframe
+              id="gmaps-embed"
+              class="absolute inset-0 w-full h-full border-0 hidden"
+              loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade"
+              title="Peta lokasi acara"
+            ></iframe>
+          </div>
+          <!-- <div class="text-center pt-8">
+            <button
+              class="font-button text-button text-primary-2 border border-primary-2 px-8 py-3 rounded-full hover:bg-primary-2 hover:text-inverse-primary-2 transition-all"
+            >
+              Tambahkan ke Kalender
+            </button>
+          </div> -->
+        </section>
+
+        <section
+          class="reveal py-stack-md bg-primary-2-container/10 rounded-3xl px-margin-mobile hidden"
+          id="guidelines"
+        >
+          <div class="flex flex-col gap-gutter">
+            <div class="flex-1 space-y-8">
+              <h2 class="font-display-lg-mobile text-display-lg-mobile">
+                Panduan Acara
+              </h2>
+              <div id="guidelines-grid" class="grid grid-cols-1 gap-8"></div>
+            </div>
+            <div class="w-full">
+              <div class="glass-card !bg-primary-1 p-8 rounded-xl space-y-4">
+                <h4
+                  id="guidelines-palette-title"
+                  class="font-label-caps text-label-caps text-inverse-primary-1"
+                ></h4>
+                <div class="grid grid-cols-2 gap-2">
+                  <div
+                    class="h-24 rounded"
+                    style="background-color: var(--color-primary-2)"
+                  ></div>
+                  <div
+                    class="h-24 rounded"
+                    style="background-color: var(--color-primary-3)"
+                  ></div>
+                  <div
+                    class="h-24 rounded"
+                    style="background-color: var(--color-primary-2-container)"
+                  ></div>
+                  <div
+                    class="h-24 rounded"
+                    style="background-color: var(--color-on-surface)"
+                  ></div>
+                </div>
+                <p
+                  id="guidelines-palette-note"
+                  class="text-xs text-inverse-primary-2 italic"
+                ></p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- <section class="reveal max-w-2xl mx-auto text-center">
+          <div class="glass-card p-12 rounded-2xl relative overflow-hidden">
+            <div
+              class="absolute top-0 right-0 w-32 h-32 bg-primary-2/5 rounded-full -translate-y-16 translate-x-16"
+            ></div>
+            <span
+              class="material-symbols-outlined text-5xl text-inverse-primary-2 mb-6"
+              >volunteer_activism</span
+            >
+            <h2
+              class="font-display-lg-mobile text-display-lg-mobile mb-4 text-inverse-primary-2"
+            >
+              Kas Kenangan Angkatan
+            </h2>
+            <p class="font-body-md text-body-md text-inverse-primary-2 mb-8">
+              Kehadiran Anda adalah hadiah terindah di hari perpisahan kami.
+              Bagi yang ingin berpartisipasi dalam kas kenangan angkatan,
+              berikut informasi rekening panitia.
+            </p>
+            <div class="flex flex-col gap-4">
+              <button
+                id="toggle-bank"
+                type="button"
+                class="bg-primary-2 text-inverse-primary-2 px-8 py-3 rounded-full font-button text-button w-full hover:bg-primary-2 transition-all"
+              >
+                Lihat Rekening Panitia
+              </button>
+              <div
+                class="hidden overflow-hidden transition-all duration-500 py-6 border-t border-outline-variant mt-4"
+                id="bank-details"
+              >
+                <div class="grid grid-cols-1 gap-8 text-left">
+                  <div class="space-y-2">
+                    <p class="font-label-caps text-xs opacity-60">ATAS NAMA</p>
+                    <p class="font-body-md font-semibold">
+                      PANITIA PERPISAHAN XII RT
+                    </p>
+                    <p class="font-label-caps text-xs opacity-60 mt-4">
+                      NOMOR REKENING
+                    </p>
+                    <p class="font-body-md font-semibold">1234 5678 9012</p>
+                    <p class="font-label-caps text-xs opacity-60 mt-4">BANK</p>
+                    <p class="font-body-md font-semibold">Bank BCA</p>
+                  </div>
+                  <div
+                    class="flex flex-col items-center justify-center p-4 bg-white rounded-lg"
+                  >
+                    <span
+                      class="material-symbols-outlined text-6xl text-on-surface-variant/20"
+                      >qr_code_2</span
+                    >
+                    <p class="text-[10px] mt-2 text-on-surface-variant">
+                      SCAN UNTUK TRANSFER
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section> -->
+
+        <section class="reveal grid grid-cols-1 gap-gutter" id="rsvp">
+          <div class="glass-card !bg-primary-2-container/10 p-10 rounded-2xl">
+            <h2
+              class="font-display-lg-mobile text-headline-sm mb-8 text-inverse-primary-1"
+            >
+              Konfirmasi Kehadiran
+            </h2>
+            <form class="space-y-6" id="rsvp-form">
+              <div>
+                <label
+                  class="font-label-caps text-xs mb-2 block text-inverse-primary-1"
+                  for="full_name"
+                  >Nama Lengkap</label
+                >
+                <input
+                  class="w-full border-0 border-b border-outline-variant bg-transparent focus:ring-0 focus:border-primary-2 py-2 transition-all outline-none"
+                  id="full_name"
+                  name="full_name"
+                  placeholder="Masukkan nama Anda"
+                  type="text"
+                  required
+                />
+              </div>
+              <div>
+                <span
+                  class="font-label-caps text-xs mb-2 block text-inverse-primary-1"
+                  >Apakah Anda akan hadir?</span
+                >
+                <div class="flex flex-col gap-4 mt-2">
+                  <label class="flex items-center gap-2 cursor-pointer group">
+                    <input
+                      class="text-primary-2 focus:ring-primary-3 border-outline-variant"
+                      name="attend"
+                      type="radio"
+                      value="yes"
+                    />
+                    <span
+                      class="font-body-md group-hover:text-primary-2 transition-colors"
+                      >Ya, saya hadir</span
+                    >
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer group">
+                    <input
+                      class="text-primary-2 focus:ring-primary-3 border-outline-variant"
+                      name="attend"
+                      type="radio"
+                      value="no"
+                    />
+                    <span
+                      class="font-body-md group-hover:text-primary-2 transition-colors"
+                      >Maaf, tidak bisa hadir</span
+                    >
+                  </label>
+                </div>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label
+                    class="font-label-caps text-xs mb-2 block text-inverse-primary-1"
+                    for="guest_count"
+                    >Jumlah Orang</label
+                  >
+                  <select
+                    class="w-full border-0 border-b border-outline-variant bg-transparent focus:ring-0 focus:border-primary-2 py-2 transition-all outline-none"
+                    id="guest_count"
+                    name="guest_count"
+                  >
+                    <option value="1">1 Orang</option>
+                    <option value="2">2 Orang</option>
+                    <option value="3">3 Orang</option>
+                  </select>
+                </div>
+                <div>
+                  <label
+                    class="font-label-caps text-xs mb-2 block text-inverse-primary-1"
+                    for="meal_preference"
+                    >Sebagai</label
+                  >
+                  <select
+                    class="w-full border-0 border-b border-outline-variant bg-transparent focus:ring-0 focus:border-primary-2 py-2 transition-all outline-none"
+                    id="meal_preference"
+                    name="meal_preference"
+                  >
+                    <option>Siswa</option>
+                    <option>Guru</option>
+                    <option>Orang Tua</option>
+                    <option>Alumni</option>
+                    <option>Tamu Undangan</option>
+                  </select>
+                </div>
+              </div>
+              <button
+                class="w-full bg-primary-2 text-white py-4 rounded-full font-button text-button hover:bg-primary-2 transition-all mt-8"
+                type="submit"
+              >
+                Kirim Konfirmasi
+              </button>
+              <p
+                id="rsvp-deadline"
+                class="text-center text-xs text-inverse-primary-1 italic mt-4"
+              ></p>
+            </form>
+          </div>
+          <div class="flex flex-col">
+            <h3
+              class="font-display-lg-mobile text-headline-sm mb-8 text-inverse-primary-1"
+            >
+              Ucapan &amp; Doa
+            </h3>
+            <div
+              class="flex-grow space-y-4 max-h-[500px] overflow-y-auto pr-4 scrollbar-hide"
+              id="guestbook-list"
+            >
+              <div
+                class="glass-card p-6 rounded-xl text-center text-inverse-primary-1 text-sm italic"
+              >
+                Memuat ucapan...
+              </div>
+            </div>
+            <button
+              id="open-guestbook"
+              type="button"
+              class="mt-8 text-primary-2 font-button text-button flex items-center justify-center gap-2 group"
+            >
+              Tulis Ucapan
+              <span
+                class="material-symbols-outlined transition-transform group-hover:translate-x-1"
+                >edit</span
+              >
+            </button>
+          </div>
+        </section>
+      </main>
+
+      <footer
+        class="bg-primary-2-container/10 dark:bg-primary-2 border-t border-outline-variant w-full py-stack-lg flex flex-col items-center gap-4 text-center px-margin-mobile mt-stack-lg"
+      >
+        <div
+          id="footer-org-name"
+          class="font-display-lg-mobile text-display-lg-mobile text-inverse-primary-2"
+        ></div>
+        <div class="flex gap-8 my-4">
+          <a
+            class="font-body-md text-body-md text-inverse-primary-2 hover:text-primary-2 transition-colors"
+            href="#gallery"
+            >Galeri</a
+          >
+          <a
+            class="font-body-md text-body-md text-inverse-primary-2 hover:text-primary-2 transition-colors"
+            href="#details"
+            >Acara</a
+          >
+          <a
+            class="font-body-md text-body-md text-inverse-primary-2 hover:text-primary-2 transition-colors"
+            href="#guidelines"
+            >Panduan</a
+          >
+          <a
+            class="font-body-md text-body-md text-inverse-primary-2 hover:text-primary-2 transition-colors"
+            href="#rsvp"
+            >Kontak Panitia</a
+          >
+        </div>
+        <p
+          id="footer-tagline"
+          class="font-body-md text-body-md text-inverse-primary-2"
+        ></p>
+        <p
+          id="footer-copyright"
+          class="text-[10px] tracking-[0.2em] uppercase mt-8 text-inverse-primary-2"
+        ></p>
+      </footer>
+    </div>
+
+    <div id="gallery-lightbox" class="gallery-lightbox" aria-hidden="true">
+      <button
+        id="gallery-lightbox-close"
+        type="button"
+        class="gallery-lightbox__close material-symbols-outlined"
+        aria-label="Tutup"
+      >
+        close
+      </button>
+      <div class="text-center px-4">
+        <img id="gallery-lightbox-img" alt="" />
+        <p id="gallery-lightbox-caption" class="mt-4 text-sm text-white/90 hidden"></p>
+      </div>
+    </div>
+
+    <div class="modal-overlay" id="guestbook-modal" aria-hidden="true">
+      <div class="modal-content glass-card p-8 rounded-2xl w-full max-w-md">
+        <div class="flex justify-between items-center mb-6">
+          <h3 class="font-display-lg-mobile text-headline-sm">Tulis Ucapan</h3>
+          <button
+            id="close-guestbook"
+            type="button"
+            class="material-symbols-outlined text-on-surface-variant hover:text-primary-2"
+          >
+            close
+          </button>
+        </div>
+        <form class="space-y-6" id="wish-form">
+          <div>
+            <label
+              class="font-label-caps text-xs mb-2 block text-on-surface-variant"
+              for="wish_name"
+              >Nama</label
+            >
+            <input
+              class="w-full border-0 border-b border-outline-variant bg-transparent focus:ring-0 focus:border-primary-2 py-2 transition-all outline-none"
+              id="wish_name"
+              name="wish_name"
+              placeholder="Nama Anda"
+              type="text"
+              required
+            />
+          </div>
+          <div>
+            <label
+              class="font-label-caps text-xs mb-2 block text-on-surface-variant"
+              for="wish_message"
+              >Ucapan</label
+            >
+            <textarea
+              class="w-full border border-outline-variant bg-transparent focus:ring-0 focus:border-primary-2 p-3 rounded-lg transition-all outline-none resize-none"
+              id="wish_message"
+              name="wish_message"
+              placeholder="Tulis ucapan untuk angkatan XII..."
+              rows="4"
+              required
+            ></textarea>
+          </div>
+          <button
+            class="w-full bg-primary-2 text-white py-3 rounded-full font-button text-button hover:bg-primary-2 transition-all"
+            type="submit"
+          >
+            Kirim Ucapan
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="/src/main-v1.js"></script>
+  </body>
+</html>

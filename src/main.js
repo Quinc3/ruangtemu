@@ -4,7 +4,19 @@ import { resolveImageUrl } from "./lib/storage.js";
 
 let currentGuest = null;
 
-function showToast(message, type = "success") {
+/* ---------- UTILITAS ---------- */
+export function escapeHtml(text) {
+  const div = document.createElement("div");
+  div.textContent = text ?? "";
+  return div.innerHTML;
+}
+
+export function setText(id, text) {
+  const el = document.getElementById(id);
+  if (el && text != null) el.textContent = text;
+}
+
+export function showToast(message, type = "success") {
   const toast = document.getElementById("toast");
   if (!toast) return;
   toast.textContent = message;
@@ -12,62 +24,15 @@ function showToast(message, type = "success") {
   setTimeout(() => toast.classList.remove("show"), 3500);
 }
 
-function toggleDetails() {
+export function toggleDetails() {
   document.getElementById("bank-details")?.classList.toggle("hidden");
 }
 
-// ==================================================
-//  REVEAL OBSERVER
-// ==================================================
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const delay = entry.target.dataset.delay || 0;
-      setTimeout(() => {
-        entry.target.classList.add("active");
-      }, delay);
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-
-function observeReveal() {
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+export function waitForFonts() {
+  return document.fonts?.ready ?? Promise.resolve();
 }
 
-function observeRundownCards() {
-  document.querySelectorAll('#rundown-grid > div').forEach((card, i) => {
-    card.classList.add('reveal', 'fade-up');
-    card.dataset.delay = i * 150;
-    revealObserver.observe(card);
-  });
-}
-
-function initParallax() {
-  const img = document.getElementById("hero-image");
-  if (!img) return;
-  window.addEventListener("scroll", () => {
-    const scroll = window.pageYOffset;
-    img.style.transform = `scale(${1.05 + scroll * 0.0001}) translateY(${scroll * 0.1}px)`;
-  });
-}
-
-function escapeHtml(text) {
-  const div = document.createElement("div");
-  div.textContent = text ?? "";
-  return div.innerHTML;
-}
-
-function setText(id, text) {
-  const el = document.getElementById(id);
-  if (el && text != null) el.textContent = text;
-}
-
-function getGuestSlug() {
-  return new URLSearchParams(window.location.search).get("to")?.trim() || null;
-}
-
-function preloadImage(src) {
+export function preloadImage(src) {
   if (!src) return Promise.resolve();
   return new Promise((resolve) => {
     const img = new Image();
@@ -77,48 +42,44 @@ function preloadImage(src) {
   });
 }
 
-function waitForFonts() {
-  return document.fonts?.ready ?? Promise.resolve();
-}
-
-function hidePageLoader() {
+export function hidePageLoader() {
   document.getElementById("page-loader")?.classList.add("loaded");
   document.body.classList.remove("is-loading");
   document.getElementById("page-loader")?.setAttribute("aria-busy", "false");
 }
 
-async function resolveGuest() {
+export function getGuestSlug() {
+  return new URLSearchParams(window.location.search).get("to")?.trim() || null;
+}
+
+/* ---------- GUEST ---------- */
+export async function resolveGuest() {
   const slug = getGuestSlug();
   if (!slug || !isSupabaseConfigured) return null;
-
   const { data, error } = await supabase
     .from("guests")
     .select("id, full_name, category, slug")
     .eq("slug", slug)
     .maybeSingle();
-
   if (error || !data) return null;
   return data;
 }
 
-function applyGuestToForm(guest) {
+export function applyGuestToForm(guest) {
   const nameInput = document.getElementById("full_name");
   const categorySelect = document.getElementById("meal_preference");
   if (!nameInput) return;
-
   nameInput.value = guest.full_name;
   nameInput.readOnly = true;
   nameInput.classList.add("opacity-80", "cursor-not-allowed");
-
   if (categorySelect && guest.category) {
-    const option = [...categorySelect.options].find(
-      (o) => o.value === guest.category,
-    );
+    const option = [...categorySelect.options].find(o => o.value === guest.category);
     if (option) categorySelect.value = guest.category;
   }
 }
 
-function renderSettings(s) {
+/* ---------- SETTINGS ---------- */
+export function renderSettings(s) {
   document.title = `Undangan Perpisahan | ${s.org_name}`;
   setText("nav-org-name", s.org_name);
   setText("footer-org-name", s.org_name);
@@ -137,9 +98,7 @@ function renderSettings(s) {
   const heroImg = document.getElementById("hero-image");
   if (heroImg && heroSrc) heroImg.src = heroSrc;
 
-  const descSrc = resolveImageUrl(
-    s.description_image_path || s.description_image_url,
-  );
+  const descSrc = resolveImageUrl(s.description_image_path || s.description_image_url);
   const descImg = document.getElementById("description-image");
   if (descImg && descSrc) descImg.src = descSrc;
 
@@ -186,51 +145,34 @@ function renderSettings(s) {
   };
 }
 
-/* =========================================
-   RENDER RUNDOWN – WARNA BERGANTIAN
-   ========================================= */
-function renderRundown(items) {
+/* ---------- RUNDOWN (WARNA CLAY) ---------- */
+export function renderRundown(items) {
   const grid = document.getElementById("rundown-grid");
   if (!grid) return;
-
   if (!items?.length) {
-    grid.innerHTML =
-      '<p class="col-span-3 text-center text-on-surface-variant italic h-40 flex items-center justify-center">Belum ada rundown acara.</p>';
+    grid.innerHTML = '<p class="col-span-3 text-center text-on-surface-variant italic h-40 flex items-center justify-center">Belum ada rundown acara.</p>';
     return;
   }
-
   const cardColors = ['card-pink', 'card-teal', 'card-lavender', 'card-peach', 'card-ochre'];
-
-  grid.innerHTML = items
-    .map(
-      (item, i) => `
+  grid.innerHTML = items.map((item, i) => `
     <div class="${cardColors[i % cardColors.length]} p-10 text-center space-y-4 rounded-xl">
       <span class="material-symbols-outlined text-4xl">${escapeHtml(item.icon)}</span>
       <h3 class="font-headline-sm text-headline-sm">${escapeHtml(item.title)}</h3>
       ${item.time_range ? `<p class="font-body-md text-body-md">${escapeHtml(item.time_range)}</p>` : ""}
       ${item.note ? `<p class="font-label-caps text-label-caps">${escapeHtml(item.note)}</p>` : ""}
     </div>
-  `
-    )
-    .join("");
+  `).join("");
 }
 
-/* =========================================
-   RENDER GUIDELINES
-   ========================================= */
-function renderGuidelines(items) {
+/* ---------- GUIDELINES ---------- */
+export function renderGuidelines(items) {
   const grid = document.getElementById("guidelines-grid");
   if (!grid) return;
-
   if (!items?.length) {
-    grid.innerHTML =
-      '<p class="col-span-2 text-on-surface-variant italic text-sm">Belum ada panduan acara.</p>';
+    grid.innerHTML = '<p class="col-span-2 text-on-surface-variant italic text-sm">Belum ada panduan acara.</p>';
     return;
   }
-
-  grid.innerHTML = items
-    .map(
-      (g) => `
+  grid.innerHTML = items.map(g => `
     <div class="flex gap-4 rounded-xl">
       <span class="material-symbols-outlined text-primary-4">${escapeHtml(g.icon)}</span>
       <div>
@@ -238,59 +180,23 @@ function renderGuidelines(items) {
         <p class="text-on-surface-variant text-sm">${escapeHtml(g.description)}</p>
       </div>
     </div>
-  `,
-    )
-    .join("");
+  `).join("");
 }
 
-async function loadInvitationData() {
-  if (!isSupabaseConfigured) return { heroUrl: null, descUrl: null };
-
-  currentGuest = await resolveGuest();
-  if (currentGuest) applyGuestToForm(currentGuest);
-
-  const [settingsRes, rundownRes, guidelinesRes] = await Promise.all([
-    supabase.from("invitation_settings").select("*").eq("id", 1).maybeSingle(),
-    supabase
-      .from("event_rundown")
-      .select("*")
-      .eq("is_active", true)
-      .order("sort_order"),
-    supabase
-      .from("guidelines")
-      .select("*")
-      .eq("is_active", true)
-      .order("sort_order"),
-  ]);
-
-  let urls = { heroUrl: null, descUrl: null };
-  if (settingsRes.data) urls = renderSettings(settingsRes.data) ?? urls;
-  renderRundown(rundownRes.data);
-  renderGuidelines(guidelinesRes.data);
-  return urls;
-}
-
-/* =========================================
-   DRESSCODE (PUBLIC)
-   ========================================= */
-async function loadDresscodeForPublic() {
+/* ---------- DRESSCODE ---------- */
+export async function loadDresscodeForPublic() {
   const dressCard = document.getElementById('dresscode-card');
   const container = document.getElementById('dresscode-colors');
   if (!dressCard || !container) return;
-
   const { data, error } = await supabase
     .from('dresscode_palette')
     .select('is_active, color1, color2, color3, color4')
     .eq('id', 1)
     .maybeSingle();
-
-  // Jika tidak aktif / error → sembunyikan seluruh kartu
   if (error || !data || !data.is_active) {
     dressCard.classList.add('hidden');
     return;
   }
-
-  // Aktif → tampilkan kartu & isi warna
   dressCard.classList.remove('hidden');
   const colors = [data.color1, data.color2, data.color3, data.color4];
   container.innerHTML = `
@@ -305,17 +211,8 @@ async function loadDresscodeForPublic() {
   `;
 }
 
-/* =========================================
-   RENDER WISH
-   ========================================= */
-const borderColors = [
-  "border-l-pink-500",
-  "border-l-teal-600",
-  "border-l-lavender",
-  "border-l-peach",
-  "border-l-ochre",
-];
-
+/* ---------- WISHES ---------- */
+const borderColors = ["border-l-pink-500","border-l-teal-600","border-l-lavender","border-l-peach","border-l-ochre"];
 function renderWish(wish, index) {
   const border = borderColors[index % borderColors.length];
   return `
@@ -326,44 +223,36 @@ function renderWish(wish, index) {
   `;
 }
 
-async function loadWishes() {
+export async function loadWishes() {
   const list = document.getElementById("guestbook-list");
   if (!list) return;
-
   if (!isSupabaseConfigured) {
     list.innerHTML = `<div class="bg-white/80 p-6 rounded-xl text-center text-ink text-sm">Hubungkan Supabase di file <code class="text-primary-3">.env</code> untuk menampilkan ucapan.</div>`;
     return;
   }
-
   const { data, error } = await supabase
     .from("wishes")
     .select("name, message, created_at")
     .order("created_at", { ascending: false })
     .limit(20);
-
   if (error) {
     list.innerHTML = `<p class="text-error text-sm text-center">Gagal memuat ucapan.</p>`;
     return;
   }
-
   if (!data?.length) {
     list.innerHTML = `<div class="bg-white/80 p-6 rounded-xl text-center text-ink text-sm italic">Belum ada ucapan. Jadilah yang pertama memberi doa!</div>`;
     return;
   }
-
   list.innerHTML = data.map((w, i) => renderWish(w, i)).join("");
 }
 
-/* =========================================
-   MODAL & FORM HANDLER
-   ========================================= */
-function openGuestbookModal() {
+/* ---------- MODAL & FORM ---------- */
+export function openGuestbookModal() {
   const modal = document.getElementById("guestbook-modal");
   if (!modal) return;
   modal.classList.add("open");
   modal.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
-
   if (currentGuest) {
     const wishName = document.getElementById("wish_name");
     if (wishName) {
@@ -373,7 +262,7 @@ function openGuestbookModal() {
   }
 }
 
-function closeGuestbookModal() {
+export function closeGuestbookModal() {
   const modal = document.getElementById("guestbook-modal");
   if (!modal) return;
   modal.classList.remove("open");
@@ -381,30 +270,17 @@ function closeGuestbookModal() {
   document.body.style.overflow = "";
 }
 
-async function handleRsvpSubmit(e) {
+export async function handleRsvpSubmit(e) {
   e.preventDefault();
   const form = e.target;
   const submitBtn = form.querySelector('[type="submit"]');
   const name = form.full_name.value.trim();
   const attend = form.querySelector('input[name="attend"]:checked');
-
-  if (!name) {
-    showToast("Mohon isi nama lengkap.", "error");
-    return;
-  }
-  if (!attend) {
-    showToast("Mohon pilih konfirmasi kehadiran.", "error");
-    return;
-  }
-
-  if (!isSupabaseConfigured) {
-    showToast("Supabase belum dikonfigurasi.", "error");
-    return;
-  }
-
+  if (!name) { showToast("Mohon isi nama lengkap.", "error"); return; }
+  if (!attend) { showToast("Mohon pilih konfirmasi kehadiran.", "error"); return; }
+  if (!isSupabaseConfigured) { showToast("Supabase belum dikonfigurasi.", "error"); return; }
   submitBtn.disabled = true;
   submitBtn.textContent = "Mengirim...";
-
   const payload = {
     full_name: name,
     will_attend: attend.value === "yes",
@@ -412,148 +288,83 @@ async function handleRsvpSubmit(e) {
     meal_preference: form.meal_preference.value,
   };
   if (currentGuest) payload.guest_id = currentGuest.id;
-
   const { error } = await supabase.from("rsvps").insert(payload);
-
   submitBtn.disabled = false;
   submitBtn.textContent = "Kirim Konfirmasi";
-
-  if (error) {
-    showToast("Gagal mengirim konfirmasi. Coba lagi.", "error");
-    return;
-  }
-
+  if (error) { showToast("Gagal mengirim konfirmasi. Coba lagi.", "error"); return; }
   if (!currentGuest) form.reset();
   showToast("Konfirmasi kehadiran berhasil dikirim. Terima kasih!");
 }
 
-async function handleWishSubmit(e) {
+export async function handleWishSubmit(e) {
   e.preventDefault();
   const form = e.target;
   const submitBtn = form.querySelector('[type="submit"]');
   const name = form.wish_name.value.trim();
   const message = form.wish_message.value.trim();
-
-  if (!name || !message) {
-    showToast("Mohon isi nama dan ucapan.", "error");
-    return;
-  }
-
-  if (!isSupabaseConfigured) {
-    showToast("Supabase belum dikonfigurasi.", "error");
-    return;
-  }
-
+  if (!name || !message) { showToast("Mohon isi nama dan ucapan.", "error"); return; }
+  if (!isSupabaseConfigured) { showToast("Supabase belum dikonfigurasi.", "error"); return; }
   submitBtn.disabled = true;
   submitBtn.textContent = "Mengirim...";
-
   const { error } = await supabase.from("wishes").insert({ name, message });
-
   submitBtn.disabled = false;
   submitBtn.textContent = "Kirim Ucapan";
-
-  if (error) {
-    showToast("Gagal mengirim ucapan. Coba lagi.", "error");
-    return;
-  }
-
+  if (error) { showToast("Gagal mengirim ucapan. Coba lagi.", "error"); return; }
   if (!currentGuest) form.reset();
   closeGuestbookModal();
   showToast("Ucapan berhasil dikirim!");
   loadWishes();
 }
 
-function initForms() {
-  document
-    .getElementById("rsvp-form")
-    ?.addEventListener("submit", handleRsvpSubmit);
-  document
-    .getElementById("wish-form")
-    ?.addEventListener("submit", handleWishSubmit);
-  document
-    .getElementById("open-guestbook")
-    ?.addEventListener("click", openGuestbookModal);
-  document
-    .getElementById("close-guestbook")
-    ?.addEventListener("click", closeGuestbookModal);
-  document.getElementById("guestbook-modal")?.addEventListener("click", (e) => {
-    if (e.target.id === "guestbook-modal") closeGuestbookModal();
+/* ---------- REVEAL OBSERVER (Arah + Delay) ---------- */
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const delay = entry.target.dataset.delay || 0;
+      setTimeout(() => entry.target.classList.add("active"), delay);
+      revealObserver.unobserve(entry.target);
+    }
   });
-  document
-    .getElementById("toggle-bank")
-    ?.addEventListener("click", toggleDetails);
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") closeGuestbookModal();
+export function observeReveal() {
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+}
+
+export function observeRundownCards() {
+  document.querySelectorAll('#rundown-grid > div').forEach((card, i) => {
+    card.classList.add('reveal', 'fade-up');
+    card.dataset.delay = i * 150;
+    revealObserver.observe(card);
   });
 }
 
-// ==================================================
-//  BOOT FUNCTION
-// ==================================================
-async function boot() {
-  initForms();
+/* ---------- PARALLAX ---------- */
+export function initParallax() {
+  const img = document.getElementById("hero-image");
+  if (!img) return;
+  window.addEventListener("scroll", () => {
+    const scroll = window.pageYOffset;
+    img.style.transform = `scale(${1.05 + scroll * 0.0001}) translateY(${scroll * 0.1}px)`;
+  });
+}
 
-  const minLoaderTime = new Promise((r) => setTimeout(r, 800));
-  const urls = await loadInvitationData();
-
-  await Promise.all([
-    loadWishes(),
-    waitForFonts(),
-    minLoaderTime,
-    preloadImage(urls?.heroUrl),
-    preloadImage(urls?.descUrl),
+/* ---------- LOAD DATA (dipanggil oleh invitation.js) ---------- */
+export async function loadInvitationData() {
+  if (!isSupabaseConfigured) return { heroUrl: null, descUrl: null };
+  currentGuest = await resolveGuest();
+  if (currentGuest) applyGuestToForm(currentGuest);
+  const [settingsRes, rundownRes, guidelinesRes] = await Promise.all([
+    supabase.from("invitation_settings").select("*").eq("id", 1).maybeSingle(),
+    supabase.from("event_rundown").select("*").eq("is_active", true).order("sort_order"),
+    supabase.from("guidelines").select("*").eq("is_active", true).order("sort_order"),
   ]);
-
-  hidePageLoader();
-
-  // Muat dresscode dari Supabase
-  await loadDresscodeForPublic();
-
-  observeReveal();
-  observeRundownCards();
-
-  initParallax();
-
-  // Hover scroll & scrollspy
-  const navLinks = document.querySelectorAll('nav a[href^="#"]');
-
-  navLinks.forEach(link => {
-    let timer;
-    link.addEventListener('mouseenter', () => {
-      const id = link.getAttribute('href').substring(1);
-      const target = document.getElementById(id);
-      if (!target) return;
-      timer = setTimeout(() => {
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }, 400);
-    });
-    link.addEventListener('mouseleave', () => clearTimeout(timer));
-  });
-
-  const sections = document.querySelectorAll('section[id]');
-  window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(section => {
-      if (window.scrollY >= section.offsetTop - 120) {
-        current = section.getAttribute('id');
-      }
-    });
-    navLinks.forEach(link => {
-      link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
-    });
-  });
+  let urls = { heroUrl: null, descUrl: null };
+  if (settingsRes.data) urls = renderSettings(settingsRes.data) ?? urls;
+  renderRundown(rundownRes.data);
+  renderGuidelines(guidelinesRes.data);
+  return urls;
 }
 
-boot().catch(async () => {
-  hidePageLoader();
-  await loadDresscodeForPublic();
-  observeReveal();
-  observeRundownCards();
-});
-
-if (!isSupabaseConfigured) {
-  console.warn(
-    "[Supabase] VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY belum diatur di .env",
-  );
-}
+// Ekspor supabase untuk digunakan di invitation.js (opsional, untuk query tambahan)
+export { supabase, isSupabaseConfigured };

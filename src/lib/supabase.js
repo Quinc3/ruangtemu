@@ -25,7 +25,6 @@ export function slugify(name) {
     .replace(/^-|-$/g, "");
 }
 
-/** Slug unik dari nama; jika bentrok tambah -2, -3, … */
 export function generateUniqueSlug(name, takenSlugs = []) {
   const base = slugify(name) || "tamu";
   const taken = new Set(takenSlugs.filter(Boolean));

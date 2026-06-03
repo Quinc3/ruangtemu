@@ -5,6 +5,7 @@ export const INVITATION_IMAGES_BUCKET =
   import.meta.env.VITE_SUPABASE_STORAGE_BUCKET?.trim() || 'ruangtemu'
 
 export const STORAGE_SETTINGS_PREFIX = 'settings'
+export const STORAGE_GALLERY_PREFIX = 'gallery'
 const MAX_IMAGE_BYTES = 5 * 1024 * 1024
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
 
@@ -66,6 +67,23 @@ export async function uploadSettingsImage(file, slot) {
   if (!supabase) throw new Error('Supabase belum dikonfigurasi')
   validateImageFile(file)
   const objectPath = buildSettingsImagePath(file, slot)
+  const { error } = await supabase.storage
+    .from(INVITATION_IMAGES_BUCKET)
+    .upload(objectPath, file, { upsert: false, contentType: file.type })
+  if (error) throw error
+  return objectPath
+}
+
+export function buildGalleryImagePath(file) {
+  const ext = imageExtension(file)
+  const base = sanitizeFileBaseName(file.name)
+  return `${STORAGE_GALLERY_PREFIX}/${Date.now()}-${base}${ext}`
+}
+
+export async function uploadGalleryImage(file) {
+  if (!supabase) throw new Error('Supabase belum dikonfigurasi')
+  validateImageFile(file)
+  const objectPath = buildGalleryImagePath(file)
   const { error } = await supabase.storage
     .from(INVITATION_IMAGES_BUCKET)
     .upload(objectPath, file, { upsert: false, contentType: file.type })
