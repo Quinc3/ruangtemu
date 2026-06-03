@@ -121,6 +121,11 @@ function switchPanel(panelId) {
     el.classList.toggle('block', el.id === panelId)
   })
   updateNav(panelId)
+
+  // Muat data khusus saat panel dresscode dibuka
+  if (panelId === 'panel-dresscode') {
+    loadDresscode()
+  }
 }
 
 function openModal(title, fieldsHtml) {
@@ -380,7 +385,7 @@ function guestFormFields(g = {}) {
     <div><label class="text-xs text-on-surface-variant">Kategori</label>
       <select name="category" class="mt-1 w-full border-b py-2">
         <option value="">-</option>
-        ${['Siswa','Guru','Orang Tua','Alumni','Tamu Undangan'].map((c) => `<option value="${c}" ${g.category === c ? 'selected' : ''}>${c}</option>`).join('')}
+        ${['Siswa', 'Guru', 'Orang Tua', 'Alumni', 'Tamu Undangan'].map((c) => `<option value="${c}" ${g.category === c ? 'selected' : ''}>${c}</option>`).join('')}
       </select>
     </div>`
 }
@@ -432,9 +437,9 @@ async function saveGuestModal() {
   const payload = { full_name, slug, category }
   let err
   if (modalMode === 'guest-edit') {
-    ;({ error: err } = await db.from('guests').update(payload).eq('id', modalId))
+    ; ({ error: err } = await db.from('guests').update(payload).eq('id', modalId))
   } else {
-    ;({ error: err } = await db.from('guests').insert(payload))
+    ; ({ error: err } = await db.from('guests').insert(payload))
   }
   if (err) { showToast(err.message, 'error'); return }
   closeModal()
@@ -477,9 +482,9 @@ async function saveRundownModal() {
   if (!payload.title) { showToast('Judul wajib', 'error'); return }
   let err
   if (modalMode === 'rundown-edit') {
-    ;({ error: err } = await db.from('event_rundown').update(payload).eq('id', modalId))
+    ; ({ error: err } = await db.from('event_rundown').update(payload).eq('id', modalId))
   } else {
-    ;({ error: err } = await db.from('event_rundown').insert(payload))
+    ; ({ error: err } = await db.from('event_rundown').insert(payload))
   }
   if (err) { showToast(err.message, 'error'); return }
   closeModal()
@@ -520,9 +525,9 @@ async function saveGuidelineModal() {
   if (!payload.title || !payload.description) { showToast('Judul & deskripsi wajib', 'error'); return }
   let err
   if (modalMode === 'guideline-edit') {
-    ;({ error: err } = await db.from('guidelines').update(payload).eq('id', modalId))
+    ; ({ error: err } = await db.from('guidelines').update(payload).eq('id', modalId))
   } else {
-    ;({ error: err } = await db.from('guidelines').insert(payload))
+    ; ({ error: err } = await db.from('guidelines').insert(payload))
   }
   if (err) { showToast(err.message, 'error'); return }
   closeModal()
@@ -594,11 +599,6 @@ async function handleModalSave() {
 }
 
 async function loadData() {
-  // if (!isAdminSupabaseConfigured) {
-  //   showToast('Set VITE_SUPABASE_SERVICE_ROLE_KEY di .env', 'error')
-  //   return
-  // }
-
   const [gRes, rRes, wRes, rdRes, glRes] = await Promise.all([
     db.from('guests').select('*').order('full_name'),
     db.from('rsvps').select('*').order('created_at', { ascending: false }),
@@ -606,7 +606,6 @@ async function loadData() {
     db.from('event_rundown').select('*').order('sort_order'),
     db.from('guidelines').select('*').order('sort_order'),
   ])
-
 
   invitedGuests = gRes.data ?? []
   rsvps = rRes.data ?? []
@@ -623,6 +622,91 @@ async function loadData() {
   await loadSettings()
 }
 
+// ==================================================
+//  DRESSCODE PALETTE FUNCTIONS
+// ==================================================
+async function loadDresscode() {
+  const { data, error } = await db
+    .from('dresscode_palette')
+    .select('*')
+    .eq('id', 1)
+    .maybeSingle()
+
+  if (error || !data) return
+
+  document.getElementById('dresscode-active').checked = data.is_active
+  document.querySelector('input[name="color1"]').value = data.color1
+  document.querySelector('input[name="color1_hex"]').value = data.color1
+  document.querySelector('input[name="color2"]').value = data.color2
+  document.querySelector('input[name="color2_hex"]').value = data.color2
+  document.querySelector('input[name="color3"]').value = data.color3
+  document.querySelector('input[name="color3_hex"]').value = data.color3
+  document.querySelector('input[name="color4"]').value = data.color4
+  document.querySelector('input[name="color4_hex"]').value = data.color4
+
+  updateDresscodePreview()
+}
+
+function updateDresscodePreview() {
+  const colorInputs = [
+    document.querySelector('input[name="color1"]'),
+    document.querySelector('input[name="color2"]'),
+    document.querySelector('input[name="color3"]'),
+    document.querySelector('input[name="color4"]'),
+  ]
+  const colors = colorInputs.map((input) => input?.value || '#000000')
+  const previewDivs = document.querySelectorAll('#dresscode-preview div')
+  previewDivs.forEach((div, i) => {
+    if (colors[i]) div.style.background = colors[i]
+  })
+}
+
+// Bind sinkronisasi color picker dan text input
+function bindDresscodeSync() {
+  ['color1', 'color2', 'color3', 'color4'].forEach((name) => {
+    const colorInput = document.querySelector(`input[name="${name}"]`)
+    const hexInput = document.querySelector(`input[name="${name}_hex"]`)
+    if (!colorInput || !hexInput) return
+
+    colorInput.addEventListener('input', () => {
+      hexInput.value = colorInput.value
+      updateDresscodePreview()
+    })
+    hexInput.addEventListener('change', () => {
+      const val = hexInput.value
+      if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+        colorInput.value = val
+        updateDresscodePreview()
+      }
+    })
+  })
+}
+
+// Handle submit form dresscode
+function bindDresscodeForm() {
+  document.getElementById('dresscode-form')?.addEventListener('submit', async (e) => {
+    e.preventDefault()
+    const payload = {
+      is_active: document.getElementById('dresscode-active').checked,
+      color1: document.querySelector('input[name="color1"]').value,
+      color2: document.querySelector('input[name="color2"]').value,
+      color3: document.querySelector('input[name="color3"]').value,
+      color4: document.querySelector('input[name="color4"]').value,
+      updated_at: new Date().toISOString(),
+    }
+
+    const { error } = await db.from('dresscode_palette').upsert({ id: 1, ...payload })
+    if (error) {
+      showToast('Gagal menyimpan dresscode', 'error')
+    } else {
+      showToast('Dresscode berhasil disimpan!', 'success')
+    }
+  })
+}
+
+// ==================================================
+//  INISIALISASI NAVIGASI & EVENT LISTENER
+// ==================================================
 function initNavigation() {
   document.querySelectorAll('aside .admin-nav-item').forEach((btn) => {
     btn.addEventListener('click', () => switchPanel(btn.dataset.panel))
@@ -639,6 +723,10 @@ function initNavigation() {
   document.getElementById('search-wishes')?.addEventListener('input', renderWishes)
   document.getElementById('modal-cancel')?.addEventListener('click', closeModal)
   document.getElementById('modal-save')?.addEventListener('click', handleModalSave)
+
+  // Inisialisasi fitur Dresscode
+  bindDresscodeSync()
+  bindDresscodeForm()
 }
 
 function handleLogin(e) {

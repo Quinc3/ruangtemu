@@ -1,146 +1,299 @@
 @import "tailwindcss";
 
 @theme {
-  --color-surface-container-highest: #e3e1ec;
-  --color-surface-bright: #fbf8ff;
-  --color-on-primary-1-fixed-variant: #454747;
-  --color-on-primary-1-fixed: #1a1c1c;
-  --color-primary-1-fixed-dim: #c6c6c7;
-  --color-error: #ba1a1a;
-  --color-on-primary-3: #ffffff;
-  --color-background: #fbf8ff;
-  --color-primary-2-container: #0037c4;
-  --color-primary-3-fixed-dim: #e9c176;
-  --color-primary-2: #2596be;
-  --color-surface-container-low: #f4f2fd;
-  --color-primary-1-fixed: #e2e2e2;
-  --color-on-primary-3-container: #8d6d2c;
-  --color-on-primary-3-fixed-variant: #5d4201;
-  --color-error-container: #ffdad6;
-  --color-on-primary-2-fixed: #161c27;
-  --color-primary-2-fixed: #dde2f3;
-  --color-outline: #747878;
-  --color-inverse-primary-1: #000000;
-  --color-inverse-primary-2: #ffffff;
-  --color-on-surface: #1a1b22;
-  --color-on-primary-2-container: #5e6473;
-  --color-on-primary-1: #ffffff;
-  --color-on-primary-1-container: #717273;
-  --color-surface-variant: #e3e1ec;
-  --color-on-error-container: #93000a;
-  --color-surface-container-high: #e8e7f1;
-  --color-primary-3: #775a19;
-  --color-on-primary-2-fixed-variant: #414754;
-  --color-primary-3-fixed: #ffdea5;
-  --color-surface-container: #fbf8ff;
-  --color-on-background: #1a1b22;
-  --color-on-error: #ffffff;
-  --color-surface-tint: #5d5f5f;
-  --color-surface: #ffffff;
-  --color-on-primary-3-fixed: #261900;
+  /* ========== PALET CLAY ========== */
+  --color-canvas: #fffaf0;
+  --color-surface-soft: #faf5e8;
+  --color-surface-card: #f5f0e0;
+  --color-surface-strong: #ebe6d6;
+  --color-surface-container: #e5e5e5; /* untuk spinner */
+
+  --brand-pink: #ff4d8b;
+  --brand-teal: #1a3a3a;
+  --brand-lavender: #b8a4ed;
+  --brand-peach: #ffb084;
+  --brand-ochre: #e8b94a;
+  --brand-cream: #f5f0e0;
+
+  --color-ink: #0a0a0a;
+  --color-body: #3a3a3a;
+  --color-muted: #6a6a6a;
+
+  --color-primary-2: #ff6d00; /* tombol primer (hitam) */
   --color-on-primary-2: #ffffff;
-  --color-primary-3-container: #fff8f2;
-  --color-inverse-on-surface: #f1effa;
-  --color-primary-2-fixed-dim: #c1c6d7;
-  --color-primary-1-container: #f9f9f9;
-  --color-primary-1: #ffffff;
-  --color-surface-container-lowest: #ffffff;
-  --color-outline-variant: #c4c7c8;
-  --color-surface-dim: #dad9e3;
-  --color-on-surface-variant: #444748;
-  --color-inverse-surface: #2f3038;
+  --color-primary-3: #1a3a3a; /* aksen (teal) */
+  --color-on-primary-3: #ffffff;
 
-  --radius-lg: 0.25rem;
-  --radius-xl: 0.5rem;
-  --radius-full: 0.75rem;
+  --color-outline: #e5e5e5;
+  --color-outline-variant: #e5e5e5;
 
-  --spacing-stack-md: 32px;
-  --spacing-stack-lg: 80px;
-  --spacing-gutter: 24px;
-  --spacing-base: 8px;
-  --spacing-container-max: 1200px;
-  --spacing-stack-sm: 12px;
-  --spacing-margin-mobile: 20px;
-  --spacing-margin-desktop: 64px;
+  --color-background: #fffaf0; /* langsung literal */
+  --color-surface: #fffaf0;
+  --color-on-surface: #0a0a0a;
+  --color-on-surface-variant: #3a3a3a;
 
-  --font-display-lg: "Playfair Display", serif;
-  --font-button: "Inter", sans-serif;
-  --font-headline-sm: "Playfair Display", serif;
-  --font-headline-md: "Playfair Display", serif;
-  --font-label-caps: "Inter", sans-serif;
-  --font-display-lg-mobile: "Playfair Display", serif;
-  --font-body-lg: "Inter", sans-serif;
-  --font-body-md: "Inter", sans-serif;
+  /* ========== TIPOGRAFI ========== */
+  --font-display-lg: "Gelasio", serif;
+  --font-button: "Poppins", sans-serif;
+  --font-headline-sm: "Gelasio", serif;
+  --font-headline-md: "Gelasio", serif;
+  --font-label-caps: "Poppins", sans-serif;
+  --font-display-lg-mobile: "Gelasio", serif;
+  --font-body-lg: "Poppins", sans-serif;
+  --font-body-md: "Poppins", sans-serif;
 
-  --text-display-lg: 48px;
-  --text-display-lg--line-height: 1.1;
+  --text-display-lg: 56px;
+  --text-display-lg--line-height: 1.05;
   --text-display-lg--letter-spacing: -0.02em;
-  --text-display-lg--font-weight: 600;
+  --text-display-lg--font-weight: 500;
 
   --text-button: 14px;
   --text-button--line-height: 1;
-  --text-button--letter-spacing: 0.05em;
-  --text-button--font-weight: 500;
+  --text-button--letter-spacing: 0;
+  --text-button--font-weight: 600;
 
   --text-headline-sm: 24px;
-  --text-headline-sm--line-height: 1.4;
+  --text-headline-sm--line-height: 1.3;
   --text-headline-sm--font-weight: 500;
 
   --text-headline-md: 32px;
-  --text-headline-md--line-height: 1.3;
+  --text-headline-md--line-height: 1.2;
   --text-headline-md--font-weight: 500;
 
   --text-label-caps: 12px;
   --text-label-caps--line-height: 1;
-  --text-label-caps--letter-spacing: 0.1em;
+  --text-label-caps--letter-spacing: 0.15em;
   --text-label-caps--font-weight: 600;
 
-  --text-display-lg-mobile: 36px;
-  --text-display-lg-mobile--line-height: 1.2;
-  --text-display-lg-mobile--font-weight: 600;
+  --text-display-lg-mobile: 40px;
+  --text-display-lg-mobile--line-height: 1.1;
+  --text-display-lg-mobile--font-weight: 500;
 
   --text-body-lg: 18px;
   --text-body-lg--line-height: 1.6;
-  --text-body-lg--letter-spacing: 0.01em;
+  --text-body-lg--letter-spacing: 0;
   --text-body-lg--font-weight: 400;
 
   --text-body-md: 16px;
-  --text-body-md--line-height: 1.6;
+  --text-body-md--line-height: 1.55;
   --text-body-md--font-weight: 400;
+
+  /* ========== SPACING & RADIUS ========== */
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+  --radius-pill: 9999px;
+
+  --spacing-stack-md: 48px;
+  --spacing-stack-lg: 96px;
+  --spacing-gutter: 24px;
+  --spacing-base: 8px;
+  --spacing-container-max: 1280px;
+  --spacing-stack-sm: 12px;
+  --spacing-margin-mobile: 20px;
+  --spacing-margin-desktop: 64px;
+  --spacing-xl: 32px; /* tambahan untuk padding kartu */
+}
+
+/* ========== GLOBAL ========== */
+body {
+  background-color: var(--color-canvas);
+  color: var(--color-body);
 }
 
 .material-symbols-outlined {
-  font-variation-settings: "FILL" 0, "wght" 300, "GRAD" 0, "opsz" 24;
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 300,
+    "GRAD" 0,
+    "opsz" 24;
   vertical-align: middle;
 }
 
-.glass-card {
-  background: var(--color-primary-2);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 40px 40px -15px rgba(0, 0, 0, 0.04);
+/* ========== NAVIGASI ========== */
+nav {
+  /* background-color: var(--color-canvas) !important;
+  border-bottom: 1px solid var(--color-outline); */
+  background-color: #fffaf0 !important;
+  border-bottom: 2px solid #ff6d00;
 }
 
+/* Scrollspy active link (seragam) */
+nav a.active {
+  color: var(--color-ink) !important;
+  border-bottom: 2px solid var(--color-ink);
+}
+
+/* ========== HERO ========== */
+header {
+  background-color: var(--color-canvas);
+}
+
+/* Overlay diganti hitam transparan untuk kontras */
+header .absolute.inset-0.bg-primary-1\/50 {
+  background: rgba(0, 0, 0, 0.25) !important;
+  backdrop-filter: blur(4px);
+}
+
+/* Teks hero tetap putih dengan shadow tajam */
+#hero-label,
+#guest-greeting,
+#hero-title,
+#hero-subtitle,
+#hero-date {
+  color: white;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Tombol hero – hitam dengan radius 12px */
+header a.bg-primary-2 {
+  background-color: var(--color-primary-2) !important;
+  color: white !important;
+  border-radius: var(--radius-md) !important;
+  border: none;
+  padding: 14px 32px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ========== KARTU WARNA ========== */
+.card-pink {
+  background-color: var(--brand-pink);
+  color: white;
+}
+.card-teal {
+  background-color: var(--brand-teal);
+  color: white;
+}
+.card-lavender {
+  background-color: var(--brand-lavender);
+  color: var(--color-ink);
+}
+.card-peach {
+  background-color: var(--brand-peach);
+  color: var(--color-ink);
+}
+.card-ochre {
+  background-color: var(--brand-ochre);
+  color: var(--color-ink);
+}
+.card-cream {
+  background-color: var(--brand-cream);
+  color: var(--color-ink);
+}
+
+.card-pink,
+.card-teal,
+.card-lavender,
+.card-peach,
+.card-ochre,
+.card-cream {
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-xl);
+  box-shadow: none;
+  border: none;
+}
+
+/* Override glass-card agar tidak berbenturan */
+.glass-card {
+  background: inherit;
+  backdrop-filter: none;
+  border: none;
+  box-shadow: none;
+}
+
+/* ========== TOMBOL UMUM ========== */
+button.bg-primary-2,
+a.bg-primary-2 {
+  background-color: var(--color-primary-2) !important;
+  color: white !important;
+  border-radius: var(--radius-md) !important;
+  padding: 12px 24px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: none;
+  transition: background 0.2s;
+}
+button.bg-primary-2:hover,
+a.bg-primary-2:hover {
+  background-color: #e65c00 !important;
+}
+
+/* Tombol outline */
+button.border-primary-2,
+a.border-primary-2 {
+  border: 1px solid var(--color-ink) !important;
+  color: var(--color-ink) !important;
+  background: transparent;
+  border-radius: var(--radius-md) !important;
+  padding: 12px 24px;
+  font-weight: 600;
+}
+
+/* ========== FOOTER ========== */
+footer {
+  background-color: var(--color-surface-soft) !important;
+  color: var(--color-body) !important;
+  border-top: 1px solid var(--color-outline);
+}
+footer a {
+  color: var(--color-body);
+}
+footer a:hover {
+  color: var(--color-ink);
+}
+
+/* ========== MODAL & TOAST ========== */
+.modal-content {
+  background: var(--color-canvas);
+  border-radius: var(--radius-lg);
+}
+.toast.success {
+  background: var(--brand-teal);
+  color: white;
+}
+.toast.error {
+  background: #ef4444;
+  color: white;
+}
+
+/* ========== REVEAL ANIMATIONS ========== */
 .reveal {
   opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.8s ease-out;
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s ease;
 }
-
+.reveal.fade-up {
+  transform: translateY(40px);
+}
+.reveal.fade-left {
+  transform: translateX(-40px);
+}
+.reveal.fade-right {
+  transform: translateX(40px);
+}
+.reveal.scale-in {
+  transform: scale(0.92);
+}
 .reveal.active {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) translateX(0) scale(1);
 }
 
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
-
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
 
+/* ========== TOAST POSITION ========== */
 .toast {
   position: fixed;
   bottom: 5rem;
@@ -153,26 +306,18 @@
   font-size: var(--text-button);
   font-weight: 500;
   letter-spacing: 0.05em;
-  transition: transform 0.4s ease, opacity 0.4s ease;
+  transition:
+    transform 0.4s ease,
+    opacity 0.4s ease;
   opacity: 0;
   pointer-events: none;
 }
-
 .toast.show {
   transform: translateX(-50%) translateY(0);
   opacity: 1;
 }
 
-.toast.success {
-  background: var(--color-primary-2);
-  color: white;
-}
-
-.toast.error {
-  background: var(--color-error);
-  color: white;
-}
-
+/* ========== MODAL OVERLAY ========== */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -187,13 +332,20 @@
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
-
 .modal-overlay.open {
   display: flex;
   opacity: 1;
   pointer-events: auto;
 }
+.modal-content {
+  transform: scale(0.95) translateY(10px);
+  transition: transform 0.3s ease;
+}
+.modal-overlay.open .modal-content {
+  transform: scale(1) translateY(0);
+}
 
+/* ========== PAGE LOADER ========== */
 #page-loader {
   position: fixed;
   inset: 0;
@@ -204,24 +356,23 @@
   justify-content: center;
   gap: 1.5rem;
   background: var(--color-surface);
-  transition: opacity 0.5s ease, visibility 0.5s ease;
+  transition:
+    opacity 0.5s ease,
+    visibility 0.5s ease;
 }
-
 #page-loader.loaded {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
 }
-
 #page-loader .loader-spinner {
   width: 48px;
   height: 48px;
   border: 3px solid var(--color-surface-container);
-  border-top-color: var(--color-primary-3);
+  border-top-color: var(--color-primary-2);
   border-radius: 50%;
   animation: spin 0.9s linear infinite;
 }
-
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -231,36 +382,12 @@
 body.is-loading {
   overflow: hidden;
 }
-
 body.is-loading #app-content {
   visibility: hidden;
-}
-
-.modal-content {
-  transform: scale(0.95) translateY(10px);
-  transition: transform 0.3s ease;
-}
-
-.modal-overlay.open .modal-content {
-  transform: scale(1) translateY(0);
 }
 
 @media (min-width: 768px) {
   .toast {
     bottom: 2rem;
   }
-}
-
-/* Custom icon select (Tailwind UI listbox pattern) */
-.icon-select-list {
-  scrollbar-width: thin;
-}
-
-.icon-select-list::-webkit-scrollbar {
-  width: 6px;
-}
-
-.icon-select-list::-webkit-scrollbar-thumb {
-  border-radius: 9999px;
-  background: color-mix(in srgb, var(--color-outline-variant) 60%, transparent);
 }

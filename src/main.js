@@ -16,10 +16,30 @@ function toggleDetails() {
   document.getElementById("bank-details")?.classList.toggle("hidden");
 }
 
-function reveal() {
-  document.querySelectorAll(".reveal").forEach((el) => {
-    const top = el.getBoundingClientRect().top;
-    if (top < window.innerHeight - 150) el.classList.add("active");
+// ==================================================
+//  REVEAL OBSERVER
+// ==================================================
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const delay = entry.target.dataset.delay || 0;
+      setTimeout(() => {
+        entry.target.classList.add("active");
+      }, delay);
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+
+function observeReveal() {
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+}
+
+function observeRundownCards() {
+  document.querySelectorAll('#rundown-grid > div').forEach((card, i) => {
+    card.classList.add('reveal', 'fade-up');
+    card.dataset.delay = i * 150;
+    revealObserver.observe(card);
   });
 }
 
@@ -112,8 +132,6 @@ function renderSettings(s) {
   setText("footer-tagline", s.footer_tagline);
   setText("footer-copyright", s.footer_copyright);
   setText("rsvp-deadline", s.rsvp_deadline_text);
-  setText("guidelines-palette-title", s.guidelines_palette_title);
-  setText("guidelines-palette-note", s.guidelines_palette_note);
 
   const heroSrc = resolveImageUrl(s.hero_image_path || s.hero_image_url);
   const heroImg = document.getElementById("hero-image");
@@ -168,6 +186,9 @@ function renderSettings(s) {
   };
 }
 
+/* =========================================
+   RENDER RUNDOWN – WARNA BERGANTIAN
+   ========================================= */
 function renderRundown(items) {
   const grid = document.getElementById("rundown-grid");
   if (!grid) return;
@@ -178,20 +199,25 @@ function renderRundown(items) {
     return;
   }
 
+  const cardColors = ['card-pink', 'card-teal', 'card-lavender', 'card-peach', 'card-ochre'];
+
   grid.innerHTML = items
     .map(
-      (item) => `
-    <div class="glass-card p-10 text-center space-y-4 rounded-xl">
-      <span class="material-symbols-outlined text-4xl text-inverse-primary-2">${escapeHtml(item.icon)}</span>
-      <h3 class="font-headline-sm text-headline-sm text-inverse-primary-2">${escapeHtml(item.title)}</h3>
-      ${item.time_range ? `<p class="font-body-md text-body-md text-inverse-primary-2">${escapeHtml(item.time_range)}</p>` : ""}
-      ${item.note ? `<p class="font-label-caps text-label-caps text-inverse-primary-2">${escapeHtml(item.note)}</p>` : ""}
+      (item, i) => `
+    <div class="${cardColors[i % cardColors.length]} p-10 text-center space-y-4 rounded-xl">
+      <span class="material-symbols-outlined text-4xl">${escapeHtml(item.icon)}</span>
+      <h3 class="font-headline-sm text-headline-sm">${escapeHtml(item.title)}</h3>
+      ${item.time_range ? `<p class="font-body-md text-body-md">${escapeHtml(item.time_range)}</p>` : ""}
+      ${item.note ? `<p class="font-label-caps text-label-caps">${escapeHtml(item.note)}</p>` : ""}
     </div>
-  `,
+  `
     )
     .join("");
 }
 
+/* =========================================
+   RENDER GUIDELINES
+   ========================================= */
 function renderGuidelines(items) {
   const grid = document.getElementById("guidelines-grid");
   if (!grid) return;
@@ -244,17 +270,57 @@ async function loadInvitationData() {
   return urls;
 }
 
+/* =========================================
+   DRESSCODE (PUBLIC)
+   ========================================= */
+async function loadDresscodeForPublic() {
+  const dressCard = document.getElementById('dresscode-card');
+  const container = document.getElementById('dresscode-colors');
+  if (!dressCard || !container) return;
+
+  const { data, error } = await supabase
+    .from('dresscode_palette')
+    .select('is_active, color1, color2, color3, color4')
+    .eq('id', 1)
+    .maybeSingle();
+
+  // Jika tidak aktif / error → sembunyikan seluruh kartu
+  if (error || !data || !data.is_active) {
+    dressCard.classList.add('hidden');
+    return;
+  }
+
+  // Aktif → tampilkan kartu & isi warna
+  dressCard.classList.remove('hidden');
+  const colors = [data.color1, data.color2, data.color3, data.color4];
+  container.innerHTML = `
+    <div class="grid grid-cols-2 gap-4 w-full max-w-xs mx-auto">
+      ${colors.map(color => `
+        <div class="flex flex-col items-center gap-1">
+          <div class="w-full aspect-square rounded-xl border-2 border-white shadow-md" style="background-color: ${color}"></div>
+          <span class="text-[11px] font-mono text-on-surface-variant">${color}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+/* =========================================
+   RENDER WISH
+   ========================================= */
 const borderColors = [
-  "border-l-primary-3",
-  "border-l-primary-2",
-  "border-l-outline",
+  "border-l-pink-500",
+  "border-l-teal-600",
+  "border-l-lavender",
+  "border-l-peach",
+  "border-l-ochre",
 ];
 
 function renderWish(wish, index) {
   const border = borderColors[index % borderColors.length];
   return `
-    <div class="glass-card !bg-primary-2-container/10 p-6 rounded-xl border-l-4 ${border}">
-      <p class="font-body-md text-inverse-primary-1 italic">"${escapeHtml(wish.message)}"</p>
+    <div class="bg-white/90 backdrop-blur-sm p-6 rounded-xl border-l-4 ${border} shadow-sm">
+      <p class="font-body-md text-ink italic">"${escapeHtml(wish.message)}"</p>
       <p class="font-label-caps text-xs mt-4 text-primary-2">— ${escapeHtml(wish.name.toUpperCase())}</p>
     </div>
   `;
@@ -265,7 +331,7 @@ async function loadWishes() {
   if (!list) return;
 
   if (!isSupabaseConfigured) {
-    list.innerHTML = `<div class="glass-card p-6 rounded-xl text-center text-inverse-primary-2 text-sm">Hubungkan Supabase di file <code class="text-primary-3">.env</code> untuk menampilkan ucapan.</div>`;
+    list.innerHTML = `<div class="bg-white/80 p-6 rounded-xl text-center text-ink text-sm">Hubungkan Supabase di file <code class="text-primary-3">.env</code> untuk menampilkan ucapan.</div>`;
     return;
   }
 
@@ -281,13 +347,16 @@ async function loadWishes() {
   }
 
   if (!data?.length) {
-    list.innerHTML = `<div class="glass-card !bg-primary-2-container/10 p-6 rounded-xl text-center text-inverse-primary-2 text-sm italic">Belum ada ucapan. Jadilah yang pertama memberi doa!</div>`;
+    list.innerHTML = `<div class="bg-white/80 p-6 rounded-xl text-center text-ink text-sm italic">Belum ada ucapan. Jadilah yang pertama memberi doa!</div>`;
     return;
   }
 
   list.innerHTML = data.map((w, i) => renderWish(w, i)).join("");
 }
 
+/* =========================================
+   MODAL & FORM HANDLER
+   ========================================= */
 function openGuestbookModal() {
   const modal = document.getElementById("guestbook-modal");
   if (!modal) return;
@@ -419,6 +488,9 @@ function initForms() {
   });
 }
 
+// ==================================================
+//  BOOT FUNCTION
+// ==================================================
 async function boot() {
   initForms();
 
@@ -434,15 +506,50 @@ async function boot() {
   ]);
 
   hidePageLoader();
-  reveal();
+
+  // Muat dresscode dari Supabase
+  await loadDresscodeForPublic();
+
+  observeReveal();
+  observeRundownCards();
+
   initParallax();
+
+  // Hover scroll & scrollspy
+  const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+  navLinks.forEach(link => {
+    let timer;
+    link.addEventListener('mouseenter', () => {
+      const id = link.getAttribute('href').substring(1);
+      const target = document.getElementById(id);
+      if (!target) return;
+      timer = setTimeout(() => {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 400);
+    });
+    link.addEventListener('mouseleave', () => clearTimeout(timer));
+  });
+
+  const sections = document.querySelectorAll('section[id]');
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      if (window.scrollY >= section.offsetTop - 120) {
+        current = section.getAttribute('id');
+      }
+    });
+    navLinks.forEach(link => {
+      link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
+    });
+  });
 }
 
-window.addEventListener("scroll", reveal);
-
-boot().catch(() => {
+boot().catch(async () => {
   hidePageLoader();
-  reveal();
+  await loadDresscodeForPublic();
+  observeReveal();
+  observeRundownCards();
 });
 
 if (!isSupabaseConfigured) {
