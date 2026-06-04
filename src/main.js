@@ -152,6 +152,21 @@ export function renderSettings(s) {
     }
   });
 
+  // Visibilitas link di footer
+  const footerLinkJadwal = document.getElementById('footer-link-jadwal');
+  const footerLinkPanduan = document.getElementById('footer-link-panduan');
+  const footerLinkKonfirmasi = document.getElementById('footer-link-konfirmasi');
+
+  if (footerLinkJadwal) {
+    footerLinkJadwal.classList.toggle('hidden', s.show_rundown === false);
+  }
+  if (footerLinkPanduan) {
+    footerLinkPanduan.classList.toggle('hidden', s.show_guidelines === false);
+  }
+  if (footerLinkKonfirmasi) {
+    footerLinkKonfirmasi.classList.toggle('hidden', s.show_rsvp === false);
+  }
+
   return {
     heroUrl: heroSrc,
     descUrl: descSrc,

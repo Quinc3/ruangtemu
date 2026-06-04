@@ -276,61 +276,62 @@
     <!-- ========== FOOTER (ID: footer) ========== -->
     <footer id="footer"
       class="bg-white border-t border-primary-2/10 w-full py-stack-lg flex flex-col items-center gap-6 text-center px-margin-mobile mt-stack-lg relative overflow-hidden">
-      <div id="footer-org-name" class="font-display-lg text-display-lg text-primary-2 font-bold"></div>
-      <div class="flex flex-wrap justify-center gap-8 my-6">
-        <a class="font-bold hover:text-primary-2 transition-colors" href="#details">Jadwal</a>
-        <a class="font-bold hover:text-primary-2 transition-colors" href="#guidelines">Panduan</a>
-        <a class="font-bold hover:text-primary-2 transition-colors" href="#rsvp">Konfirmasi</a>
+      <div id="footer-links" class="flex flex-wrap justify-center gap-8 my-6">
+        <a id="footer-link-jadwal" class="font-bold hover:text-primary-2 transition-colors hidden"
+          href="#details">Jadwal</a>
+        <a id="footer-link-panduan" class="font-bold hover:text-primary-2 transition-colors hidden"
+          href="#guidelines">Panduan</a>
+        <a id="footer-link-konfirmasi" class="font-bold hover:text-primary-2 transition-colors hidden"
+          href="#rsvp">Konfirmasi</a>
       </div>
-      <p id="footer-tagline" class="font-display-lg-mobile text-xl max-w-md"></p>
       <div class="w-16 h-1 bg-brand-yellow rounded-full mt-8"></div>
-      <p id="footer-copyright" class="text-[10px] tracking-[0.3em] uppercase opacity-50 mt-4"></p>
+      <p class="text-[10px] tracking-[0.3em] uppercase opacity-50 mt-4">© 2026 Ruang Temu. All rights reserved.</p>
     </footer>
-  </div>
 
-  <!-- ========== GALLERY LIGHTBOX ========== -->
-  <div id="gallery-lightbox" class="gallery-lightbox" aria-hidden="true">
-    <button id="gallery-lightbox-close" type="button" class="gallery-lightbox__close material-symbols-outlined text-5xl"
-      aria-label="Tutup">close</button>
-    <div class="max-w-4xl px-6 text-center">
-      <img id="gallery-lightbox-img" alt="" class="rounded-super border-8 border-white shadow-2xl" />
-      <p id="gallery-lightbox-caption" class="mt-8 text-xl font-display-lg-mobile text-white hidden"></p>
-    </div>
-  </div>
-
-  <!-- ========== MODAL UCAPAN ========== -->
-  <div class="modal-overlay" id="guestbook-modal" aria-hidden="true">
-    <div class="bg-white p-10 rounded-super w-full max-w-md shadow-2xl relative border-8 border-tertiary-container/20">
-      <div class="flex justify-between items-center mb-8">
-        <h3 class="font-display-lg-mobile text-3xl" style="color: var(--color-tertiary);">Tulis Pesanmu</h3>
-        <button id="close-guestbook" type="button"
-          class="material-symbols-outlined text-gray-400 hover:text-brand-pink text-3xl">close</button>
+    <!-- ========== GALLERY LIGHTBOX ========== -->
+    <div id="gallery-lightbox" class="gallery-lightbox" aria-hidden="true">
+      <button id="gallery-lightbox-close" type="button"
+        class="gallery-lightbox__close material-symbols-outlined text-5xl" aria-label="Tutup">close</button>
+      <div class="max-w-4xl px-6 text-center">
+        <img id="gallery-lightbox-img" alt="" class="rounded-super border-8 border-white shadow-2xl" />
+        <p id="gallery-lightbox-caption" class="mt-8 text-xl font-display-lg-mobile text-white hidden"></p>
       </div>
-      <form id="wish-form" class="space-y-6">
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
-            for="wish_name">Nama Kamu</label>
-          <input
-            class="w-full rounded-2xl border-2 border-primary-2/10 bg-primary-2/5 focus:border-primary-2 focus:ring-0 p-4 transition-all outline-none"
-            id="wish_name" name="wish_name" placeholder="Siapa namamu?" type="text" required />
-        </div>
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
-            for="wish_message">Pesan Manis</label>
-          <textarea
-            class="w-full rounded-2xl border-2 border-primary-2/10 bg-primary-2/5 focus:border-primary-2 focus:ring-0 p-4 transition-all outline-none resize-none"
-            id="wish_message" name="wish_message" placeholder="Tulis sesuatu yang indah untuk angkatan kita..." rows="4"
-            required></textarea>
-        </div>
-        <button class="w-full text-white py-4 rounded-full font-bold text-lg btn-playful"
-          style="background: var(--color-tertiary);" type="submit">Kirim Pesan! ✨</button>
-      </form>
     </div>
-  </div>
 
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <!-- ========== MODAL UCAPAN ========== -->
+    <div class="modal-overlay" id="guestbook-modal" aria-hidden="true">
+      <div
+        class="bg-white p-10 rounded-super w-full max-w-md shadow-2xl relative border-8 border-tertiary-container/20">
+        <div class="flex justify-between items-center mb-8">
+          <h3 class="font-display-lg-mobile text-3xl" style="color: var(--color-tertiary);">Tulis Pesanmu</h3>
+          <button id="close-guestbook" type="button"
+            class="material-symbols-outlined text-gray-400 hover:text-brand-pink text-3xl">close</button>
+        </div>
+        <form id="wish-form" class="space-y-6">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
+              for="wish_name">Nama Kamu</label>
+            <input
+              class="w-full rounded-2xl border-2 border-primary-2/10 bg-primary-2/5 focus:border-primary-2 focus:ring-0 p-4 transition-all outline-none"
+              id="wish_name" name="wish_name" placeholder="Siapa namamu?" type="text" required />
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
+              for="wish_message">Pesan Manis</label>
+            <textarea
+              class="w-full rounded-2xl border-2 border-primary-2/10 bg-primary-2/5 focus:border-primary-2 focus:ring-0 p-4 transition-all outline-none resize-none"
+              id="wish_message" name="wish_message" placeholder="Tulis sesuatu yang indah untuk angkatan kita..."
+              rows="4" required></textarea>
+          </div>
+          <button class="w-full text-white py-4 rounded-full font-bold text-lg btn-playful"
+            style="background: var(--color-tertiary);" type="submit">Kirim Pesan! ✨</button>
+        </form>
+      </div>
+    </div>
 
-  <script type="module" src="/src/invitation.js"></script>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script type="module" src="/src/invitation.js"></script>
 </body>
 
 </html>
