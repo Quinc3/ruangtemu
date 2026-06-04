@@ -1,250 +1,54 @@
-﻿/* ========== ADMIN PANEL STYLES (Pastel Playtime) ========== */
-:root {
-  --color-canvas: #fbfaee;
-  --color-primary-2: #87ceeb;
-  --color-primary-3: #fcd400;
-  --color-tertiary: #78d97a;
-  --brand-pink: #ffb6c1;
-  --color-ink: #1b1c15;
-  --color-body: #3f484c;
-  --color-on-surface-variant: #3f484c;
-  --color-outline: #bfc8cd;
-  --color-outline-variant: #e5e7eb;
-  --color-error: #ba1a1a;
-  --color-error-container: #ffdad6;
-  --color-on-error-container: #93000a;
-  --color-surface-container: #efeee3;
-  --color-surface-container-low: #f5f4e8;
-  --radius-sm: 0.5rem;
-  --radius-md: 1rem;
-  --radius-lg: 1.5rem;
-  --radius-xl: 2rem;
-  --radius-full: 9999px;
-  --sidebar-width: 260px;
-  --font-display: "Fredoka", sans-serif;
-  --font-body: "Poppins", sans-serif;
-}
+﻿/* ========== ADMIN PANEL STYLES (Pastel Playtime + Tailwind CDN) ========== */
+/* Hanya berisi aturan yang tidak bisa ditangani Tailwind */
 
-* {
-  box-sizing: border-box;
-}
-
-body {
-  background-color: var(--color-canvas) !important;
-  color: var(--color-body) !important;
-  font-family: var(--font-body) !important;
-  margin: 0;
-  padding: 0;
-}
-
-.hidden {
-  display: none !important;
-}
-.block {
-  display: block !important;
-}
-
-/* ===== SIDEBAR (Desktop) ===== */
-.sidebar {
-  position: fixed;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: var(--sidebar-width);
-  background-color: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(12px);
-  border-right: 1px solid rgba(255, 255, 255, 0.2);
-  z-index: 40;
-  display: flex;
-  flex-direction: column;
-  overflow-y: auto;
-}
-
-.main-content {
-  margin-left: var(--sidebar-width);
-  min-height: 100vh;
-}
-
-/* ===== TOMBOL HAMBURGER ===== */
-.sidebar-toggle-btn {
-  display: none;
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--color-ink);
-  padding: 0.5rem;
-  border-radius: var(--radius-md);
-}
-
-.sidebar-toggle-btn:hover {
-  background-color: var(--color-surface-container-low);
-}
-
-/* ===== MOBILE ===== */
-@media (max-width: 1023px) {
-  .sidebar {
-    display: none !important;
-    position: fixed;
-    z-index: 100;
-    width: 80%;
-    max-width: 300px;
-    height: 100%;
-  }
-  .sidebar.open {
-    display: flex !important;
-  }
-  .main-content {
-    margin-left: 0;
-  }
-  .sidebar-toggle-btn {
-    display: block;
-  }
-}
-
-/* ===== NAVIGASI ITEM ===== */
+/* ===== ADMIN NAV ITEM ===== */
 .admin-nav-item {
   transition: all 0.2s ease;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  padding: 0.75rem 1rem;
-  margin: 0.25rem 0.5rem;
-  color: var(--color-on-surface-variant);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-family: var(--font-body);
+  border-radius: 1rem;
+  color: #3f484c;
+  font-family: "Poppins", sans-serif;
   font-size: 0.875rem;
   background: none;
   border: none;
-  width: calc(100% - 1rem);
-  text-align: left;
 }
 
 .admin-nav-item:hover {
-  background-color: var(--color-surface-container-low);
+  background-color: #f5f4e8;
 }
 
 .admin-nav-item.active {
-  background-color: var(--color-primary-2);
-  color: var(--color-ink);
+  background-color: #87ceeb !important;
+  color: #1b1c15 !important;
   font-weight: 600;
 }
 
-/* ===== TOMBOL ===== */
-button.bg-primary-2,
-a.bg-primary-2 {
-  background-color: var(--color-primary-2) !important;
-  color: var(--color-ink) !important;
-  border-radius: var(--radius-full);
-  padding: 0.75rem 1.5rem;
-  font-weight: 600;
-  font-family: var(--font-body);
-  transition: all 0.2s ease;
-  border: none;
-  cursor: pointer;
+/* ===== BUTTON BOUNCE ===== */
+.btn-bounce {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-button.bg-primary-2:hover,
-a.bg-primary-2:hover {
-  background-color: #6bb5d9 !important;
-  transform: scale(1.02);
-}
-
-/* ===== TABEL ===== */
-table {
-  font-family: var(--font-body);
-  width: 100%;
-  border-collapse: collapse;
-}
-
-th {
-  font-family: var(--font-body);
-  font-weight: 600;
-  color: var(--color-on-surface-variant);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.75rem 1rem;
-  text-align: left;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-td {
-  color: var(--color-body);
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* ===== INPUT ===== */
-input,
-textarea,
-select {
-  font-family: var(--font-body);
-  border-radius: var(--radius-md) !important;
-  border: 1px solid var(--color-outline-variant);
-  background-color: rgba(255, 255, 255, 0.5);
-  transition: border-color 0.2s ease;
-  padding: 0.5rem 0.75rem;
-}
-
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: var(--color-primary-2) !important;
-  outline: none;
-}
-
-/* ===== FILE INPUT ===== */
-input[type="file"]::file-selector-button {
-  background-color: var(--color-primary-2);
-  color: var(--color-ink);
-  border: none;
-  border-radius: var(--radius-full);
-  padding: 0.5rem 1rem;
-  margin-right: 0.75rem;
-  cursor: pointer;
-  font-family: var(--font-body);
-  font-weight: 600;
-}
-
-/* ===== MODAL ===== */
-#modal {
-  z-index: 200;
-}
-
-/* ===== TOAST ===== */
-#toast {
-  font-family: var(--font-body);
-  border-radius: var(--radius-full);
+.btn-bounce:active {
+  transform: scale(0.92);
 }
 
 /* ===== BADGE ===== */
 .bg-green-100 {
-  background-color: var(--color-tertiary) !important;
-  color: var(--color-ink) !important;
+  background-color: #78d97a !important;
+  color: #1b1c15 !important;
   padding: 0.25rem 0.75rem;
-  border-radius: var(--radius-full);
+  border-radius: 9999px;
 }
 
 .bg-error-container {
-  background-color: var(--color-error-container) !important;
-  color: var(--color-on-error-container) !important;
+  background-color: #ffdad6 !important;
+  color: #93000a !important;
   padding: 0.25rem 0.75rem;
-  border-radius: var(--radius-full);
+  border-radius: 9999px;
 }
 
 /* ===== DRESSCODE PREVIEW ===== */
 #dresscode-preview div {
-  border-radius: var(--radius-md);
+  border-radius: 1rem;
   border: 2px solid white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-/* ===== SCROLLBAR ===== */
-::-webkit-scrollbar {
-  width: 6px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-outline);
-  border-radius: 3px;
 }

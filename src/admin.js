@@ -24,7 +24,7 @@ const TD = 'py-3.5 px-4 align-top border-b border-white/20'
 const TR = 'hover:bg-surface-container-low'
 const BADGE_OK = 'inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold bg-green-100 text-green-800'
 const BADGE_NO = 'inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold bg-error-container text-on-error-container'
-const NAV_ACTIVE = 'admin-nav-item flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium'
+const NAV_ACTIVE = 'admin-nav-item flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium active'
 const NAV_INACTIVE = 'admin-nav-item flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm text-on-surface-variant hover:bg-surface-container'
 
 let invitedGuests = []
@@ -70,11 +70,13 @@ function toDatetimeLocalValue(iso) {
 function showToast(msg, type = 'success') {
   const t = document.getElementById('toast')
   if (!t) return
-  const bg = type === 'success' ? 'background-color: #87ceeb; color: #1b1c15;' : 'background-color: #ba1a1a; color: white;'
+  const bg = type === 'success' ? 'background-color: var(--color-primary-2); color: var(--color-ink);' : 'background-color: var(--color-error); color: white;'
   t.textContent = msg
-  t.style.cssText = bg
+  t.setAttribute('style', bg)
   t.className = 'fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-[300] px-6 py-3 rounded-full text-sm shadow-lg opacity-100'
-  setTimeout(() => t.classList.add('opacity-0'), 3500)
+  setTimeout(() => {
+    t.classList.add('opacity-0')
+  }, 3500)
 }
 
 async function copyText(text) {
@@ -122,7 +124,7 @@ function updateNav(panelId) {
         ? 'admin-nav-item shrink-0 flex items-center gap-1 rounded-full px-3 py-2 text-xs bg-primary-2 text-ink'
         : 'admin-nav-item shrink-0 flex items-center gap-1 rounded-full px-3 py-2 text-xs bg-surface-container text-on-surface-variant'
     } else {
-      btn.className = active ? NAV_ACTIVE + ' active' : NAV_INACTIVE
+      btn.className = active ? NAV_ACTIVE : NAV_INACTIVE
     }
   })
 }
@@ -386,6 +388,16 @@ function fillSettingsForm(s) {
     if (el.type === 'checkbox') el.checked = !!s[key]
     else el.value = s[key] ?? ''
   })
+
+  const visibilityFields = [
+    'show_navbar', 'show_footer', 'show_story', 'show_kas_kenangan',
+    'show_rsvp', 'show_guestbook', 'show_countdown', 'show_gallery',
+    'show_rundown', 'show_guidelines', 'show_dresscode', 'show_map'
+  ];
+  visibilityFields.forEach(field => {
+    const el = form.elements[field];
+    if (el) el.checked = s[field] !== false; // default true
+  });
   const startsAt = form.elements.event_starts_at
   if (startsAt) startsAt.value = toDatetimeLocalValue(s.event_starts_at)
   setSettingsImagePreview('hero', s.hero_image_path || s.hero_image_url)
@@ -670,30 +682,55 @@ async function deleteGallery(id) {
   loadData()
 }
 
+// ==================================================
+//  SAVE SETTINGS (DIPERBAIKI)
+// ==================================================
 async function saveSettings(e) {
   e.preventDefault()
   const form = e.target
   const fd = new FormData(form)
   const payload = { id: 1, updated_at: new Date().toISOString() }
   const skip = new Set(['hero_image_path', 'description_image_path'])
+
+  const visibilityFields = [
+    'show_navbar', 'show_footer', 'show_story', 'show_kas_kenangan',
+    'show_rsvp', 'show_guestbook', 'show_countdown', 'show_gallery',
+    'show_rundown', 'show_guidelines', 'show_dresscode', 'show_map'
+  ]
+
+  // Kumpulkan semua data dari form
   for (const [key, val] of fd.entries()) {
     if (skip.has(key)) continue
-    if (key === 'guidelines_section_enabled' || key === 'countdown_enabled') payload[key] = true
-    else if (key === 'event_starts_at') continue
-    else payload[key] = val
+    if (key === 'guidelines_section_enabled' || key === 'countdown_enabled') {
+      payload[key] = true
+    } else if (key === 'event_starts_at') {
+      continue
+    } else if (visibilityFields.includes(key)) {
+      payload[key] = true // checkbox dicentang
+    } else {
+      payload[key] = val
+    }
   }
+
+  // Set false untuk checkbox yang tidak dicentang
   if (!fd.has('guidelines_section_enabled')) payload.guidelines_section_enabled = false
   if (!fd.has('countdown_enabled')) payload.countdown_enabled = false
+  visibilityFields.forEach(field => {
+    if (!fd.has(field)) payload[field] = false
+  })
 
+  // Tanggal event
   const startsRaw = fd.get('event_starts_at')?.toString().trim()
   payload.event_starts_at = startsRaw ? new Date(startsRaw).toISOString() : null
 
+  // Path gambar (dari hidden input)
   payload.hero_image_path = fd.get('hero_image_path')?.toString() || ''
   payload.description_image_path = fd.get('description_image_path')?.toString() || ''
 
   const prevHeroPath = payload.hero_image_path
   const prevDescPath = payload.description_image_path
 
+  // Upload gambar jika ada file baru
   try {
     const heroFile = document.getElementById('hero_image_file')?.files?.[0]
     const descFile = document.getElementById('description_image_file')?.files?.[0]
@@ -733,27 +770,27 @@ async function handleModalSave() {
 }
 
 async function loadData() {
-  console.log('🔄 loadData dipanggil');
-  const [gRes, rRes, wRes, rdRes, glRes, galRes] = await Promise.all([
-    db.from('guests').select('*').order('full_name'),
-    db.from('rsvps').select('*').order('created_at', { ascending: false }),
-    db.from('wishes').select('*').order('created_at', { ascending: false }),
-    db.from('event_rundown').select('*').order('sort_order'),
-    db.from('guidelines').select('*').order('sort_order'),
-    db.from('gallery_images').select('*').order('sort_order'),
-  ]);
+  try {
+    const [gRes, rRes, wRes, rdRes, glRes, galRes] = await Promise.all([
+      db.from('guests').select('*').order('full_name'),
+      db.from('rsvps').select('*').order('created_at', { ascending: false }),
+      db.from('wishes').select('*').order('created_at', { ascending: false }),
+      db.from('event_rundown').select('*').order('sort_order'),
+      db.from('guidelines').select('*').order('sort_order'),
+      db.from('gallery_images').select('*').order('sort_order'),
+    ])
 
-  invitedGuests = gRes.data ?? []
-  rsvps = rRes.data ?? []
-  wishes = wRes.data ?? []
-  rundown = rdRes.data ?? []
-  guidelines = glRes.data ?? []
-  gallery = galRes.data ?? []
-
-  console.log('📊 Data tamu:', invitedGuests);
-  console.log('📊 Data rundown:', rundown);
-  console.log('📊 Data guidelines:', guidelines);
-  console.log('📊 Data gallery:', gallery);
+    invitedGuests = gRes.data ?? []
+    rsvps = rRes.data ?? []
+    wishes = wRes.data ?? []
+    rundown = rdRes.data ?? []
+    guidelines = glRes.data ?? []
+    gallery = galRes.data ?? []
+  } catch (err) {
+    console.error('Gagal memuat data:', err)
+    showToast('Gagal memuat data dari server', 'error')
+    invitedGuests = []; rsvps = []; wishes = []; rundown = []; guidelines = []; gallery = []
+  }
 
   updateStats()
   renderInvitedGuests()
@@ -868,25 +905,22 @@ function initNavigation() {
   // Init Dresscode
   bindDresscodeSync()
   bindDresscodeForm()
-
-  document.getElementById('sidebar-toggle')?.addEventListener('click', () => {
-    document.getElementById('sidebar')?.classList.toggle('open');
-  });
 }
 
 function handleLogin(e) {
   e.preventDefault()
   const input = document.getElementById('admin-password')
-  console.log('🔑 Mencoba login dengan password:', input?.value);
-  if (input?.value === adminPassword) {
-    console.log('✅ Password benar, masuk ke admin');
+  if (!input || !input.value.trim()) {
+    showToast('Masukkan password', 'error')
+    return
+  }
+  if (input.value === adminPassword) {
     sessionStorage.setItem(AUTH_KEY, 'true')
     showAdmin()
     initNavigation()
     loadData()
     return
   }
-  console.log('❌ Password salah');
   showToast('Password salah', 'error')
 }
 
@@ -895,6 +929,20 @@ function handleLogout() {
   showLogin()
 }
 
+// Toggle password visibility
+document.getElementById('toggle-password')?.addEventListener('click', () => {
+  const pw = document.getElementById('admin-password')
+  const icon = document.querySelector('#toggle-password .material-symbols-outlined')
+  if (pw.type === 'password') {
+    pw.type = 'text'
+    icon.textContent = 'visibility'
+  } else {
+    pw.type = 'password'
+    icon.textContent = 'visibility_off'
+  }
+})
+
+// Form login listener
 document.getElementById('login-form')?.addEventListener('submit', handleLogin)
 
 if (isAuthenticated()) {

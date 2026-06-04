@@ -11,82 +11,6 @@
     rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     rel="stylesheet" />
-  <style>
-    /* Dekorasi animasi (pastikan sudah ada di style.css, kita duplikasi untuk berjaga-jaga) */
-    @keyframes float {
-
-      0%,
-      100% {
-        transform: translateY(0);
-      }
-
-      50% {
-        transform: translateY(-15px);
-      }
-    }
-
-    @keyframes wiggle {
-
-      0%,
-      100% {
-        transform: rotate(0deg);
-      }
-
-      25% {
-        transform: rotate(-5deg);
-      }
-
-      75% {
-        transform: rotate(5deg);
-      }
-    }
-
-    .animate-float {
-      animation: float 3s ease-in-out infinite;
-    }
-
-    .animate-wiggle {
-      animation: wiggle 2.5s ease-in-out infinite;
-    }
-
-    .decorative {
-      z-index: 10;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    /* Tambahan untuk memastikan dekorasi tidak tertutup */
-    section,
-    header,
-    footer,
-    main {
-      position: relative;
-      overflow: hidden;
-      /* agar dekorasi tidak meluber keluar section */
-    }
-
-    /* Override overflow untuk section tertentu jika diperlukan */
-    #story,
-    #details,
-    #rsvp,
-    #guidelines,
-    #gallery,
-    #dresscode-card {
-      overflow: visible;
-      /* biarkan dekorasi keluar sedikit untuk efek */
-    }
-
-    /* Namun untuk mobile, kita batasi overflow agar tidak merusak layout */
-    @media (max-width: 767px) {
-
-      section,
-      header,
-      footer,
-      main {
-        overflow: hidden;
-      }
-    }
-  </style>
 </head>
 
 <body class="bg-surface font-body-md text-on-surface antialiased overflow-x-hidden is-loading">
@@ -97,16 +21,15 @@
   </div>
 
   <div id="app-content">
-    <!-- ========== NAVBAR ========== -->
-    <nav class="fixed top-0 w-full z-50 backdrop-blur-xl border-b border-white/20">
+    <!-- ========== NAVBAR (ID: navbar) ========== -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 backdrop-blur-xl border-b border-white/20">
       <div
         class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
         <div id="nav-org-name" class="font-display-lg-mobile text-2xl text-primary-2 font-bold tracking-tight">...</div>
         <div class="hidden md:flex items-center gap-8">
           <a class="font-medium hover:text-primary-2 transition-colors" href="#story">Kenangan</a>
           <a class="font-medium hover:text-primary-2 transition-colors" href="#details">Acara</a>
-          <a id="nav-guidelines-link" class="font-medium hover:text-primary-2 transition-colors"
-            href="#guidelines">Panduan</a>
+          <a class="font-medium hover:text-primary-2 transition-colors" href="#guidelines">Panduan</a>
           <a class="bg-primary-2 text-white px-6 py-2 btn-playful" href="#rsvp">Ayo Hadir!</a>
         </div>
         <div class="md:hidden">
@@ -117,7 +40,6 @@
 
     <!-- ========== HERO ========== -->
     <header class="relative min-h-screen flex items-center justify-center overflow-hidden">
-      <!-- Dekorasi Hero (sudah ada) -->
       <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <div class="absolute top-20 left-[10%] text-5xl md:text-8xl animate-bounce decorative"
           style="animation-duration: 3s; color: var(--brand-pink);">★</div>
@@ -125,11 +47,6 @@
           style="color: var(--brand-yellow);">🎈</div>
         <div class="absolute top-1/3 right-[5%] text-4xl md:text-7xl opacity-40 decorative"
           style="color: var(--brand-mint);">✨</div>
-        <!-- tambahan biar lebih ramai -->
-        <div class="absolute bottom-10 left-[20%] text-3xl md:text-5xl animate-wiggle decorative"
-          style="animation-delay: 0.5s; color: var(--brand-orange);">🎈</div>
-        <div class="absolute top-1/4 left-[5%] text-2xl md:text-4xl animate-float decorative"
-          style="animation-delay: 1.2s; color: var(--brand-pink);">⭐</div>
       </div>
       <img id="hero-image" alt="Hero background"
         class="absolute inset-0 w-full h-full object-cover opacity-20 scale-105" src="" />
@@ -145,21 +62,23 @@
           <span id="hero-date" class="font-display-lg-mobile text-2xl md:text-4xl"></span>
           <div class="h-1 w-12 bg-primary-2/30 rounded-full"></div>
         </div>
-        <!-- Countdown -->
-        <div id="event-countdown" class="event-countdown hidden mb-12" aria-live="polite">
-          <div class="event-countdown__grid">
-            <div class="event-countdown__unit"><span id="countdown-days">00</span><span
-                class="event-countdown__label">Hari</span></div>
-            <div class="event-countdown__unit"><span id="countdown-hours">00</span><span
-                class="event-countdown__label">Jam</span></div>
-            <div class="event-countdown__unit"><span id="countdown-minutes">00</span><span
-                class="event-countdown__label">Menit</span></div>
-            <div class="event-countdown__unit"><span id="countdown-seconds">00</span><span
-                class="event-countdown__label">Detik</span></div>
+        <!-- Countdown (ID: countdown-section) -->
+        <div id="countdown-section" class="hidden mb-12">
+          <div id="event-countdown" class="event-countdown hidden" aria-live="polite">
+            <div class="event-countdown__grid">
+              <div class="event-countdown__unit"><span id="countdown-days">00</span><span
+                  class="event-countdown__label">Hari</span></div>
+              <div class="event-countdown__unit"><span id="countdown-hours">00</span><span
+                  class="event-countdown__label">Jam</span></div>
+              <div class="event-countdown__unit"><span id="countdown-minutes">00</span><span
+                  class="event-countdown__label">Menit</span></div>
+              <div class="event-countdown__unit"><span id="countdown-seconds">00</span><span
+                  class="event-countdown__label">Detik</span></div>
+            </div>
           </div>
+          <p id="countdown-ended" class="hidden font-display-lg-mobile text-xl" style="color: var(--brand-pink);">Yey!
+            Acara sedang berlangsung!</p>
         </div>
-        <p id="countdown-ended" class="hidden font-display-lg-mobile text-xl mb-8" style="color: var(--brand-pink);">
-          Yey! Acara sedang berlangsung!</p>
         <a class="inline-block bg-primary-2 text-white px-12 py-5 text-xl btn-playful" href="#rsvp">Konfirmasi
           Sekarang</a>
       </div>
@@ -167,15 +86,8 @@
 
     <!-- ========== MAIN CONTENT ========== -->
     <main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop space-y-stack-lg py-stack-lg">
-      <!-- Story Section -->
-      <section class="reveal grid md:grid-cols-2 gap-gutter items-center relative" id="story">
-        <!-- Dekorasi Story -->
-        <div class="absolute -top-6 -left-6 text-4xl md:text-7xl animate-float decorative"
-          style="color: var(--brand-yellow); z-index: 20;">🌟</div>
-        <div class="absolute bottom-0 right-0 text-3xl md:text-6xl animate-wiggle decorative"
-          style="color: var(--brand-mint); z-index: 20;">🎈</div>
-        <div class="absolute bottom-10 left-[5%] text-xl md:text-3xl animate-float decorative"
-          style="animation-delay: 0.3s; color: var(--brand-orange);">⭐</div>
+      <!-- Story Section (ID: story) -->
+      <section id="story" class="reveal grid md:grid-cols-2 gap-gutter items-center">
         <div class="space-y-6 order-2 md:order-1">
           <span id="description-label"
             class="inline-block px-4 py-1 bg-primary-2-container/20 rounded-full font-bold text-sm uppercase tracking-widest text-primary-2"></span>
@@ -194,12 +106,8 @@
         </div>
       </section>
 
-      <!-- Galeri -->
-      <section class="reveal hidden relative" id="gallery">
-        <div class="absolute -top-10 right-10 text-4xl md:text-6xl animate-float decorative"
-          style="color: var(--brand-pink);">📸</div>
-        <div class="absolute top-1/3 left-[5%] text-2xl md:text-4xl animate-bounce decorative"
-          style="animation-delay: 1.8s; color: var(--brand-mint);">⭐</div>
+      <!-- Galeri (ID: gallery) -->
+      <section id="gallery" class="reveal hidden">
         <div class="text-center mb-stack-md">
           <h2 class="font-display-lg text-display-lg">Galeri Kebahagiaan</h2>
           <div class="w-24 h-2 bg-primary-2/40 mx-auto rounded-full"></div>
@@ -207,22 +115,16 @@
         <div id="gallery-grid" class="grid grid-cols-2 gap-6 md:grid-cols-3"></div>
       </section>
 
-      <!-- Detail Acara -->
-      <section class="reveal space-y-gutter relative" id="details">
-        <div class="absolute top-0 left-[8%] text-3xl md:text-5xl animate-wiggle decorative"
-          style="color: var(--brand-orange);">🎈</div>
-        <div class="absolute bottom-10 right-[5%] text-2xl md:text-4xl animate-float decorative"
-          style="color: var(--brand-yellow);">⭐</div>
-        <div class="absolute top-1/2 right-[10%] text-xl md:text-3xl animate-bounce decorative"
-          style="animation-delay: 0.9s; color: var(--brand-pink);">✨</div>
-        <div class="absolute bottom-0 left-[15%] text-4xl md:text-6xl animate-float decorative"
-          style="animation-delay: 1.4s; color: var(--brand-mint);">🎈</div>
+      <!-- Detail Acara (ID: details) -->
+      <section id="details" class="reveal space-y-gutter">
         <div class="text-center mb-stack-md">
           <h2 class="font-display-lg text-display-lg">Agenda Seru</h2>
           <div class="w-24 h-2 bg-brand-pink/40 mx-auto rounded-full"></div>
         </div>
         <div id="rundown-grid" class="grid md:grid-cols-3 gap-gutter"></div>
-        <div class="mt-gutter h-[450px] rounded-super overflow-hidden relative card-bubble border-8 border-white">
+        <!-- Peta (ID: map-section) -->
+        <div id="map-section"
+          class="mt-gutter h-[450px] rounded-super overflow-hidden relative card-bubble border-8 border-white">
           <div id="map-fallback" class="absolute inset-0 bg-primary-2/5 flex items-center justify-center">
             <div class="text-center p-8 bg-white/90 backdrop-blur-md rounded-super shadow-xl max-w-sm">
               <span class="material-symbols-outlined text-5xl text-primary-2 mb-4">location_on</span>
@@ -239,17 +141,13 @@
         </div>
       </section>
 
-      <!-- Panduan & Dresscode -->
-      <section class="reveal grid md:grid-cols-2 gap-gutter hidden relative" id="guidelines">
-        <div class="absolute -top-4 -left-4 text-4xl md:text-6xl animate-float decorative"
-          style="color: var(--brand-pink);">🎈</div>
-        <div class="absolute bottom-0 right-0 text-3xl md:text-5xl animate-wiggle decorative"
-          style="animation-delay: 0.6s; color: var(--brand-yellow);">⭐</div>
+      <!-- Panduan & Dresscode (ID: guidelines) -->
+      <section id="guidelines" class="reveal grid md:grid-cols-2 gap-gutter hidden">
         <div class="card-bubble p-8" style="background: rgba(135,206,235,0.1);">
           <h2 class="font-display-lg text-display-lg mb-6 text-primary-2">Tips Untukmu</h2>
           <div id="guidelines-grid" class="space-y-6"></div>
         </div>
-        <div class="card-bubble p-8 text-center flex flex-col items-center hidden" id="dresscode-card"
+        <div id="dresscode-card" class="card-bubble p-8 text-center flex flex-col items-center hidden"
           style="background: rgba(255,215,0,0.1);">
           <span class="text-5xl mb-4">👕</span>
           <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-4">Baju Warna-Warni</h2>
@@ -258,16 +156,8 @@
         </div>
       </section>
 
-      <!-- Kas Kenangan -->
-      <section class="reveal max-w-3xl mx-auto text-center relative">
-        <div class="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden rounded-super">
-          <div class="absolute -top-6 -right-6 text-5xl md:text-7xl animate-float decorative"
-            style="color: var(--brand-yellow);">🎈</div>
-          <div class="absolute bottom-0 -left-4 text-4xl md:text-5xl animate-wiggle decorative"
-            style="color: var(--brand-mint);">⭐</div>
-          <div class="absolute top-1/2 right-[10%] text-3xl md:text-4xl animate-bounce decorative"
-            style="animation-delay: 0.4s; color: var(--brand-pink);">✨</div>
-        </div>
+      <!-- Kas Kenangan (ID: kas-kenangan) -->
+      <section id="kas-kenangan" class="reveal max-w-3xl mx-auto text-center">
         <div class="card-bubble p-12 relative overflow-hidden" style="background: rgba(255,182,193,0.1);">
           <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full" style="background: rgba(255,182,193,0.2);">
           </div>
@@ -278,8 +168,8 @@
           </p>
           <button id="toggle-bank" type="button"
             class="bg-brand-pink text-ink px-10 py-4 btn-playful w-full md:w-auto">Lihat Nomor Rekening</button>
-          <div class="hidden py-10 border-t-2 border-dashed mt-10" style="border-color: rgba(255,182,193,0.3);"
-            id="bank-details">
+          <div id="bank-details" class="hidden py-10 border-t-2 border-dashed mt-10"
+            style="border-color: rgba(255,182,193,0.3);">
             <div class="grid md:grid-cols-2 gap-8 text-left items-center">
               <div class="space-y-4">
                 <div>
@@ -307,19 +197,13 @@
         </div>
       </section>
 
-      <!-- RSVP & Ucapan -->
-      <section class="reveal grid md:grid-cols-2 gap-gutter relative" id="rsvp">
-        <div class="absolute -top-4 -left-4 text-4xl md:text-6xl animate-float decorative"
-          style="color: var(--brand-yellow);">🎈</div>
-        <div class="absolute -bottom-4 -right-4 text-3xl md:text-5xl animate-wiggle decorative"
-          style="color: var(--brand-pink);">⭐</div>
-        <div class="absolute bottom-1/2 right-[5%] text-xl md:text-3xl animate-float decorative"
-          style="animation-delay: 1.7s; color: var(--brand-orange);">🎈</div>
+      <!-- RSVP & Ucapan (ID: rsvp) -->
+      <section id="rsvp" class="reveal grid md:grid-cols-2 gap-gutter">
         <!-- RSVP Form Card -->
         <div class="card-bubble p-12 text-white relative overflow-hidden" style="background: var(--color-primary-2);">
           <div class="absolute top-4 right-4 text-4xl opacity-20">✍️</div>
           <h2 class="font-display-lg text-display-lg-mobile mb-8">Aku Mau Datang!</h2>
-          <form class="space-y-6" id="rsvp-form">
+          <form id="rsvp-form" class="space-y-6">
             <div>
               <label class="block text-sm font-bold uppercase tracking-wider mb-2" for="full_name">Siapa Namamu?</label>
               <input
@@ -374,8 +258,8 @@
             <p id="rsvp-deadline" class="text-center text-xs opacity-70 italic mt-4"></p>
           </form>
         </div>
-        <!-- Guestbook Card -->
-        <div class="card-bubble p-12 flex flex-col" style="background: rgba(152,251,152,0.1);">
+        <!-- Guestbook Card (ID: guestbook-section) -->
+        <div id="guestbook-section" class="card-bubble p-12 flex flex-col" style="background: rgba(152,251,152,0.1);">
           <h3 class="font-display-lg text-display-lg-mobile mb-8" style="color: var(--color-tertiary);">Pesan &amp; Doa
           </h3>
           <div class="flex-grow space-y-6 max-h-[500px] overflow-y-auto pr-4 mb-8" id="guestbook-list">
@@ -383,26 +267,15 @@
           </div>
           <button id="open-guestbook" type="button"
             class="w-full text-white py-5 rounded-full font-bold text-lg btn-playful flex items-center justify-center gap-2"
-            style="background: var(--color-tertiary);">
-            Tulis Pesan <span class="material-symbols-outlined">edit_note</span>
-          </button>
+            style="background: var(--color-tertiary);">Tulis Pesan <span
+              class="material-symbols-outlined">edit_note</span></button>
         </div>
       </section>
     </main>
 
-    <!-- ========== FOOTER ========== -->
-    <footer
+    <!-- ========== FOOTER (ID: footer) ========== -->
+    <footer id="footer"
       class="bg-white border-t border-primary-2/10 w-full py-stack-lg flex flex-col items-center gap-6 text-center px-margin-mobile mt-stack-lg relative overflow-hidden">
-      <div class="absolute top-0 left-0 w-full h-full pointer-events-none overflow-hidden">
-        <div class="absolute -top-10 left-10 text-5xl md:text-8xl opacity-20 animate-float"
-          style="color: var(--brand-pink);">🎈</div>
-        <div class="absolute -bottom-10 right-10 text-5xl md:text-8xl opacity-20 animate-wiggle"
-          style="color: var(--brand-yellow);">⭐</div>
-        <div class="absolute top-1/2 left-[5%] text-4xl md:text-6xl opacity-10 animate-bounce decorative"
-          style="animation-delay: 0.2s; color: var(--brand-mint);">✨</div>
-        <div class="absolute bottom-1/4 right-[10%] text-3xl md:text-5xl opacity-15 animate-float decorative"
-          style="animation-delay: 1.3s; color: var(--brand-orange);">🎈</div>
-      </div>
       <div id="footer-org-name" class="font-display-lg text-display-lg text-primary-2 font-bold"></div>
       <div class="flex flex-wrap justify-center gap-8 my-6">
         <a class="font-bold hover:text-primary-2 transition-colors" href="#details">Jadwal</a>
@@ -413,27 +286,6 @@
       <div class="w-16 h-1 bg-brand-yellow rounded-full mt-8"></div>
       <p id="footer-copyright" class="text-[10px] tracking-[0.3em] uppercase opacity-50 mt-4"></p>
     </footer>
-
-    <!-- ========== MOBILE NAV ========== -->
-    <nav class="mobile-nav md:hidden">
-      <a class="flex flex-col items-center justify-center text-primary-2 group" href="#">
-        <span class="material-symbols-outlined text-2xl group-active:scale-125 transition-transform">home</span>
-        <span class="text-[9px] font-bold uppercase mt-1">Beranda</span>
-      </a>
-      <a class="flex flex-col items-center justify-center text-on-surface-variant/50 group" href="#story">
-        <span class="material-symbols-outlined text-2xl group-active:scale-125 transition-transform">auto_stories</span>
-        <span class="text-[9px] font-bold uppercase mt-1">Kisah</span>
-      </a>
-      <a class="flex flex-col items-center justify-center text-on-surface-variant/50 group" href="#details">
-        <span
-          class="material-symbols-outlined text-2xl group-active:scale-125 transition-transform">calendar_month</span>
-        <span class="text-[9px] font-bold uppercase mt-1">Acara</span>
-      </a>
-      <a class="flex flex-col items-center justify-center text-on-surface-variant/50 group" href="#rsvp">
-        <span class="material-symbols-outlined text-2xl group-active:scale-125 transition-transform">check_circle</span>
-        <span class="text-[9px] font-bold uppercase mt-1">Hadir</span>
-      </a>
-    </nav>
   </div>
 
   <!-- ========== GALLERY LIGHTBOX ========== -->
@@ -454,7 +306,7 @@
         <button id="close-guestbook" type="button"
           class="material-symbols-outlined text-gray-400 hover:text-brand-pink text-3xl">close</button>
       </div>
-      <form class="space-y-6" id="wish-form">
+      <form id="wish-form" class="space-y-6">
         <div>
           <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
             for="wish_name">Nama Kamu</label>
