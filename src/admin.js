@@ -68,18 +68,16 @@ function toDatetimeLocalValue(iso) {
 }
 
 function showToast(msg, type = 'success') {
-  const t = document.getElementById('toast');
-  if (!t) return;
+  const t = document.getElementById('toast')
+  if (!t) return
   const bg = type === 'success'
     ? 'background-color: #87ceeb; color: #1b1c15;'
-    : 'background-color: #dc2626; color: white;'; // merah solid
-  t.textContent = msg;
-  t.setAttribute('style', bg);
-  t.className = 'fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-[300] px-6 py-3 rounded-full text-sm shadow-lg opacity-100';
-  t.classList.remove('hidden');
-  setTimeout(() => {
-    t.classList.add('hidden');
-  }, 3500);
+    : 'background-color: #dc2626; color: white;'
+  t.textContent = msg
+  t.style.cssText = bg
+  t.className = 'fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-[300] px-6 py-3 rounded-full text-sm shadow-lg opacity-100'
+  t.classList.remove('hidden')
+  setTimeout(() => t.classList.add('hidden'), 3500)
 }
 
 async function copyText(text) {
@@ -114,12 +112,12 @@ function buildMobileNav() {
       <span class="material-symbols-outlined text-sm">${p.icon}</span>${p.label}
     </button>
   `).join('') + `<button id="logout-btn-mobile" type="button" class="ml-auto shrink-0 rounded-full border border-error/20 px-3 py-2 text-xs text-error">Keluar</button>`
-  nav.querySelectorAll('.admin-nav-item').forEach((b) => b.addEventListener('click', () => switchPanel(b.dataset.panel)))
+  nav.querySelectorAll('.admin-nav-item').forEach(b => b.addEventListener('click', () => switchPanel(b.dataset.panel)))
   document.getElementById('logout-btn-mobile')?.addEventListener('click', handleLogout)
 }
 
 function updateNav(panelId) {
-  document.querySelectorAll('.admin-nav-item').forEach((btn) => {
+  document.querySelectorAll('.admin-nav-item').forEach(btn => {
     const active = btn.dataset.panel === panelId
     const mobile = btn.closest('#mobile-nav')
     if (mobile) {
@@ -133,12 +131,11 @@ function updateNav(panelId) {
 }
 
 function switchPanel(panelId) {
-  document.querySelectorAll('[data-panel-id]').forEach((el) => {
+  document.querySelectorAll('[data-panel-id]').forEach(el => {
     el.classList.toggle('hidden', el.id !== panelId)
     el.classList.toggle('block', el.id === panelId)
   })
   updateNav(panelId)
-
   if (panelId === 'panel-dresscode') loadDresscode()
 }
 
@@ -153,7 +150,7 @@ function openModal(title, fieldsHtml) {
 }
 
 function guestTakenSlugs(excludeGuestId = null) {
-  return invitedGuests.filter((g) => g.id !== excludeGuestId).map((g) => g.slug)
+  return invitedGuests.filter(g => g.id !== excludeGuestId).map(g => g.slug)
 }
 
 function bindGuestSlugAutoFill(form) {
@@ -164,9 +161,7 @@ function bindGuestSlugAutoFill(form) {
   const excludeId = modalMode === 'guest-edit' ? modalId : null
   let slugManual = modalMode === 'guest-edit' && Boolean(slugInput.value.trim())
 
-  slugInput.addEventListener('input', () => {
-    slugManual = Boolean(slugInput.value.trim())
-  })
+  slugInput.addEventListener('input', () => { slugManual = Boolean(slugInput.value.trim()) })
 
   nameInput.addEventListener('input', () => {
     if (slugManual) return
@@ -187,12 +182,12 @@ function closeModal() {
 }
 
 function updateStats() {
-  const attending = rsvps.filter((r) => r.will_attend)
+  const attending = rsvps.filter(r => r.will_attend)
   document.getElementById('stat-invited').textContent = invitedGuests.length
   document.getElementById('stat-total-rsvp').textContent = rsvps.length
   document.getElementById('stat-attending').textContent = attending.length
   document.getElementById('stat-guest-count').textContent = attending.reduce((s, r) => s + r.guest_count, 0)
-  document.getElementById('stat-declined').textContent = rsvps.filter((r) => !r.will_attend).length
+  document.getElementById('stat-declined').textContent = rsvps.filter(r => !r.will_attend).length
   document.getElementById('stat-wishes').textContent = wishes.length
 }
 
@@ -203,35 +198,33 @@ function renderInvitedGuests() {
     tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center italic text-on-surface-variant">Belum ada tamu undangan.</td></tr>`
     return
   }
-  tbody.innerHTML = invitedGuests.map((g) => `
+  tbody.innerHTML = invitedGuests.map(g => `
     <tr class="${TR}">
       <td class="${TD} font-medium">${escapeHtml(g.full_name)}</td>
       <td class="${TD} text-sm text-on-surface-variant">${escapeHtml(g.slug)}</td>
       <td class="${TD}">${escapeHtml(g.category || '-')}</td>
-      <td class="${TD}">
-        <button type="button" data-copy="${escapeHtml(getGuestLink(g.slug))}" class="copy-link text-xs text-primary-3 hover:underline">Salin Link</button>
-      </td>
+      <td class="${TD}"><button type="button" data-copy="${escapeHtml(getGuestLink(g.slug))}" class="copy-link text-xs text-primary-3 hover:underline">Salin Link</button></td>
       <td class="${TD}">
         <button type="button" data-edit-guest="${g.id}" class="text-xs text-primary-2 mr-2">Edit</button>
         <button type="button" data-del-guest="${g.id}" class="text-xs text-error">Hapus</button>
       </td>
     </tr>
   `).join('')
-  tbody.querySelectorAll('.copy-link').forEach((b) => b.addEventListener('click', () => copyText(b.dataset.copy)))
-  tbody.querySelectorAll('[data-edit-guest]').forEach((b) => b.addEventListener('click', () => editGuest(b.dataset.editGuest)))
-  tbody.querySelectorAll('[data-del-guest]').forEach((b) => b.addEventListener('click', () => deleteGuest(b.dataset.delGuest)))
+  tbody.querySelectorAll('.copy-link').forEach(b => b.addEventListener('click', () => copyText(b.dataset.copy)))
+  tbody.querySelectorAll('[data-edit-guest]').forEach(b => b.addEventListener('click', () => editGuest(b.dataset.editGuest)))
+  tbody.querySelectorAll('[data-del-guest]').forEach(b => b.addEventListener('click', () => deleteGuest(b.dataset.delGuest)))
 }
 
 function renderAttendance() {
   const tbody = document.getElementById('attendance-tbody')
   const q = (document.getElementById('search-attendance')?.value || '').toLowerCase()
-  const rows = rsvps.filter((r) => !q || r.full_name.toLowerCase().includes(q))
+  const rows = rsvps.filter(r => !q || r.full_name.toLowerCase().includes(q))
   if (!tbody) return
   if (!rows.length) {
     tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center italic text-on-surface-variant">Belum ada konfirmasi.</td></tr>`
     return
   }
-  tbody.innerHTML = rows.map((r) => `
+  tbody.innerHTML = rows.map(r => `
     <tr class="${TR}">
       <td class="${TD} font-medium">${escapeHtml(r.full_name)}</td>
       <td class="${TD}"><span class="${r.will_attend ? BADGE_OK : BADGE_NO}">${r.will_attend ? 'Hadir' : 'Tidak'}</span></td>
@@ -246,13 +239,13 @@ function renderAttendance() {
 function renderWishes() {
   const tbody = document.getElementById('wishes-tbody')
   const q = (document.getElementById('search-wishes')?.value || '').toLowerCase()
-  const rows = wishes.filter((w) => !q || w.name.toLowerCase().includes(q) || w.message.toLowerCase().includes(q))
+  const rows = wishes.filter(w => !q || w.name.toLowerCase().includes(q) || w.message.toLowerCase().includes(q))
   if (!tbody) return
   if (!rows.length) {
     tbody.innerHTML = `<tr><td colspan="3" class="py-8 text-center italic text-on-surface-variant">Belum ada ucapan.</td></tr>`
     return
   }
-  tbody.innerHTML = rows.map((w) => `
+  tbody.innerHTML = rows.map(w => `
     <tr class="${TR}">
       <td class="${TD} font-medium whitespace-nowrap">${escapeHtml(w.name)}</td>
       <td class="${TD} max-w-md">${escapeHtml(w.message)}</td>
@@ -268,7 +261,7 @@ function renderRundown() {
     tbody.innerHTML = `<tr><td colspan="7" class="py-8 text-center italic text-on-surface-variant">Belum ada rundown.</td></tr>`
     return
   }
-  tbody.innerHTML = rundown.map((r) => `
+  tbody.innerHTML = rundown.map(r => `
     <tr class="${TR}">
       <td class="${TD}">${r.sort_order}</td>
       <td class="${TD}"><span class="material-symbols-outlined text-primary-3">${escapeHtml(r.icon)}</span></td>
@@ -282,8 +275,8 @@ function renderRundown() {
       </td>
     </tr>
   `).join('')
-  tbody.querySelectorAll('[data-edit-rundown]').forEach((b) => b.addEventListener('click', () => editRundown(b.dataset.editRundown)))
-  tbody.querySelectorAll('[data-del-rundown]').forEach((b) => b.addEventListener('click', () => deleteRundown(b.dataset.delRundown)))
+  tbody.querySelectorAll('[data-edit-rundown]').forEach(b => b.addEventListener('click', () => editRundown(b.dataset.editRundown)))
+  tbody.querySelectorAll('[data-del-rundown]').forEach(b => b.addEventListener('click', () => deleteRundown(b.dataset.delRundown)))
 }
 
 function renderGuidelinesAdmin() {
@@ -293,7 +286,7 @@ function renderGuidelinesAdmin() {
     tbody.innerHTML = `<tr><td colspan="6" class="py-8 text-center italic text-on-surface-variant">Belum ada panduan.</td></tr>`
     return
   }
-  tbody.innerHTML = guidelines.map((g) => `
+  tbody.innerHTML = guidelines.map(g => `
     <tr class="${TR}">
       <td class="${TD}">${g.sort_order}</td>
       <td class="${TD}"><span class="material-symbols-outlined text-primary-3">${escapeHtml(g.icon)}</span></td>
@@ -306,8 +299,8 @@ function renderGuidelinesAdmin() {
       </td>
     </tr>
   `).join('')
-  tbody.querySelectorAll('[data-edit-gl]').forEach((b) => b.addEventListener('click', () => editGuideline(b.dataset.editGl)))
-  tbody.querySelectorAll('[data-del-gl]').forEach((b) => b.addEventListener('click', () => deleteGuideline(b.dataset.delGl)))
+  tbody.querySelectorAll('[data-edit-gl]').forEach(b => b.addEventListener('click', () => editGuideline(b.dataset.editGl)))
+  tbody.querySelectorAll('[data-del-gl]').forEach(b => b.addEventListener('click', () => deleteGuideline(b.dataset.delGl)))
 }
 
 function renderGalleryAdmin() {
@@ -317,7 +310,7 @@ function renderGalleryAdmin() {
     tbody.innerHTML = `<tr><td colspan="5" class="py-8 text-center italic text-on-surface-variant">Belum ada foto di galeri.</td></tr>`
     return
   }
-  tbody.innerHTML = gallery.map((item) => {
+  tbody.innerHTML = gallery.map(item => {
     const url = resolveImageUrl(item.image_path)
     return `
     <tr class="${TR}">
@@ -331,8 +324,8 @@ function renderGalleryAdmin() {
       </td>
     </tr>`
   }).join('')
-  tbody.querySelectorAll('[data-edit-gallery]').forEach((b) => b.addEventListener('click', () => editGallery(b.dataset.editGallery)))
-  tbody.querySelectorAll('[data-del-gallery]').forEach((b) => b.addEventListener('click', () => deleteGallery(b.dataset.delGallery)))
+  tbody.querySelectorAll('[data-edit-gallery]').forEach(b => b.addEventListener('click', () => editGallery(b.dataset.editGallery)))
+  tbody.querySelectorAll('[data-del-gallery]').forEach(b => b.addEventListener('click', () => deleteGallery(b.dataset.delGallery)))
 }
 
 function setSettingsImagePreview(kind, path) {
@@ -345,25 +338,14 @@ function setSettingsImagePreview(kind, path) {
   const pathEl = form.querySelector(`[data-settings-path="${kind}"]`)
   const url = resolveImageUrl(path)
   if (img) {
-    if (url) {
-      img.src = url
-      img.classList.remove('hidden')
-    } else {
-      img.classList.add('hidden')
-      img.removeAttribute('src')
-    }
+    if (url) { img.src = url; img.classList.remove('hidden') }
+    else { img.classList.add('hidden'); img.removeAttribute('src') }
   }
-  if (pathEl) {
-    pathEl.textContent = path ? `File tersimpan: ${path}` : 'Belum ada gambar. Pilih file lalu simpan.'
-  }
+  if (pathEl) pathEl.textContent = path ? `File tersimpan: ${path}` : 'Belum ada gambar. Pilih file lalu simpan.'
 }
 
 function bindSettingsImageFileInputs() {
-  const pairs = [
-    ['hero_image_file', 'hero'],
-    ['description_image_file', 'description'],
-  ]
-  pairs.forEach(([inputId, kind]) => {
+  [['hero_image_file', 'hero'], ['description_image_file', 'description']].forEach(([inputId, kind]) => {
     const input = document.getElementById(inputId)
     if (!input || input.dataset.bound) return
     input.dataset.bound = '1'
@@ -384,7 +366,7 @@ function fillSettingsForm(s) {
   const form = document.getElementById('settings-form')
   if (!form || !s) return
   const skip = new Set(['hero_image_path', 'description_image_path', 'event_starts_at'])
-  Object.keys(s).forEach((key) => {
+  Object.keys(s).forEach(key => {
     if (skip.has(key)) return
     const el = form.elements[key]
     if (!el) return
@@ -395,12 +377,13 @@ function fillSettingsForm(s) {
   const visibilityFields = [
     'show_navbar', 'show_footer', 'show_story', 'show_kas_kenangan',
     'show_rsvp', 'show_guestbook', 'show_countdown', 'show_gallery',
-    'show_rundown', 'show_guidelines', 'show_dresscode', 'show_map'
-  ];
+    'show_rundown', 'show_guidelines', 'show_dresscode', 'show_map',
+    'show_hero_button'
+  ]
   visibilityFields.forEach(field => {
-    const el = form.elements[field];
-    if (el) el.checked = s[field] !== false; // default true
-  });
+    const el = form.elements[field]
+    if (el) el.checked = s[field] !== false
+  })
   const startsAt = form.elements.event_starts_at
   if (startsAt) startsAt.value = toDatetimeLocalValue(s.event_starts_at)
   setSettingsImagePreview('hero', s.hero_image_path || s.hero_image_url)
@@ -436,7 +419,7 @@ function guestFormFields(g = {}) {
     <div><label class="text-xs text-on-surface-variant">Kategori</label>
       <select name="category" class="mt-1 w-full border-b py-2">
         <option value="">-</option>
-        ${['Siswa', 'Guru', 'Orang Tua', 'Alumni', 'Tamu Undangan'].map((c) => `<option value="${c}" ${g.category === c ? 'selected' : ''}>${c}</option>`).join('')}
+        ${['Siswa', 'Guru', 'Orang Tua', 'Alumni', 'Tamu Undangan'].map(c => `<option value="${c}" ${g.category === c ? 'selected' : ''}>${c}</option>`).join('')}
       </select>
     </div>`
 }
@@ -487,16 +470,11 @@ function bindGalleryFilePreview() {
   })
 }
 
-function addGuest() {
-  modalMode = 'guest-add'
-  openModal('Tambah Tamu Undangan', guestFormFields())
-}
-
+function addGuest() { modalMode = 'guest-add'; openModal('Tambah Tamu Undangan', guestFormFields()) }
 function editGuest(id) {
-  const g = invitedGuests.find((x) => x.id === id)
+  const g = invitedGuests.find(x => x.id === id)
   if (!g) return
-  modalMode = 'guest-edit'
-  modalId = id
+  modalMode = 'guest-edit'; modalId = id
   openModal('Edit Tamu', guestFormFields(g))
 }
 
@@ -511,38 +489,26 @@ async function saveGuestModal() {
   else if (taken.includes(slug)) slug = generateUniqueSlug(slug, taken)
   const category = fd.get('category')?.toString() || null
   if (!full_name) { showToast('Nama wajib diisi', 'error'); return }
-
   const payload = { full_name, slug, category }
   let err
-  if (modalMode === 'guest-edit') {
-    ; ({ error: err } = await db.from('guests').update(payload).eq('id', modalId))
-  } else {
-    ; ({ error: err } = await db.from('guests').insert(payload))
-  }
+  if (modalMode === 'guest-edit') ({ error: err } = await db.from('guests').update(payload).eq('id', modalId))
+  else ({ error: err } = await db.from('guests').insert(payload))
   if (err) { showToast(err.message, 'error'); return }
-  closeModal()
-  showToast('Tamu disimpan')
-  loadData()
+  closeModal(); showToast('Tamu disimpan'); loadData()
 }
 
 async function deleteGuest(id) {
   if (!confirm('Hapus tamu ini?')) return
   const { error } = await db.from('guests').delete().eq('id', id)
   if (error) { showToast(error.message, 'error'); return }
-  showToast('Tamu dihapus')
-  loadData()
+  showToast('Tamu dihapus'); loadData()
 }
 
-function addRundown() {
-  modalMode = 'rundown-add'
-  openModal('Tambah Rundown', rundownFormFields({ sort_order: rundown.length + 1 }))
-}
-
+function addRundown() { modalMode = 'rundown-add'; openModal('Tambah Rundown', rundownFormFields({ sort_order: rundown.length + 1 })) }
 function editRundown(id) {
-  const r = rundown.find((x) => x.id === id)
+  const r = rundown.find(x => x.id === id)
   if (!r) return
-  modalMode = 'rundown-edit'
-  modalId = id
+  modalMode = 'rundown-edit'; modalId = id
   openModal('Edit Rundown', rundownFormFields(r))
 }
 
@@ -559,15 +525,10 @@ async function saveRundownModal() {
   }
   if (!payload.title) { showToast('Judul wajib', 'error'); return }
   let err
-  if (modalMode === 'rundown-edit') {
-    ; ({ error: err } = await db.from('event_rundown').update(payload).eq('id', modalId))
-  } else {
-    ; ({ error: err } = await db.from('event_rundown').insert(payload))
-  }
+  if (modalMode === 'rundown-edit') ({ error: err } = await db.from('event_rundown').update(payload).eq('id', modalId))
+  else ({ error: err } = await db.from('event_rundown').insert(payload))
   if (err) { showToast(err.message, 'error'); return }
-  closeModal()
-  showToast('Rundown disimpan')
-  loadData()
+  closeModal(); showToast('Rundown disimpan'); loadData()
 }
 
 async function deleteRundown(id) {
@@ -577,16 +538,11 @@ async function deleteRundown(id) {
   loadData()
 }
 
-function addGuideline() {
-  modalMode = 'guideline-add'
-  openModal('Tambah Panduan', guidelineFormFields({ sort_order: guidelines.length + 1 }))
-}
-
+function addGuideline() { modalMode = 'guideline-add'; openModal('Tambah Panduan', guidelineFormFields({ sort_order: guidelines.length + 1 })) }
 function editGuideline(id) {
-  const g = guidelines.find((x) => x.id === id)
+  const g = guidelines.find(x => x.id === id)
   if (!g) return
-  modalMode = 'guideline-edit'
-  modalId = id
+  modalMode = 'guideline-edit'; modalId = id
   openModal('Edit Panduan', guidelineFormFields(g))
 }
 
@@ -602,15 +558,10 @@ async function saveGuidelineModal() {
   }
   if (!payload.title || !payload.description) { showToast('Judul & deskripsi wajib', 'error'); return }
   let err
-  if (modalMode === 'guideline-edit') {
-    ; ({ error: err } = await db.from('guidelines').update(payload).eq('id', modalId))
-  } else {
-    ; ({ error: err } = await db.from('guidelines').insert(payload))
-  }
+  if (modalMode === 'guideline-edit') ({ error: err } = await db.from('guidelines').update(payload).eq('id', modalId))
+  else ({ error: err } = await db.from('guidelines').insert(payload))
   if (err) { showToast(err.message, 'error'); return }
-  closeModal()
-  showToast('Panduan disimpan')
-  loadData()
+  closeModal(); showToast('Panduan disimpan'); loadData()
 }
 
 async function deleteGuideline(id) {
@@ -620,19 +571,12 @@ async function deleteGuideline(id) {
   loadData()
 }
 
-function addGallery() {
-  modalMode = 'gallery-add'
-  openModal('Tambah Foto Galeri', galleryFormFields({ sort_order: gallery.length + 1 }))
-  bindGalleryFilePreview()
-}
-
+function addGallery() { modalMode = 'gallery-add'; openModal('Tambah Foto Galeri', galleryFormFields({ sort_order: gallery.length + 1 })); bindGalleryFilePreview() }
 function editGallery(id) {
-  const item = gallery.find((x) => x.id === id)
+  const item = gallery.find(x => x.id === id)
   if (!item) return
-  modalMode = 'gallery-edit'
-  modalId = id
-  openModal('Edit Foto Galeri', galleryFormFields(item))
-  bindGalleryFilePreview()
+  modalMode = 'gallery-edit'; modalId = id
+  openModal('Edit Foto Galeri', galleryFormFields(item)); bindGalleryFilePreview()
 }
 
 async function saveGalleryModal() {
@@ -641,20 +585,12 @@ async function saveGalleryModal() {
   const prevPath = fd.get('image_path')?.toString() || ''
   let image_path = prevPath
   const file = document.getElementById('gallery_image_file')?.files?.[0]
-
   try {
     if (file) {
       image_path = await uploadGalleryImage(file)
       if (prevPath && prevPath !== image_path) await removeInvitationImage(prevPath)
-    } else if (modalMode === 'gallery-add') {
-      showToast('Pilih foto untuk diunggah', 'error')
-      return
-    }
-  } catch (err) {
-    showToast(err.message || 'Gagal mengunggah foto', 'error')
-    return
-  }
-
+    } else if (modalMode === 'gallery-add') { showToast('Pilih foto untuk diunggah', 'error'); return }
+  } catch (err) { showToast(err.message || 'Gagal mengunggah foto', 'error'); return }
   const payload = {
     image_path,
     caption: fd.get('caption')?.toString().trim() || null,
@@ -662,31 +598,24 @@ async function saveGalleryModal() {
     is_active: fd.get('is_active') === 'on',
   }
   if (!payload.image_path) { showToast('Path gambar tidak valid', 'error'); return }
-
   let err
-  if (modalMode === 'gallery-edit') {
-    ; ({ error: err } = await db.from('gallery_images').update(payload).eq('id', modalId))
-  } else {
-    ; ({ error: err } = await db.from('gallery_images').insert(payload))
-  }
+  if (modalMode === 'gallery-edit') ({ error: err } = await db.from('gallery_images').update(payload).eq('id', modalId))
+  else ({ error: err } = await db.from('gallery_images').insert(payload))
   if (err) { showToast(err.message, 'error'); return }
-  closeModal()
-  showToast('Foto galeri disimpan')
-  loadData()
+  closeModal(); showToast('Foto galeri disimpan'); loadData()
 }
 
 async function deleteGallery(id) {
   if (!confirm('Hapus foto ini?')) return
-  const item = gallery.find((x) => x.id === id)
+  const item = gallery.find(x => x.id === id)
   const { error } = await db.from('gallery_images').delete().eq('id', id)
   if (error) { showToast(error.message, 'error'); return }
   if (item?.image_path) await removeInvitationImage(item.image_path)
-  showToast('Foto dihapus')
-  loadData()
+  showToast('Foto dihapus'); loadData()
 }
 
 // ==================================================
-//  SAVE SETTINGS (DIPERBAIKI)
+//  SAVE SETTINGS
 // ==================================================
 async function saveSettings(e) {
   e.preventDefault()
@@ -694,65 +623,45 @@ async function saveSettings(e) {
   const fd = new FormData(form)
   const payload = { id: 1, updated_at: new Date().toISOString() }
   const skip = new Set(['hero_image_path', 'description_image_path'])
-
   const visibilityFields = [
     'show_navbar', 'show_footer', 'show_story', 'show_kas_kenangan',
     'show_rsvp', 'show_guestbook', 'show_countdown', 'show_gallery',
-    'show_rundown', 'show_guidelines', 'show_dresscode', 'show_map'
+    'show_rundown', 'show_guidelines', 'show_dresscode', 'show_map',
+    'show_hero_button'
   ]
 
-  // Kumpulkan semua data dari form
   for (const [key, val] of fd.entries()) {
     if (skip.has(key)) continue
-    if (key === 'guidelines_section_enabled' || key === 'countdown_enabled') {
-      payload[key] = true
-    } else if (key === 'event_starts_at') {
-      continue
-    } else if (visibilityFields.includes(key)) {
-      payload[key] = true // checkbox dicentang
-    } else {
-      payload[key] = val
-    }
+    if (key === 'countdown_enabled') { payload[key] = true; continue }
+    if (key === 'event_starts_at') continue
+    if (visibilityFields.includes(key)) { payload[key] = true; continue }
+    payload[key] = val
   }
 
-  // Set false untuk checkbox yang tidak dicentang
-  if (!fd.has('guidelines_section_enabled')) payload.guidelines_section_enabled = false
   if (!fd.has('countdown_enabled')) payload.countdown_enabled = false
-  visibilityFields.forEach(field => {
-    if (!fd.has(field)) payload[field] = false
-  })
+  visibilityFields.forEach(field => { if (!fd.has(field)) payload[field] = false })
 
-  // Tanggal event
   const startsRaw = fd.get('event_starts_at')?.toString().trim()
   payload.event_starts_at = startsRaw ? new Date(startsRaw).toISOString() : null
 
-  // Path gambar (dari hidden input)
   payload.hero_image_path = fd.get('hero_image_path')?.toString() || ''
   payload.description_image_path = fd.get('description_image_path')?.toString() || ''
 
   const prevHeroPath = payload.hero_image_path
   const prevDescPath = payload.description_image_path
 
-  // Upload gambar jika ada file baru
   try {
     const heroFile = document.getElementById('hero_image_file')?.files?.[0]
     const descFile = document.getElementById('description_image_file')?.files?.[0]
     if (heroFile) {
       payload.hero_image_path = await uploadSettingsImage(heroFile, 'hero')
-      if (prevHeroPath && prevHeroPath !== payload.hero_image_path) {
-        await removeInvitationImage(prevHeroPath)
-      }
+      if (prevHeroPath && prevHeroPath !== payload.hero_image_path) await removeInvitationImage(prevHeroPath)
     }
     if (descFile) {
       payload.description_image_path = await uploadSettingsImage(descFile, 'description')
-      if (prevDescPath && prevDescPath !== payload.description_image_path) {
-        await removeInvitationImage(prevDescPath)
-      }
+      if (prevDescPath && prevDescPath !== payload.description_image_path) await removeInvitationImage(prevDescPath)
     }
-  } catch (err) {
-    showToast(err.message || 'Gagal mengunggah gambar', 'error')
-    return
-  }
+  } catch (err) { showToast(err.message || 'Gagal mengunggah gambar', 'error'); return }
 
   const { error } = await db.from('invitation_settings').upsert(payload)
   if (error) { showToast(error.message, 'error'); return }
@@ -782,7 +691,6 @@ async function loadData() {
       db.from('guidelines').select('*').order('sort_order'),
       db.from('gallery_images').select('*').order('sort_order'),
     ])
-
     invitedGuests = gRes.data ?? []
     rsvps = rRes.data ?? []
     wishes = wRes.data ?? []
@@ -794,7 +702,6 @@ async function loadData() {
     showToast('Gagal memuat data dari server', 'error')
     invitedGuests = []; rsvps = []; wishes = []; rundown = []; guidelines = []; gallery = []
   }
-
   updateStats()
   renderInvitedGuests()
   renderAttendance()
@@ -809,14 +716,8 @@ async function loadData() {
 //  DRESSCODE
 // ==================================================
 async function loadDresscode() {
-  const { data, error } = await db
-    .from('dresscode_palette')
-    .select('*')
-    .eq('id', 1)
-    .maybeSingle()
-
+  const { data, error } = await db.from('dresscode_palette').select('*').eq('id', 1).maybeSingle()
   if (error || !data) return
-
   document.getElementById('dresscode-active').checked = data.is_active
   document.querySelector('input[name="color1"]').value = data.color1
   document.querySelector('input[name="color1_hex"]').value = data.color1
@@ -826,7 +727,6 @@ async function loadDresscode() {
   document.querySelector('input[name="color3_hex"]').value = data.color3
   document.querySelector('input[name="color4"]').value = data.color4
   document.querySelector('input[name="color4_hex"]').value = data.color4
-
   updateDresscodePreview()
 }
 
@@ -838,27 +738,18 @@ function updateDresscodePreview() {
     document.querySelector('input[name="color4"]')?.value,
   ]
   const previewDivs = document.querySelectorAll('#dresscode-preview div')
-  previewDivs.forEach((div, i) => {
-    if (colors[i]) div.style.background = colors[i]
-  })
+  previewDivs.forEach((div, i) => { if (colors[i]) div.style.background = colors[i] })
 }
 
 function bindDresscodeSync() {
-  ['color1', 'color2', 'color3', 'color4'].forEach((name) => {
+  ['color1', 'color2', 'color3', 'color4'].forEach(name => {
     const colorInput = document.querySelector(`input[name="${name}"]`)
     const hexInput = document.querySelector(`input[name="${name}_hex"]`)
     if (!colorInput || !hexInput) return
-
-    colorInput.addEventListener('input', () => {
-      hexInput.value = colorInput.value
-      updateDresscodePreview()
-    })
+    colorInput.addEventListener('input', () => { hexInput.value = colorInput.value; updateDresscodePreview() })
     hexInput.addEventListener('change', () => {
       const val = hexInput.value
-      if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
-        colorInput.value = val
-        updateDresscodePreview()
-      }
+      if (/^#[0-9A-Fa-f]{6}$/.test(val)) { colorInput.value = val; updateDresscodePreview() }
     })
   })
 }
@@ -874,12 +765,12 @@ function bindDresscodeForm() {
       color4: document.querySelector('input[name="color4"]').value,
       updated_at: new Date().toISOString(),
     }
-
-    const { error } = await db.from('dresscode_palette').upsert({ id: 1, ...payload })
+    const { error } = await db.from('dresscode_palette').upsert({ id: 1, ...payload });
     if (error) {
-      showToast('Gagal menyimpan dresscode', 'error')
+      console.error('❌ Gagal menyimpan dresscode:', error); // <-- tambahkan ini
+      showToast('Gagal menyimpan dresscode', 'error');
     } else {
-      showToast('Dresscode berhasil disimpan!', 'success')
+      showToast('Dresscode berhasil disimpan!', 'success');
     }
   })
 }
@@ -888,7 +779,7 @@ function bindDresscodeForm() {
 //  INIT
 // ==================================================
 function initNavigation() {
-  document.querySelectorAll('aside .admin-nav-item').forEach((btn) => {
+  document.querySelectorAll('aside .admin-nav-item').forEach(btn => {
     btn.addEventListener('click', () => switchPanel(btn.dataset.panel))
   })
   document.getElementById('logout-btn')?.addEventListener('click', handleLogout)
@@ -904,19 +795,32 @@ function initNavigation() {
   document.getElementById('search-wishes')?.addEventListener('input', renderWishes)
   document.getElementById('modal-cancel')?.addEventListener('click', closeModal)
   document.getElementById('modal-save')?.addEventListener('click', handleModalSave)
-
-  // Init Dresscode
   bindDresscodeSync()
   bindDresscodeForm()
+
+  // Drag & drop urutan section
+  const sectionOrderEl = document.getElementById('section-order')
+  if (sectionOrderEl) {
+    new Sortable(sectionOrderEl, {
+      animation: 150,
+      ghostClass: 'bg-primary-2/30',
+      onEnd() {
+        const order = [...sectionOrderEl.children].map(li => li.dataset.section)
+        db.from('invitation_settings')
+          .upsert({ id: 1, section_order: order, updated_at: new Date().toISOString() })
+          .then(({ error }) => {
+            if (error) showToast('Gagal menyimpan urutan', 'error')
+            else showToast('Urutan disimpan!', 'success')
+          })
+      }
+    })
+  }
 }
 
 function handleLogin(e) {
   e.preventDefault()
   const input = document.getElementById('admin-password')
-  if (!input || !input.value.trim()) {
-    showToast('Masukkan password', 'error')
-    return
-  }
+  if (!input || !input.value.trim()) { showToast('Masukkan password', 'error'); return }
   if (input.value === adminPassword) {
     sessionStorage.setItem(AUTH_KEY, 'true')
     showAdmin()
@@ -936,13 +840,8 @@ function handleLogout() {
 document.getElementById('toggle-password')?.addEventListener('click', () => {
   const pw = document.getElementById('admin-password')
   const icon = document.querySelector('#toggle-password .material-symbols-outlined')
-  if (pw.type === 'password') {
-    pw.type = 'text'
-    icon.textContent = 'visibility'
-  } else {
-    pw.type = 'password'
-    icon.textContent = 'visibility_off'
-  }
+  if (pw.type === 'password') { pw.type = 'text'; icon.textContent = 'visibility' }
+  else { pw.type = 'password'; icon.textContent = 'visibility_off' }
 })
 
 // Form login listener

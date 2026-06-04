@@ -87,12 +87,16 @@ export function renderSettings(s) {
   setText("description-title", s.description_title);
   setText("description-body", s.description_body);
   setText("footer-tagline", s.footer_tagline);
-  // setText("footer-copyright", s.footer_copyright);
   setText("rsvp-deadline", s.rsvp_deadline_text);
 
   const heroSrc = resolveImageUrl(s.hero_image_path || s.hero_image_url);
   const heroImg = document.getElementById("hero-image");
   if (heroImg && heroSrc) heroImg.src = heroSrc;
+
+  const heroBtn = document.getElementById('hero-button');
+  if (heroBtn) {
+    heroBtn.classList.toggle('hidden', s.show_hero_button === false);
+  }
 
   const descSrc = resolveImageUrl(s.description_image_path || s.description_image_url);
   const descImg = document.getElementById("description-image");
@@ -137,11 +141,45 @@ export function renderSettings(s) {
     'details': s.show_rundown !== false,
     'map-section': s.show_map !== false,
     'guidelines': s.show_guidelines !== false,
-    'dresscode-card': s.show_dresscode !== false,
+    'dresscode': s.show_dresscode !== false,
     'footer': s.show_footer !== false,
   };
 
+  // Grid container Panduan & Dresscode
+  const guidelinesRow = document.getElementById('guidelines-dresscode-row');
+  const guidelinesSection = document.getElementById('guidelines');
+  const dresscodeSection = document.getElementById('dresscode');
+
+  const showGuidelines = s.show_guidelines !== false;
+  const showDresscode = s.show_dresscode !== false;
+
+  if (guidelinesRow) {
+    if (showGuidelines || showDresscode) {
+      guidelinesRow.classList.remove('hidden');
+    } else {
+      guidelinesRow.classList.add('hidden');
+    }
+  }
+
+  if (guidelinesSection) {
+    if (showGuidelines) {
+      guidelinesSection.classList.remove('hidden');
+    } else {
+      guidelinesSection.classList.add('hidden');
+    }
+  }
+
+  if (dresscodeSection) {
+    if (showDresscode) {
+      dresscodeSection.classList.remove('hidden');
+    } else {
+      dresscodeSection.classList.add('hidden');
+    }
+  }
+
+  // Terapkan visibilityMap untuk semua section lain
   Object.entries(visibilityMap).forEach(([id, isVisible]) => {
+    if (id === 'guidelines' || id === 'dresscode') return; // sudah ditangani di atas
     const el = document.getElementById(id);
     if (el) {
       if (isVisible) {
@@ -152,8 +190,17 @@ export function renderSettings(s) {
     }
   });
 
+  // Urutan section (drag-and-drop)
+  const sectionOrder = s.section_order || ['story', 'gallery', 'details', 'guidelines-dresscode-row', 'kas-kenangan', 'rsvp'];
+  const main = document.querySelector('main');
+  if (main) {
+    sectionOrder.forEach(id => {
+      const section = document.getElementById(id);
+      if (section) main.appendChild(section);
+    });
+  }
+
   // Visibilitas link di footer
-  // Link footer
   const footerLinkJadwal = document.getElementById('footer-link-jadwal');
   const footerLinkPanduan = document.getElementById('footer-link-panduan');
   const footerLinkKonfirmasi = document.getElementById('footer-link-konfirmasi');
@@ -208,19 +255,22 @@ export function renderGuidelines(items) {
 
 /* ---------- DRESSCODE ---------- */
 export async function loadDresscodeForPublic() {
-  const dressCard = document.getElementById('dresscode-card');
+  const dressSection = document.getElementById('dresscode');
   const container = document.getElementById('dresscode-colors');
-  if (!dressCard || !container) return;
+  if (!dressSection || !container) return;
+
   const { data, error } = await supabase
     .from('dresscode_palette')
     .select('is_active, color1, color2, color3, color4')
     .eq('id', 1)
     .maybeSingle();
+
   if (error || !data || !data.is_active) {
-    dressCard.classList.add('hidden');
+    dressSection.classList.add('hidden');
     return;
   }
-  dressCard.classList.remove('hidden');
+
+  dressSection.classList.remove('hidden');
   const colors = [data.color1, data.color2, data.color3, data.color4];
   container.innerHTML = `
     <div class="grid grid-cols-2 gap-4 w-full max-w-xs mx-auto">
@@ -270,10 +320,74 @@ export async function loadWishes() {
 }
 
 /* ---------- MODAL & FORM ---------- */
-export function openGuestbookModal() { /* ... */ }
-export function closeGuestbookModal() { /* ... */ }
-export async function handleRsvpSubmit(e) { /* ... */ }
-export async function handleWishSubmit(e) { /* ... */ }
+export function openGuestbookModal() {
+  const modal = document.getElementById("guestbook-modal");
+  if (!modal) return;
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.style.overflow = "hidden";
+  if (currentGuest) {
+    const wishName = document.getElementById("wish_name");
+    if (wishName) {
+      wishName.value = currentGuest.full_name;
+      wishName.readOnly = true;
+    }
+  }
+}
+
+export function closeGuestbookModal() {
+  const modal = document.getElementById("guestbook-modal");
+  if (!modal) return;
+  modal.classList.remove("open");
+  modal.setAttribute("aria-hidden", "true");
+  document.body.style.overflow = "";
+}
+
+export async function handleRsvpSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const submitBtn = form.querySelector('[type="submit"]');
+  const name = form.full_name.value.trim();
+  const attend = form.querySelector('input[name="attend"]:checked');
+  if (!name) { showToast("Mohon isi nama lengkap.", "error"); return; }
+  if (!attend) { showToast("Mohon pilih konfirmasi kehadiran.", "error"); return; }
+  if (!isSupabaseConfigured) { showToast("Supabase belum dikonfigurasi.", "error"); return; }
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Mengirim...";
+  const payload = {
+    full_name: name,
+    will_attend: attend.value === "yes",
+    guest_count: parseInt(form.guest_count.value, 10),
+    meal_preference: form.meal_preference.value,
+  };
+  if (currentGuest) payload.guest_id = currentGuest.id;
+  const { error } = await supabase.from("rsvps").insert(payload);
+  submitBtn.disabled = false;
+  submitBtn.textContent = "Kirim Konfirmasi";
+  if (error) { showToast("Gagal mengirim konfirmasi. Coba lagi.", "error"); return; }
+  if (!currentGuest) form.reset();
+  showToast("Konfirmasi kehadiran berhasil dikirim. Terima kasih!");
+}
+
+export async function handleWishSubmit(e) {
+  e.preventDefault();
+  const form = e.target;
+  const submitBtn = form.querySelector('[type="submit"]');
+  const name = form.wish_name.value.trim();
+  const message = form.wish_message.value.trim();
+  if (!name || !message) { showToast("Mohon isi nama dan ucapan.", "error"); return; }
+  if (!isSupabaseConfigured) { showToast("Supabase belum dikonfigurasi.", "error"); return; }
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Mengirim...";
+  const { error } = await supabase.from("wishes").insert({ name, message });
+  submitBtn.disabled = false;
+  submitBtn.textContent = "Kirim Ucapan";
+  if (error) { showToast("Gagal mengirim ucapan. Coba lagi.", "error"); return; }
+  if (!currentGuest) form.reset();
+  closeGuestbookModal();
+  showToast("Ucapan berhasil dikirim!");
+  loadWishes();
+}
 
 /* ---------- REVEAL OBSERVER ---------- */
 const revealObserver = new IntersectionObserver((entries) => {
@@ -325,5 +439,5 @@ export async function loadInvitationData() {
   return urls;
 }
 
-// Ekspor supabase dan konfigurasi untuk digunakan di invitation.js
+// Ekspor supabase dan konfigurasi
 export { supabase, isSupabaseConfigured };

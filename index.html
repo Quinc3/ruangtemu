@@ -14,6 +14,7 @@
 </head>
 
 <body class="bg-surface font-body-md text-on-surface antialiased overflow-x-hidden is-loading">
+
   <!-- Page Loader -->
   <div id="page-loader" aria-live="polite" aria-busy="true">
     <div class="loader-spinner" aria-hidden="true"></div>
@@ -21,7 +22,8 @@
   </div>
 
   <div id="app-content">
-    <!-- ========== NAVBAR (ID: navbar) ========== -->
+
+    <!-- ========== NAVBAR ========== -->
     <nav id="navbar" class="fixed top-0 w-full z-50 backdrop-blur-xl border-b border-white/20">
       <div
         class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
@@ -62,7 +64,8 @@
           <span id="hero-date" class="font-display-lg-mobile text-2xl md:text-4xl"></span>
           <div class="h-1 w-12 bg-primary-2/30 rounded-full"></div>
         </div>
-        <!-- Countdown (ID: countdown-section) -->
+
+        <!-- Countdown -->
         <div id="countdown-section" class="hidden mb-12">
           <div id="event-countdown" class="event-countdown hidden" aria-live="polite">
             <div class="event-countdown__grid">
@@ -76,17 +79,20 @@
                   class="event-countdown__label">Detik</span></div>
             </div>
           </div>
-          <p id="countdown-ended" class="hidden font-display-lg-mobile text-xl" style="color: var(--brand-pink);">Yey!
-            Acara sedang berlangsung!</p>
+          <p id="countdown-ended" class="hidden font-display-lg-mobile text-xl" style="color: var(--brand-pink);">
+            Yey! Acara sedang berlangsung!</p>
         </div>
-        <a class="inline-block bg-primary-2 text-white px-12 py-5 text-xl btn-playful" href="#rsvp">Konfirmasi
-          Sekarang</a>
+
+        <a id="hero-button" class="inline-block bg-primary-2 text-white px-12 py-5 text-xl btn-playful" href="#rsvp">
+          Konfirmasi Sekarang
+        </a>
       </div>
     </header>
 
     <!-- ========== MAIN CONTENT ========== -->
     <main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop space-y-stack-lg py-stack-lg">
-      <!-- Story Section (ID: story) -->
+
+      <!-- Story Section -->
       <section id="story" class="reveal grid md:grid-cols-2 gap-gutter items-center">
         <div class="space-y-6 order-2 md:order-1">
           <span id="description-label"
@@ -106,7 +112,7 @@
         </div>
       </section>
 
-      <!-- Galeri (ID: gallery) -->
+      <!-- Galeri -->
       <section id="gallery" class="reveal hidden">
         <div class="text-center mb-stack-md">
           <h2 class="font-display-lg text-display-lg">Galeri Kebahagiaan</h2>
@@ -115,14 +121,15 @@
         <div id="gallery-grid" class="grid grid-cols-2 gap-6 md:grid-cols-3"></div>
       </section>
 
-      <!-- Detail Acara (ID: details) -->
+      <!-- Detail Acara -->
       <section id="details" class="reveal space-y-gutter">
         <div class="text-center mb-stack-md">
           <h2 class="font-display-lg text-display-lg">Agenda Seru</h2>
           <div class="w-24 h-2 bg-brand-pink/40 mx-auto rounded-full"></div>
         </div>
         <div id="rundown-grid" class="grid md:grid-cols-3 gap-gutter"></div>
-        <!-- Peta (ID: map-section) -->
+
+        <!-- Peta -->
         <div id="map-section"
           class="mt-gutter h-[450px] rounded-super overflow-hidden relative card-bubble border-8 border-white">
           <div id="map-fallback" class="absolute inset-0 bg-primary-2/5 flex items-center justify-center">
@@ -141,22 +148,28 @@
         </div>
       </section>
 
-      <!-- Panduan & Dresscode (ID: guidelines) -->
-      <section id="guidelines" class="reveal grid md:grid-cols-2 gap-gutter hidden">
-        <div class="card-bubble p-8" style="background: rgba(135,206,235,0.1);">
-          <h2 class="font-display-lg text-display-lg mb-6 text-primary-2">Tips Untukmu</h2>
-          <div id="guidelines-grid" class="space-y-6"></div>
-        </div>
-        <div id="dresscode-card" class="card-bubble p-8 text-center flex flex-col items-center hidden"
-          style="background: rgba(255,215,0,0.1);">
-          <span class="text-5xl mb-4">👕</span>
-          <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-4">Baju Warna-Warni</h2>
-          <p class="text-on-surface-variant mb-6 text-lg">Pakai baju dengan warna favorit ini ya!</p>
-          <div id="dresscode-colors" class="flex flex-wrap justify-center gap-6 w-full"></div>
-        </div>
-      </section>
+      <!-- Panduan & Dresscode (Grid Container) -->
+      <div id="guidelines-dresscode-row" class="grid md:grid-cols-2 gap-gutter hidden">
+        <!-- Panduan Acara -->
+        <section id="guidelines" class="reveal hidden">
+          <div class="card-bubble p-8 h-full" style="background: rgba(135,206,235,0.1);">
+            <h2 class="font-display-lg text-display-lg mb-6 text-primary-2">Tips Untukmu</h2>
+            <div id="guidelines-grid" class="space-y-6"></div>
+          </div>
+        </section>
 
-      <!-- Kas Kenangan (ID: kas-kenangan) -->
+        <!-- Dresscode -->
+        <section id="dresscode" class="reveal hidden">
+          <div class="card-bubble p-8 h-full text-center" style="background: rgba(255,215,0,0.1);">
+            <span class="text-5xl mb-4">👕</span>
+            <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-4">Baju Warna-Warni</h2>
+            <p class="text-on-surface-variant mb-6 text-lg">Pakai baju dengan warna favorit ini ya!</p>
+            <div id="dresscode-colors" class="flex flex-wrap justify-center gap-6 w-full"></div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Kas Kenangan -->
       <section id="kas-kenangan" class="reveal max-w-3xl mx-auto text-center">
         <div class="card-bubble p-12 relative overflow-hidden" style="background: rgba(255,182,193,0.1);">
           <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full" style="background: rgba(255,182,193,0.2);">
@@ -166,8 +179,9 @@
             Kehadiranmu adalah hadiah terindah. Namun jika ingin berbagi kasih melalui kas angkatan, silakan klik tombol
             di bawah ya!
           </p>
-          <button id="toggle-bank" type="button"
-            class="bg-brand-pink text-ink px-10 py-4 btn-playful w-full md:w-auto">Lihat Nomor Rekening</button>
+          <button id="toggle-bank" type="button" class="bg-brand-pink text-ink px-10 py-4 btn-playful w-full md:w-auto">
+            Lihat Nomor Rekening
+          </button>
           <div id="bank-details" class="hidden py-10 border-t-2 border-dashed mt-10"
             style="border-color: rgba(255,182,193,0.3);">
             <div class="grid md:grid-cols-2 gap-8 text-left items-center">
@@ -197,7 +211,7 @@
         </div>
       </section>
 
-      <!-- RSVP & Ucapan (ID: rsvp) -->
+      <!-- RSVP & Ucapan -->
       <section id="rsvp" class="reveal grid md:grid-cols-2 gap-gutter">
         <!-- RSVP Form Card -->
         <div class="card-bubble p-12 text-white relative overflow-hidden" style="background: var(--color-primary-2);">
@@ -254,11 +268,14 @@
               </div>
             </div>
             <button class="w-full bg-white text-primary-2 py-5 rounded-full font-bold text-lg btn-playful mt-4"
-              type="submit">Kirim Sekarang!</button>
+              type="submit">
+              Kirim Sekarang!
+            </button>
             <p id="rsvp-deadline" class="text-center text-xs opacity-70 italic mt-4"></p>
           </form>
         </div>
-        <!-- Guestbook Card (ID: guestbook-section) -->
+
+        <!-- Guestbook Card -->
         <div id="guestbook-section" class="card-bubble p-12 flex flex-col" style="background: rgba(152,251,152,0.1);">
           <h3 class="font-display-lg text-display-lg-mobile mb-8" style="color: var(--color-tertiary);">Pesan &amp; Doa
           </h3>
@@ -267,13 +284,14 @@
           </div>
           <button id="open-guestbook" type="button"
             class="w-full text-white py-5 rounded-full font-bold text-lg btn-playful flex items-center justify-center gap-2"
-            style="background: var(--color-tertiary);">Tulis Pesan <span
-              class="material-symbols-outlined">edit_note</span></button>
+            style="background: var(--color-tertiary);">
+            Tulis Pesan <span class="material-symbols-outlined">edit_note</span>
+          </button>
         </div>
       </section>
     </main>
 
-    <!-- ========== FOOTER (ID: footer) ========== -->
+    <!-- ========== FOOTER ========== -->
     <footer id="footer"
       class="bg-white border-t border-primary-2/10 w-full py-stack-lg flex flex-col items-center gap-6 text-center px-margin-mobile mt-stack-lg relative overflow-hidden">
       <div id="footer-links" class="flex flex-wrap justify-center gap-8 my-6">
@@ -283,56 +301,62 @@
           href="#guidelines">Panduan</a>
         <a id="footer-link-konfirmasi" class="font-bold hover:text-primary-2 transition-colors hidden"
           href="#rsvp">Konfirmasi</a>
+        <a id="footer-link-galeri" class="font-bold hover:text-primary-2 transition-colors hidden"
+          href="#gallery">Galeri</a>
+        <a id="footer-link-kas" class="font-bold hover:text-primary-2 transition-colors hidden"
+          href="#kas-kenangan">Kas</a>
       </div>
       <p id="footer-tagline" class="font-display-lg-mobile text-xl max-w-md"></p>
       <div class="w-16 h-1 bg-brand-yellow rounded-full mt-8"></div>
       <p class="text-[10px] tracking-[0.3em] uppercase opacity-50 mt-4">© 2026 Ruang Temu. All rights reserved.</p>
     </footer>
+  </div>
 
-    <!-- ========== GALLERY LIGHTBOX ========== -->
-    <div id="gallery-lightbox" class="gallery-lightbox" aria-hidden="true">
-      <button id="gallery-lightbox-close" type="button"
-        class="gallery-lightbox__close material-symbols-outlined text-5xl" aria-label="Tutup">close</button>
-      <div class="max-w-4xl px-6 text-center">
-        <img id="gallery-lightbox-img" alt="" class="rounded-super border-8 border-white shadow-2xl" />
-        <p id="gallery-lightbox-caption" class="mt-8 text-xl font-display-lg-mobile text-white hidden"></p>
-      </div>
+  <!-- ========== GALLERY LIGHTBOX ========== -->
+  <div id="gallery-lightbox" class="gallery-lightbox" aria-hidden="true">
+    <button id="gallery-lightbox-close" type="button" class="gallery-lightbox__close material-symbols-outlined text-5xl"
+      aria-label="Tutup">close</button>
+    <div class="max-w-4xl px-6 text-center">
+      <img id="gallery-lightbox-img" alt="" class="rounded-super border-8 border-white shadow-2xl" />
+      <p id="gallery-lightbox-caption" class="mt-8 text-xl font-display-lg-mobile text-white hidden"></p>
     </div>
+  </div>
 
-    <!-- ========== MODAL UCAPAN ========== -->
-    <div class="modal-overlay" id="guestbook-modal" aria-hidden="true">
-      <div
-        class="bg-white p-10 rounded-super w-full max-w-md shadow-2xl relative border-8 border-tertiary-container/20">
-        <div class="flex justify-between items-center mb-8">
-          <h3 class="font-display-lg-mobile text-3xl" style="color: var(--color-tertiary);">Tulis Pesanmu</h3>
-          <button id="close-guestbook" type="button"
-            class="material-symbols-outlined text-gray-400 hover:text-brand-pink text-3xl">close</button>
+  <!-- ========== MODAL UCAPAN ========== -->
+  <div class="modal-overlay" id="guestbook-modal" aria-hidden="true">
+    <div class="bg-white p-10 rounded-super w-full max-w-md shadow-2xl relative border-8 border-tertiary-container/20">
+      <div class="flex justify-between items-center mb-8">
+        <h3 class="font-display-lg-mobile text-3xl" style="color: var(--color-tertiary);">Tulis Pesanmu</h3>
+        <button id="close-guestbook" type="button"
+          class="material-symbols-outlined text-gray-400 hover:text-brand-pink text-3xl">close</button>
+      </div>
+      <form id="wish-form" class="space-y-6">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
+            for="wish_name">Nama Kamu</label>
+          <input
+            class="w-full rounded-2xl border-2 border-primary-2/10 bg-primary-2/5 focus:border-primary-2 focus:ring-0 p-4 transition-all outline-none"
+            id="wish_name" name="wish_name" placeholder="Siapa namamu?" type="text" required />
         </div>
-        <form id="wish-form" class="space-y-6">
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
-              for="wish_name">Nama Kamu</label>
-            <input
-              class="w-full rounded-2xl border-2 border-primary-2/10 bg-primary-2/5 focus:border-primary-2 focus:ring-0 p-4 transition-all outline-none"
-              id="wish_name" name="wish_name" placeholder="Siapa namamu?" type="text" required />
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
-              for="wish_message">Pesan Manis</label>
-            <textarea
-              class="w-full rounded-2xl border-2 border-primary-2/10 bg-primary-2/5 focus:border-primary-2 focus:ring-0 p-4 transition-all outline-none resize-none"
-              id="wish_message" name="wish_message" placeholder="Tulis sesuatu yang indah untuk angkatan kita..."
-              rows="4" required></textarea>
-          </div>
-          <button class="w-full text-white py-4 rounded-full font-bold text-lg btn-playful"
-            style="background: var(--color-tertiary);" type="submit">Kirim Pesan! ✨</button>
-        </form>
-      </div>
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-2"
+            for="wish_message">Pesan Manis</label>
+          <textarea
+            class="w-full rounded-2xl border-2 border-primary-2/10 bg-primary-2/5 focus:border-primary-2 focus:ring-0 p-4 transition-all outline-none resize-none"
+            id="wish_message" name="wish_message" placeholder="Tulis sesuatu yang indah untuk angkatan kita..." rows="4"
+            required></textarea>
+        </div>
+        <button class="w-full text-white py-4 rounded-full font-bold text-lg btn-playful"
+          style="background: var(--color-tertiary);" type="submit">
+          Kirim Pesan! ✨
+        </button>
+      </form>
     </div>
+  </div>
 
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
-    <script type="module" src="/src/invitation.js"></script>
+  <script type="module" src="/src/invitation.js"></script>
 </body>
 
 </html>

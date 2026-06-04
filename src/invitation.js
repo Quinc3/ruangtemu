@@ -133,6 +133,7 @@ async function boot() {
         if (!galleryRes.error) galleryData = galleryRes.data;
         if (settingsRes.data) {
           initCountdown(settingsRes.data.event_starts_at, settingsRes.data.countdown_enabled !== false);
+          // Hanya render galeri jika show_gallery true
           if (settingsRes.data.show_gallery !== false) {
             renderGallery(galleryData);
           } else {

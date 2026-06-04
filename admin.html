@@ -14,6 +14,7 @@
     rel="stylesheet" />
   <!-- Tailwind CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.0/Sortable.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -294,6 +295,8 @@
           <form id="settings-form"
             class="rounded-2xl border border-white/20 bg-white/80 p-6 md:p-8 backdrop-blur-xl space-y-8">
             <h3 class="font-display text-xl font-bold text-ink">Pengaturan Undangan</h3>
+
+            <!-- ========== KONTEN UMUM ========== -->
             <div class="grid md:grid-cols-2 gap-6">
               <div><label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Nama
                   Organisasi</label><input name="org_name"
@@ -319,12 +322,20 @@
                   (countdown)</label><input name="event_starts_at" type="datetime-local"
                   class="mt-1 w-full border-b border-outline-variant py-2 outline-none focus:border-primary-2 bg-transparent" />
               </div>
-              <div class="flex items-center gap-2">
-                <input type="checkbox" name="countdown_enabled" id="countdown_enabled"
-                  class="rounded border-outline-variant text-primary-2" />
-                <label for="countdown_enabled" class="text-sm">Tampilkan countdown di undangan</label>
+              <div><label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Nama
+                  Tempat</label><input name="venue_name"
+                  class="mt-1 w-full border-b border-outline-variant py-2 outline-none focus:border-primary-2 bg-transparent" />
               </div>
-              <div class="md:col-span-2">
+              <div><label
+                  class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Alamat</label><input
+                  name="venue_address"
+                  class="mt-1 w-full border-b border-outline-variant py-2 outline-none focus:border-primary-2 bg-transparent" />
+              </div>
+            </div>
+
+            <!-- ========== GAMBAR ========== -->
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
                 <label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Gambar Hero</label>
                 <input type="hidden" name="hero_image_path" />
                 <input type="file" id="hero_image_file" accept="image/jpeg,image/png,image/webp,image/gif"
@@ -333,6 +344,20 @@
                   class="mt-3 max-h-40 rounded-xl object-cover shadow hidden" />
                 <p data-settings-path="hero" class="mt-1 text-[10px] text-on-surface-variant"></p>
               </div>
+              <div>
+                <label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Gambar
+                  Kenangan</label>
+                <input type="hidden" name="description_image_path" />
+                <input type="file" id="description_image_file" accept="image/jpeg,image/png,image/webp,image/gif"
+                  class="mt-2 block w-full text-sm file:mr-3 file:rounded-full file:border-0 file:bg-primary-2 file:px-4 file:py-2 file:text-ink file:font-bold" />
+                <img data-settings-preview="description" alt="Pratinjau kenangan"
+                  class="mt-3 max-h-40 rounded-xl object-cover shadow hidden" />
+                <p data-settings-path="description" class="mt-1 text-[10px] text-on-surface-variant"></p>
+              </div>
+            </div>
+
+            <!-- ========== KENANGAN ========== -->
+            <div class="grid md:grid-cols-2 gap-6">
               <div><label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Label
                   Kenangan</label><input name="description_label"
                   class="mt-1 w-full border-b border-outline-variant py-2 outline-none focus:border-primary-2 bg-transparent" />
@@ -351,25 +376,10 @@
                   (opsional)</label><input name="description_quote"
                   class="mt-1 w-full border-b border-outline-variant py-2 outline-none focus:border-primary-2 bg-transparent" />
               </div>
-              <div class="md:col-span-2">
-                <label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Gambar
-                  Kenangan</label>
-                <input type="hidden" name="description_image_path" />
-                <input type="file" id="description_image_file" accept="image/jpeg,image/png,image/webp,image/gif"
-                  class="mt-2 block w-full text-sm file:mr-3 file:rounded-full file:border-0 file:bg-primary-2 file:px-4 file:py-2 file:text-ink file:font-bold" />
-                <img data-settings-preview="description" alt="Pratinjau kenangan"
-                  class="mt-3 max-h-40 rounded-xl object-cover shadow hidden" />
-                <p data-settings-path="description" class="mt-1 text-[10px] text-on-surface-variant"></p>
-              </div>
-              <div><label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Nama
-                  Tempat</label><input name="venue_name"
-                  class="mt-1 w-full border-b border-outline-variant py-2 outline-none focus:border-primary-2 bg-transparent" />
-              </div>
-              <div><label
-                  class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Alamat</label><input
-                  name="venue_address"
-                  class="mt-1 w-full border-b border-outline-variant py-2 outline-none focus:border-primary-2 bg-transparent" />
-              </div>
+            </div>
+
+            <!-- ========== MAPS ========== -->
+            <div class="grid md:grid-cols-2 gap-6">
               <div class="md:col-span-2"><label
                   class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Google Maps Embed
                   URL</label><input name="gmaps_embed_url"
@@ -380,6 +390,10 @@
                   Link</label><input name="gmaps_link_url"
                   class="mt-1 w-full border-b border-outline-variant py-2 outline-none focus:border-primary-2 bg-transparent" />
               </div>
+            </div>
+
+            <!-- ========== FOOTER & RSVP ========== -->
+            <div class="grid md:grid-cols-2 gap-6">
               <div><label class="text-xs font-bold uppercase tracking-widest text-on-surface-variant">Footer
                   Tagline</label><input name="footer_tagline"
                   class="mt-1 w-full border-b border-outline-variant py-2 outline-none focus:border-primary-2 bg-transparent" />
@@ -388,80 +402,97 @@
                   RSVP</label><input name="rsvp_deadline_text"
                   class="mt-1 w-full border-b border-outline-variant py-2 outline-none focus:border-primary-2 bg-transparent" />
               </div>
-              <div class="flex items-center gap-2 md:col-span-2">
-                <input type="checkbox" name="guidelines_section_enabled" id="guidelines_section_enabled"
-                  class="rounded border-outline-variant text-primary-2" />
-                <label for="guidelines_section_enabled" class="text-sm">Tampilkan section Panduan Acara</label>
+            </div>
+
+            <!-- ========== CHECKBOX TOGGLE ========== -->
+            <div class="mt-8 border-t border-white/20 pt-6">
+              <h3 class="font-display text-xl font-bold text-ink mb-4">Pengaturan Toggle</h3>
+              <div class="grid md:grid-cols-2 gap-4">
+                <div class="flex items-center gap-2">
+                  <input type="checkbox" name="countdown_enabled" id="countdown_enabled"
+                    class="rounded border-outline-variant text-primary-2" />
+                  <label for="countdown_enabled" class="text-sm">Tampilkan countdown di undangan</label>
+                </div>
+                <div class="flex items-center gap-2">
+                  <input type="checkbox" name="show_hero_button" id="show_hero_button"
+                    class="rounded border-outline-variant text-primary-2" />
+                  <label for="show_hero_button" class="text-sm">Tombol Konfirmasi di Hero</label>
+                </div>
               </div>
             </div>
 
+            <!-- ========== VISIBILITAS SECTION ========== -->
             <div class="mt-8 border-t border-white/20 pt-6">
               <h3 class="font-display text-xl font-bold text-ink mb-4">Visibilitas Section</h3>
               <p class="text-sm text-on-surface-variant mb-4">Pilih section mana yang akan ditampilkan di halaman
                 undangan.</p>
               <div class="grid md:grid-cols-2 gap-4">
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" name="show_navbar" id="show_navbar"
-                    class="rounded border-outline-variant text-primary-2" />
-                  <label for="show_navbar" class="text-sm">Navbar</label>
-                </div>
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" name="show_footer" id="show_footer"
-                    class="rounded border-outline-variant text-primary-2" />
-                  <label for="show_footer" class="text-sm">Footer</label>
-                </div>
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" name="show_story" id="show_story"
-                    class="rounded border-outline-variant text-primary-2" />
-                  <label for="show_story" class="text-sm">Story (Kenangan)</label>
-                </div>
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" name="show_gallery" id="show_gallery"
-                    class="rounded border-outline-variant text-primary-2" />
-                  <label for="show_gallery" class="text-sm">Galeri Foto</label>
-                </div>
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" name="show_kas_kenangan" id="show_kas_kenangan"
-                    class="rounded border-outline-variant text-primary-2" />
-                  <label for="show_kas_kenangan" class="text-sm">Kas Kenangan</label>
-                </div>
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" name="show_rsvp" id="show_rsvp"
-                    class="rounded border-outline-variant text-primary-2" />
-                  <label for="show_rsvp" class="text-sm">RSVP (Konfirmasi Kehadiran)</label>
-                </div>
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" name="show_guestbook" id="show_guestbook"
-                    class="rounded border-outline-variant text-primary-2" />
-                  <label for="show_guestbook" class="text-sm">Guestbook (Ucapan)</label>
-                </div>
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" name="show_countdown" id="show_countdown"
-                    class="rounded border-outline-variant text-primary-2" />
-                  <label for="show_countdown" class="text-sm">Countdown</label>
-                </div>
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" name="show_rundown" id="show_rundown"
-                    class="rounded border-outline-variant text-primary-2" />
-                  <label for="show_rundown" class="text-sm">Rundown Acara</label>
-                </div>
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" name="show_guidelines" id="show_guidelines"
-                    class="rounded border-outline-variant text-primary-2" />
-                  <label for="show_guidelines" class="text-sm">Panduan Acara</label>
-                </div>
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" name="show_dresscode" id="show_dresscode"
-                    class="rounded border-outline-variant text-primary-2" />
-                  <label for="show_dresscode" class="text-sm">Dresscode</label>
-                </div>
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" name="show_map" id="show_map"
-                    class="rounded border-outline-variant text-primary-2" />
-                  <label for="show_map" class="text-sm">Peta Lokasi</label>
-                </div>
+                <div class="flex items-center gap-2"><input type="checkbox" name="show_navbar" id="show_navbar"
+                    class="rounded border-outline-variant text-primary-2" /><label for="show_navbar"
+                    class="text-sm">Navbar</label></div>
+                <div class="flex items-center gap-2"><input type="checkbox" name="show_footer" id="show_footer"
+                    class="rounded border-outline-variant text-primary-2" /><label for="show_footer"
+                    class="text-sm">Footer</label></div>
+                <div class="flex items-center gap-2"><input type="checkbox" name="show_story" id="show_story"
+                    class="rounded border-outline-variant text-primary-2" /><label for="show_story"
+                    class="text-sm">Story (Kenangan)</label></div>
+                <div class="flex items-center gap-2"><input type="checkbox" name="show_gallery" id="show_gallery"
+                    class="rounded border-outline-variant text-primary-2" /><label for="show_gallery"
+                    class="text-sm">Galeri Foto</label></div>
+                <div class="flex items-center gap-2"><input type="checkbox" name="show_kas_kenangan"
+                    id="show_kas_kenangan" class="rounded border-outline-variant text-primary-2" /><label
+                    for="show_kas_kenangan" class="text-sm">Kas Kenangan</label></div>
+                <div class="flex items-center gap-2"><input type="checkbox" name="show_rsvp" id="show_rsvp"
+                    class="rounded border-outline-variant text-primary-2" /><label for="show_rsvp" class="text-sm">RSVP
+                    (Konfirmasi)</label></div>
+                <div class="flex items-center gap-2"><input type="checkbox" name="show_guestbook" id="show_guestbook"
+                    class="rounded border-outline-variant text-primary-2" /><label for="show_guestbook"
+                    class="text-sm">Guestbook (Ucapan)</label></div>
+                <div class="flex items-center gap-2"><input type="checkbox" name="show_countdown" id="show_countdown"
+                    class="rounded border-outline-variant text-primary-2" /><label for="show_countdown"
+                    class="text-sm">Countdown</label></div>
+                <div class="flex items-center gap-2"><input type="checkbox" name="show_rundown" id="show_rundown"
+                    class="rounded border-outline-variant text-primary-2" /><label for="show_rundown"
+                    class="text-sm">Rundown Acara</label></div>
+                <div class="flex items-center gap-2"><input type="checkbox" name="show_guidelines" id="show_guidelines"
+                    class="rounded border-outline-variant text-primary-2" /><label for="show_guidelines"
+                    class="text-sm">Panduan Acara</label></div>
+                <div class="flex items-center gap-2"><input type="checkbox" name="show_dresscode" id="show_dresscode"
+                    class="rounded border-outline-variant text-primary-2" /><label for="show_dresscode"
+                    class="text-sm">Dresscode</label></div>
+                <div class="flex items-center gap-2"><input type="checkbox" name="show_map" id="show_map"
+                    class="rounded border-outline-variant text-primary-2" /><label for="show_map" class="text-sm">Peta
+                    Lokasi</label></div>
               </div>
             </div>
+
+            <!-- ========== URUTAN SECTION ========== -->
+            <div class="mt-8 border-t border-white/20 pt-6">
+              <h3 class="font-display text-xl font-bold text-ink mb-4">Urutan Section</h3>
+              <p class="text-sm text-on-surface-variant mb-4">Drag & drop untuk mengatur urutan section di halaman
+                undangan.</p>
+              <ul id="section-order" class="space-y-2">
+                <li data-section="story" class="bg-white/50 p-3 rounded-lg cursor-move flex items-center gap-2"><span
+                    class="material-symbols-outlined text-on-surface-variant">drag_indicator</span> Story (Kenangan)
+                </li>
+                <li data-section="gallery" class="bg-white/50 p-3 rounded-lg cursor-move flex items-center gap-2"><span
+                    class="material-symbols-outlined text-on-surface-variant">drag_indicator</span> Galeri Foto</li>
+                <li data-section="details" class="bg-white/50 p-3 rounded-lg cursor-move flex items-center gap-2"><span
+                    class="material-symbols-outlined text-on-surface-variant">drag_indicator</span> Detail Acara
+                  (Rundown)</li>
+                <li data-section="guidelines" class="bg-white/50 p-3 rounded-lg cursor-move flex items-center gap-2">
+                  <span class="material-symbols-outlined text-on-surface-variant">drag_indicator</span> Panduan Acara
+                </li>
+                <li data-section="dresscode" class="bg-white/50 p-3 rounded-lg cursor-move flex items-center gap-2">
+                  <span class="material-symbols-outlined text-on-surface-variant">drag_indicator</span> Dresscode</li>
+                <li data-section="kas-kenangan" class="bg-white/50 p-3 rounded-lg cursor-move flex items-center gap-2">
+                  <span class="material-symbols-outlined text-on-surface-variant">drag_indicator</span> Kas Kenangan
+                </li>
+                <li data-section="rsvp" class="bg-white/50 p-3 rounded-lg cursor-move flex items-center gap-2"><span
+                    class="material-symbols-outlined text-on-surface-variant">drag_indicator</span> RSVP & Ucapan</li>
+              </ul>
+            </div>
+
             <button type="submit"
               class="btn-bounce rounded-full bg-primary-2 text-ink px-8 py-3 font-bold hover:bg-sky-400">Simpan
               Pengaturan</button>

@@ -1,0 +1,188 @@
+  {
+    "name": "ruangtemu-native",
+    "path": "c:\\xampp\\htdocs\\ruangtemu-native",
+    "type": "directory",
+    "children": [
+      {
+        "name": "public",
+        "type": "folder",
+        "children": [
+          {
+            "name": "favicon.svg",
+            "type": "file"
+          },
+          {
+            "name": "icons.svg",
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "name": "src",
+        "type": "folder",
+        "children": [
+          {
+            "name": "assets",
+            "type": "folder",
+            "children": [
+              {
+                "name": "hero.png",
+                "type": "file"
+              },
+              {
+                "name": "javascript.svg",
+                "type": "file"
+              },
+              {
+                "name": "vite.svg",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "lib",
+            "type": "folder",
+            "children": [
+              {
+                "name": "material-icons.js",
+                "type": "file"
+              },
+              {
+                "name": "storage.js",
+                "type": "file"
+              },
+              {
+                "name": "supabase.js",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "styles",
+            "type": "folder",
+            "children": [
+              {
+                "name": "shared.css",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "admin.js",
+            "type": "file"
+          },
+          {
+            "name": "invitation.js",
+            "type": "file"
+          },
+          {
+            "name": "main-v1.js",
+            "type": "file"
+          },
+          {
+            "name": "main.js",
+            "type": "file"
+          },
+          {
+            "name": "style-admin.css",
+            "type": "file"
+          },
+          {
+            "name": "style-v1.css",
+            "type": "file"
+          },
+          {
+            "name": "style.css",
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "name": "supabase",
+        "type": "folder",
+        "children": [
+          {
+            "name": "data",
+            "type": "folder",
+            "children": [
+              {
+                "name": "event_rundown.csv",
+                "type": "file"
+              },
+              {
+                "name": "guests.csv",
+                "type": "file"
+              },
+              {
+                "name": "guidelines.csv",
+                "type": "file"
+              },
+              {
+                "name": "invitation_settings.csv",
+                "type": "file"
+              },
+              {
+                "name": "rsvps.csv",
+                "type": "file"
+              },
+              {
+                "name": "wishes.csv",
+                "type": "file"
+              }
+            ]
+          },
+          {
+            "name": "STORAGE.md",
+            "type": "file"
+          },
+          {
+            "name": "schema.sql",
+            "type": "file"
+          }
+        ]
+      },
+      {
+        "name": ".env.example",
+        "type": "file"
+      },
+      {
+        "name": ".gitignore",
+        "type": "file"
+      },
+      {
+        "name": "admin.html",
+        "type": "file"
+      },
+      {
+        "name": "index.html",
+        "type": "file"
+      },
+      {
+        "name": "index_v1.html",
+        "type": "file"
+      },
+      {
+        "name": "package-lock.json",
+        "type": "file"
+      },
+      {
+        "name": "package.json",
+        "type": "file"
+      },
+      {
+        "name": "vercel.json",
+        "type": "file"
+      },
+      {
+        "name": "vite.config.js",
+        "type": "file"
+      }
+    ],
+    "metadata": {
+      "generated": "2026-06-04T04:54:51.452Z",
+      "generator": "FileTree Pro Extension",
+      "version": "0.2.0",
+      "showIcons": false,
+      "maxDepth": 10
+    }
+  }
