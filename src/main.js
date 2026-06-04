@@ -223,15 +223,21 @@ export function renderRundown(items) {
     grid.innerHTML = '<p class="col-span-3 text-center text-on-surface-variant italic h-40 flex items-center justify-center">Belum ada rundown acara.</p>';
     return;
   }
-  const cardColors = ['card-pink', 'card-blue', 'card-lavender', 'card-peach', 'card-yellow'];
-  grid.innerHTML = items.map((item, i) => `
-    <div class="${cardColors[i % cardColors.length]} p-10 text-center space-y-4 rounded-xl">
-      <span class="material-symbols-outlined text-4xl">${escapeHtml(item.icon)}</span>
-      <h3 class="font-headline-sm text-headline-sm">${escapeHtml(item.title)}</h3>
-      ${item.time_range ? `<p class="font-body-md text-body-md">${escapeHtml(item.time_range)}</p>` : ""}
-      ${item.note ? `<p class="font-label-caps text-label-caps">${escapeHtml(item.note)}</p>` : ""}
-    </div>
-  `).join("");
+  grid.innerHTML = items.map((item, i) => {
+    // Ambil warna dari database, fallback ke default kalau kosong
+    const bg = item.bg_color || '#FFB6C1';
+    const text = item.text_color || '#1b1c15';
+    return `
+      <div class="p-10 text-center space-y-4 rounded-xl" style="background-color: ${bg}; color: ${text};">
+        <span class="material-symbols-outlined text-4xl">${escapeHtml(item.icon)}</span>
+        <h3 class="font-headline-sm text-headline-sm">${escapeHtml(item.title)}</h3>
+        ${item.time_range ? `<p class="font-body-md text-body-md">${escapeHtml(item.time_range)}</p>` : ""}
+        ${item.note ? `<p class="font-label-caps text-label-caps">${escapeHtml(item.note)}</p>` : ""}
+      </div>
+    `;
+  }).join("");
+  // Re-observasi kartu agar animasi reveal tetap berfungsi
+  observeRundownCards();
 }
 
 /* ---------- GUIDELINES ---------- */

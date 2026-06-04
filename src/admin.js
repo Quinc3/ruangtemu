@@ -47,6 +47,7 @@ const PANELS = [
   { id: 'panel-dresscode', label: 'Dresscode', icon: 'palette' },
 ]
 
+// ==================== UTILS ====================
 function escapeHtml(t) {
   const d = document.createElement('div')
   d.textContent = t ?? ''
@@ -93,6 +94,7 @@ function isAuthenticated() {
   return sessionStorage.getItem(AUTH_KEY) === 'true'
 }
 
+// ==================== SCREEN SWITCH ====================
 function showLogin() {
   document.getElementById('login-screen')?.classList.remove('hidden')
   document.getElementById('admin-app')?.classList.add('hidden')
@@ -139,6 +141,7 @@ function switchPanel(panelId) {
   if (panelId === 'panel-dresscode') loadDresscode()
 }
 
+// ==================== MODAL ====================
 function openModal(title, fieldsHtml) {
   document.getElementById('modal-title').textContent = title
   const form = document.getElementById('modal-form')
@@ -147,8 +150,21 @@ function openModal(title, fieldsHtml) {
   document.getElementById('modal').classList.add('flex')
   bindIconSelectPreview(form)
   if (modalMode?.startsWith('guest')) bindGuestSlugAutoFill(form)
+  // ★ Sinkronisasi color ↔ hex untuk rundown
+  if (modalMode?.startsWith('rundown')) {
+    bindColorHexSync(form, 'bg_color', 'bg_color_hex')
+    bindColorHexSync(form, 'text_color', 'text_color_hex')
+  }
 }
 
+function closeModal() {
+  document.getElementById('modal').classList.add('hidden')
+  document.getElementById('modal').classList.remove('flex')
+  modalMode = null
+  modalId = null
+}
+
+// ==================== GUEST SLUG HELPER ====================
 function guestTakenSlugs(excludeGuestId = null) {
   return invitedGuests.filter(g => g.id !== excludeGuestId).map(g => g.slug)
 }
@@ -174,13 +190,7 @@ function bindGuestSlugAutoFill(form) {
   }
 }
 
-function closeModal() {
-  document.getElementById('modal').classList.add('hidden')
-  document.getElementById('modal').classList.remove('flex')
-  modalMode = null
-  modalId = null
-}
-
+// ==================== STATS ====================
 function updateStats() {
   const attending = rsvps.filter(r => r.will_attend)
   document.getElementById('stat-invited').textContent = invitedGuests.length
@@ -191,6 +201,7 @@ function updateStats() {
   document.getElementById('stat-wishes').textContent = wishes.length
 }
 
+// ==================== RENDERERS ====================
 function renderInvitedGuests() {
   const tbody = document.getElementById('invited-tbody')
   if (!tbody) return
@@ -265,7 +276,10 @@ function renderRundown() {
     <tr class="${TR}">
       <td class="${TD}">${r.sort_order}</td>
       <td class="${TD}"><span class="material-symbols-outlined text-primary-3">${escapeHtml(r.icon)}</span></td>
-      <td class="${TD} font-medium">${escapeHtml(r.title)}</td>
+      <td class="${TD} font-medium">
+        ${escapeHtml(r.title)}
+        ${r.bg_color ? `<span class="inline-block w-3 h-3 rounded-full ml-2" style="background:${r.bg_color}; border:1px solid ${r.text_color || '#000'}"></span>` : ''}
+      </td>
       <td class="${TD}">${escapeHtml(r.time_range || '-')}</td>
       <td class="${TD} text-sm">${escapeHtml(r.note || '-')}</td>
       <td class="${TD}">${r.is_active ? 'Ya' : 'Tidak'}</td>
@@ -328,6 +342,7 @@ function renderGalleryAdmin() {
   tbody.querySelectorAll('[data-del-gallery]').forEach(b => b.addEventListener('click', () => deleteGallery(b.dataset.delGallery)))
 }
 
+// ==================== SETTINGS HELPERS ====================
 function setSettingsImagePreview(kind, path) {
   const form = document.getElementById('settings-form')
   if (!form) return
@@ -412,6 +427,7 @@ async function loadSettings() {
   await updateStorageStatus()
 }
 
+// ==================== FORM FIELDS ====================
 function guestFormFields(g = {}) {
   return `
     <div><label class="text-xs text-on-surface-variant">Nama Lengkap</label><input name="full_name" required value="${escapeHtml(g.full_name || '')}" class="mt-1 w-full border-b py-2 outline-none focus:border-primary-2" /></div>
@@ -431,7 +447,35 @@ function rundownFormFields(r = {}) {
     <div><label class="text-xs text-on-surface-variant">Waktu</label><input name="time_range" value="${escapeHtml(r.time_range || '')}" class="mt-1 w-full border-b py-2" /></div>
     <div><label class="text-xs text-on-surface-variant">Catatan</label><input name="note" value="${escapeHtml(r.note || '')}" class="mt-1 w-full border-b py-2" /></div>
     <div><label class="text-xs text-on-surface-variant">Urutan</label><input name="sort_order" type="number" value="${r.sort_order ?? 0}" class="mt-1 w-full border-b py-2" /></div>
-    <div class="flex items-center gap-2"><input type="checkbox" name="is_active" ${r.is_active !== false ? 'checked' : ''} /><label class="text-sm">Aktif</label></div>`
+    <div class="grid grid-cols-2 gap-4 mt-3">
+      <div>
+        <label class="text-xs text-on-surface-variant">Warna Background</label>
+        <div class="flex items-center gap-2 mt-1">
+          <input type="color" name="bg_color" value="${escapeHtml(r.bg_color || '#ffffff')}" class="w-10 h-10 rounded border-0 cursor-pointer" />
+          <input type="text" name="bg_color_hex" maxlength="7" placeholder="#ffffff" value="${escapeHtml(r.bg_color || '#ffffff')}" class="w-full border-b border-outline-variant py-1 outline-none focus:border-primary-2 text-sm bg-transparent" />
+        </div>
+      </div>
+      <div>
+        <label class="text-xs text-on-surface-variant">Warna Teks</label>
+        <div class="flex items-center gap-2 mt-1">
+          <input type="color" name="text_color" value="${escapeHtml(r.text_color || '#1b1c15')}" class="w-10 h-10 rounded border-0 cursor-pointer" />
+          <input type="text" name="text_color_hex" maxlength="7" placeholder="#1b1c15" value="${escapeHtml(r.text_color || '#1b1c15')}" class="w-full border-b border-outline-variant py-1 outline-none focus:border-primary-2 text-sm bg-transparent" />
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 mt-3"><input type="checkbox" name="is_active" ${r.is_active !== false ? 'checked' : ''} /><label class="text-sm">Aktif</label></div>`
+}
+
+// ★ Fungsi sinkronisasi color ↔ hex (seperti dresscode)
+function bindColorHexSync(form, colorName, hexName) {
+  const colorInput = form.querySelector(`[name="${colorName}"]`);
+  const hexInput = form.querySelector(`[name="${hexName}"]`);
+  if (!colorInput || !hexInput) return;
+  colorInput.addEventListener('input', () => { hexInput.value = colorInput.value; });
+  hexInput.addEventListener('change', () => {
+    const val = hexInput.value.trim();
+    if (/^#[0-9A-Fa-f]{6}$/.test(val)) { colorInput.value = val; }
+  });
 }
 
 function guidelineFormFields(g = {}) {
@@ -470,6 +514,8 @@ function bindGalleryFilePreview() {
   })
 }
 
+// ==================== CRUD OPERATIONS ====================
+// --- Guests ---
 function addGuest() { modalMode = 'guest-add'; openModal('Tambah Tamu Undangan', guestFormFields()) }
 function editGuest(id) {
   const g = invitedGuests.find(x => x.id === id)
@@ -477,7 +523,6 @@ function editGuest(id) {
   modalMode = 'guest-edit'; modalId = id
   openModal('Edit Tamu', guestFormFields(g))
 }
-
 async function saveGuestModal() {
   const form = document.getElementById('modal-form')
   const fd = new FormData(form)
@@ -496,7 +541,6 @@ async function saveGuestModal() {
   if (err) { showToast(err.message, 'error'); return }
   closeModal(); showToast('Tamu disimpan'); loadData()
 }
-
 async function deleteGuest(id) {
   if (!confirm('Hapus tamu ini?')) return
   const { error } = await db.from('guests').delete().eq('id', id)
@@ -504,6 +548,7 @@ async function deleteGuest(id) {
   showToast('Tamu dihapus'); loadData()
 }
 
+// --- Rundown ---
 function addRundown() { modalMode = 'rundown-add'; openModal('Tambah Rundown', rundownFormFields({ sort_order: rundown.length + 1 })) }
 function editRundown(id) {
   const r = rundown.find(x => x.id === id)
@@ -511,7 +556,6 @@ function editRundown(id) {
   modalMode = 'rundown-edit'; modalId = id
   openModal('Edit Rundown', rundownFormFields(r))
 }
-
 async function saveRundownModal() {
   const form = document.getElementById('modal-form')
   const fd = new FormData(form)
@@ -522,6 +566,8 @@ async function saveRundownModal() {
     note: fd.get('note')?.toString() || null,
     sort_order: parseInt(fd.get('sort_order')?.toString() || '0', 10),
     is_active: fd.get('is_active') === 'on',
+    bg_color: fd.get('bg_color')?.toString() || null,
+    text_color: fd.get('text_color')?.toString() || null,
   }
   if (!payload.title) { showToast('Judul wajib', 'error'); return }
   let err
@@ -530,7 +576,6 @@ async function saveRundownModal() {
   if (err) { showToast(err.message, 'error'); return }
   closeModal(); showToast('Rundown disimpan'); loadData()
 }
-
 async function deleteRundown(id) {
   if (!confirm('Hapus item rundown?')) return
   const { error } = await db.from('event_rundown').delete().eq('id', id)
@@ -538,6 +583,7 @@ async function deleteRundown(id) {
   loadData()
 }
 
+// --- Guidelines ---
 function addGuideline() { modalMode = 'guideline-add'; openModal('Tambah Panduan', guidelineFormFields({ sort_order: guidelines.length + 1 })) }
 function editGuideline(id) {
   const g = guidelines.find(x => x.id === id)
@@ -545,7 +591,6 @@ function editGuideline(id) {
   modalMode = 'guideline-edit'; modalId = id
   openModal('Edit Panduan', guidelineFormFields(g))
 }
-
 async function saveGuidelineModal() {
   const form = document.getElementById('modal-form')
   const fd = new FormData(form)
@@ -563,7 +608,6 @@ async function saveGuidelineModal() {
   if (err) { showToast(err.message, 'error'); return }
   closeModal(); showToast('Panduan disimpan'); loadData()
 }
-
 async function deleteGuideline(id) {
   if (!confirm('Hapus panduan ini?')) return
   const { error } = await db.from('guidelines').delete().eq('id', id)
@@ -571,6 +615,7 @@ async function deleteGuideline(id) {
   loadData()
 }
 
+// --- Gallery ---
 function addGallery() { modalMode = 'gallery-add'; openModal('Tambah Foto Galeri', galleryFormFields({ sort_order: gallery.length + 1 })); bindGalleryFilePreview() }
 function editGallery(id) {
   const item = gallery.find(x => x.id === id)
@@ -578,7 +623,6 @@ function editGallery(id) {
   modalMode = 'gallery-edit'; modalId = id
   openModal('Edit Foto Galeri', galleryFormFields(item)); bindGalleryFilePreview()
 }
-
 async function saveGalleryModal() {
   const form = document.getElementById('modal-form')
   const fd = new FormData(form)
@@ -604,7 +648,6 @@ async function saveGalleryModal() {
   if (err) { showToast(err.message, 'error'); return }
   closeModal(); showToast('Foto galeri disimpan'); loadData()
 }
-
 async function deleteGallery(id) {
   if (!confirm('Hapus foto ini?')) return
   const item = gallery.find(x => x.id === id)
@@ -614,9 +657,7 @@ async function deleteGallery(id) {
   showToast('Foto dihapus'); loadData()
 }
 
-// ==================================================
-//  SAVE SETTINGS
-// ==================================================
+// ==================== SETTINGS SAVE ====================
 async function saveSettings(e) {
   e.preventDefault()
   const form = e.target
@@ -674,6 +715,7 @@ async function saveSettings(e) {
   showToast('Pengaturan disimpan')
 }
 
+// ==================== MODAL SAVE ROUTER ====================
 async function handleModalSave() {
   if (modalMode?.startsWith('guest')) return saveGuestModal()
   if (modalMode?.startsWith('rundown')) return saveRundownModal()
@@ -681,6 +723,7 @@ async function handleModalSave() {
   if (modalMode?.startsWith('gallery')) return saveGalleryModal()
 }
 
+// ==================== DATA LOADER ====================
 async function loadData() {
   try {
     const [gRes, rRes, wRes, rdRes, glRes, galRes] = await Promise.all([
@@ -712,9 +755,7 @@ async function loadData() {
   await loadSettings()
 }
 
-// ==================================================
-//  DRESSCODE
-// ==================================================
+// ==================== DRESSCODE ====================
 async function loadDresscode() {
   const { data, error } = await db.from('dresscode_palette').select('*').eq('id', 1).maybeSingle()
   if (error || !data) return
@@ -767,7 +808,7 @@ function bindDresscodeForm() {
     }
     const { error } = await db.from('dresscode_palette').upsert({ id: 1, ...payload });
     if (error) {
-      console.error('❌ Gagal menyimpan dresscode:', error); // <-- tambahkan ini
+      console.error('❌ Gagal menyimpan dresscode:', error);
       showToast('Gagal menyimpan dresscode', 'error');
     } else {
       showToast('Dresscode berhasil disimpan!', 'success');
@@ -775,9 +816,7 @@ function bindDresscodeForm() {
   })
 }
 
-// ==================================================
-//  INIT
-// ==================================================
+// ==================== INIT NAVIGATION ====================
 function initNavigation() {
   document.querySelectorAll('aside .admin-nav-item').forEach(btn => {
     btn.addEventListener('click', () => switchPanel(btn.dataset.panel))
@@ -817,6 +856,7 @@ function initNavigation() {
   }
 }
 
+// ==================== LOGIN / LOGOUT ====================
 function handleLogin(e) {
   e.preventDefault()
   const input = document.getElementById('admin-password')
@@ -847,6 +887,7 @@ document.getElementById('toggle-password')?.addEventListener('click', () => {
 // Form login listener
 document.getElementById('login-form')?.addEventListener('submit', handleLogin)
 
+// ==================== INIT CHECK ====================
 if (isAuthenticated()) {
   showAdmin()
   initNavigation()
