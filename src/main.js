@@ -87,7 +87,7 @@ export function renderSettings(s) {
   setText("description-title", s.description_title);
   setText("description-body", s.description_body);
   setText("footer-tagline", s.footer_tagline);
-  setText("footer-copyright", s.footer_copyright);
+  // setText("footer-copyright", s.footer_copyright);
   setText("rsvp-deadline", s.rsvp_deadline_text);
 
   const heroSrc = resolveImageUrl(s.hero_image_path || s.hero_image_url);
@@ -153,19 +153,14 @@ export function renderSettings(s) {
   });
 
   // Visibilitas link di footer
+  // Link footer
   const footerLinkJadwal = document.getElementById('footer-link-jadwal');
   const footerLinkPanduan = document.getElementById('footer-link-panduan');
   const footerLinkKonfirmasi = document.getElementById('footer-link-konfirmasi');
 
-  if (footerLinkJadwal) {
-    footerLinkJadwal.classList.toggle('hidden', s.show_rundown === false);
-  }
-  if (footerLinkPanduan) {
-    footerLinkPanduan.classList.toggle('hidden', s.show_guidelines === false);
-  }
-  if (footerLinkKonfirmasi) {
-    footerLinkKonfirmasi.classList.toggle('hidden', s.show_rsvp === false);
-  }
+  if (footerLinkJadwal) footerLinkJadwal.classList.toggle('hidden', !(s.show_rundown !== false));
+  if (footerLinkPanduan) footerLinkPanduan.classList.toggle('hidden', !(s.show_guidelines !== false));
+  if (footerLinkKonfirmasi) footerLinkKonfirmasi.classList.toggle('hidden', !(s.show_rsvp !== false));
 
   return {
     heroUrl: heroSrc,
