@@ -56,6 +56,8 @@ create table if not exists public.event_rundown (
   note text,
   sort_order integer not null default 0,
   is_active boolean not null default true,
+  bg_color text default null,
+  text_color text default null,
   created_at timestamptz not null default now()
 );
 
