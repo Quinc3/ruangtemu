@@ -153,7 +153,10 @@ export function renderRundown(items) {
     grid.innerHTML = '<p class="col-span-3 text-center text-on-surface-variant italic h-40 flex items-center justify-center">Belum ada rundown acara.</p>';
     return;
   }
-  const cardColors = ['card-pink', 'card-teal', 'card-lavender', 'card-peach', 'card-ochre'];
+
+  // Warna pastel untuk kartu (bergantian)
+  const cardColors = ['card-pink', 'card-blue', 'card-lavender', 'card-peach', 'card-yellow'];
+
   grid.innerHTML = items.map((item, i) => `
     <div class="${cardColors[i % cardColors.length]} p-10 text-center space-y-4 rounded-xl">
       <span class="material-symbols-outlined text-4xl">${escapeHtml(item.icon)}</span>
@@ -212,7 +215,7 @@ export async function loadDresscodeForPublic() {
 }
 
 /* ---------- WISHES ---------- */
-const borderColors = ["border-l-pink-500","border-l-teal-600","border-l-lavender","border-l-peach","border-l-ochre"];
+const borderColors = ["border-l-pink-500", "border-l-teal-600", "border-l-lavender", "border-l-peach", "border-l-ochre"];
 function renderWish(wish, index) {
   const border = borderColors[index % borderColors.length];
   return `
@@ -327,13 +330,25 @@ const revealObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
 
+const revealVariants = ['fade-up', 'fade-left', 'fade-right', 'scale-in'];
+
 export function observeReveal() {
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  document.querySelectorAll('.reveal').forEach(el => {
+    // Jangan ubah jika sudah ada class arah dari HTML
+    if (!el.classList.contains('fade-up') &&
+      !el.classList.contains('fade-left') &&
+      !el.classList.contains('fade-right') &&
+      !el.classList.contains('scale-in')) {
+      const randomVariant = revealVariants[Math.floor(Math.random() * revealVariants.length)];
+      el.classList.add(randomVariant);
+    }
+    revealObserver.observe(el);
+  });
 }
 
 export function observeRundownCards() {
   document.querySelectorAll('#rundown-grid > div').forEach((card, i) => {
-    card.classList.add('reveal', 'fade-up');
+    card.classList.add('reveal', 'pop-in');
     card.dataset.delay = i * 150;
     revealObserver.observe(card);
   });

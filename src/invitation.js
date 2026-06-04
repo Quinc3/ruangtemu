@@ -1,20 +1,13 @@
 import {
-  // utilitas
   escapeHtml, setText, showToast, toggleDetails, waitForFonts,
   preloadImage, hidePageLoader,
-  // guest
   resolveGuest, applyGuestToForm,
-  // settings & render
   renderSettings, renderRundown, renderGuidelines,
   loadDresscodeForPublic, loadWishes,
-  // form & modal
   openGuestbookModal, closeGuestbookModal,
   handleRsvpSubmit, handleWishSubmit,
-  // reveal & parallax
   observeReveal, observeRundownCards, initParallax,
-  // data loader
   loadInvitationData,
-  // supabase instance (sudah diekspor dari main.js)
   supabase, isSupabaseConfigured
 } from "./main.js";
 
@@ -123,63 +116,69 @@ function renderGallery(items) {
 
 /* ---------- BOOT (Gabungan) ---------- */
 async function boot() {
-  // Inisialisasi form dan gallery lightbox
-  initForms();
-  initGalleryLightbox();
+  try {
+    initForms();
+    initGalleryLightbox();
 
-  const minLoaderTime = new Promise(r => setTimeout(r, 800));
-  const urls = await loadInvitationData();   // dari main.js
+    const minLoaderTime = new Promise(r => setTimeout(r, 800));
+    const urls = await loadInvitationData();
 
-  // Ambil data galeri & countdown
-  let galleryData = [];
-  if (isSupabaseConfigured) {
-    const [galleryRes, settingsRes] = await Promise.all([
-      supabase.from("gallery_images").select("*").eq("is_active", true).order("sort_order"),
-      supabase.from("invitation_settings").select("event_starts_at, countdown_enabled").eq("id", 1).maybeSingle()
-    ]);
-    if (!galleryRes.error) galleryData = galleryRes.data;
-    if (settingsRes.data) {
-      initCountdown(settingsRes.data.event_starts_at, settingsRes.data.countdown_enabled !== false);
+    let galleryData = [];
+    if (isSupabaseConfigured) {
+      try {
+        const [galleryRes, settingsRes] = await Promise.all([
+          supabase.from("gallery_images").select("*").eq("is_active", true).order("sort_order"),
+          supabase.from("invitation_settings").select("event_starts_at, countdown_enabled").eq("id", 1).maybeSingle()
+        ]);
+        if (!galleryRes.error) galleryData = galleryRes.data;
+        if (settingsRes.data) {
+          initCountdown(settingsRes.data.event_starts_at, settingsRes.data.countdown_enabled !== false);
+        }
+      } catch (supaError) {
+        console.warn("Gagal mengambil data dari Supabase:", supaError);
+      }
     }
+
+    renderGallery(galleryData);
+    await loadDresscodeForPublic();
+    await loadWishes();
+
+    await Promise.all([
+      waitForFonts(),
+      minLoaderTime,
+      preloadImage(urls?.heroUrl),
+      preloadImage(urls?.descUrl),
+    ]);
+
+  } catch (err) {
+    console.error("Error during boot:", err);
+  } finally {
+    hidePageLoader();
+    observeReveal();
+    observeRundownCards();
+    initParallax();
+
+    const navLinks = document.querySelectorAll('nav a[href^="#"]');
+    navLinks.forEach(link => {
+      let timer;
+      link.addEventListener('mouseenter', () => {
+        const id = link.getAttribute('href').substring(1);
+        const target = document.getElementById(id);
+        if (!target) return;
+        timer = setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 400);
+      });
+      link.addEventListener('mouseleave', () => clearTimeout(timer));
+    });
+
+    const sections = document.querySelectorAll('section[id]');
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        if (window.scrollY >= section.offsetTop - 120) current = section.id;
+      });
+      navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${current}`));
+    });
   }
-
-  renderGallery(galleryData);
-  await loadDresscodeForPublic();
-  await loadWishes();
-
-  await Promise.all([
-    waitForFonts(),
-    minLoaderTime,
-    preloadImage(urls?.heroUrl),
-    preloadImage(urls?.descUrl),
-  ]);
-
-  hidePageLoader();
-  observeReveal();
-  observeRundownCards();
-  initParallax();
-
-  // Hover scroll & scrollspy
-  const navLinks = document.querySelectorAll('nav a[href^="#"]');
-  navLinks.forEach(link => {
-    let timer;
-    link.addEventListener('mouseenter', () => {
-      const id = link.getAttribute('href').substring(1);
-      const target = document.getElementById(id);
-      if (!target) return;
-      timer = setTimeout(() => target.scrollIntoView({ behavior: 'smooth' }), 400);
-    });
-    link.addEventListener('mouseleave', () => clearTimeout(timer));
-  });
-
-  const sections = document.querySelectorAll('section[id]');
-  window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(section => {
-      if (window.scrollY >= section.offsetTop - 120) current = section.id;
-    });
-    navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === `#${current}`));
-  });
 }
 
 function initForms() {
@@ -198,15 +197,10 @@ function initForms() {
 
 export function startInvitation() {
   window.addEventListener("beforeunload", stopCountdown);
-  boot().catch(() => {
-    hidePageLoader();
-    observeReveal();
-    observeRundownCards();
-  });
+  boot();
   if (!isSupabaseConfigured) {
     console.warn("[Supabase] VITE_SUPABASE_URL dan VITE_SUPABASE_ANON_KEY belum diatur di .env");
   }
 }
-
 
 startInvitation();

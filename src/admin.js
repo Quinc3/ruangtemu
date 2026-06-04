@@ -1,4 +1,4 @@
-import './style.css'
+import './style-admin.css'
 import {
   supabase,
   isSupabaseConfigured,
@@ -20,11 +20,11 @@ const AUTH_KEY = 'admin_authenticated'
 const adminPassword = import.meta.env.VITE_ADMIN_PASSWORD || 'admin123'
 const db = supabase
 
-const TD = 'py-3.5 px-4 align-top border-b border-surface-container'
+const TD = 'py-3.5 px-4 align-top border-b border-white/20'
 const TR = 'hover:bg-surface-container-low'
 const BADGE_OK = 'inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold bg-green-100 text-green-800'
 const BADGE_NO = 'inline-flex px-2 py-0.5 rounded-full text-[10px] font-semibold bg-error-container text-on-error-container'
-const NAV_ACTIVE = 'admin-nav-item flex w-full items-center gap-3 rounded-xl bg-primary-2 px-4 py-3 text-left text-sm font-medium text-white'
+const NAV_ACTIVE = 'admin-nav-item flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium'
 const NAV_INACTIVE = 'admin-nav-item flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm text-on-surface-variant hover:bg-surface-container'
 
 let invitedGuests = []
@@ -70,9 +70,10 @@ function toDatetimeLocalValue(iso) {
 function showToast(msg, type = 'success') {
   const t = document.getElementById('toast')
   if (!t) return
-  const bg = type === 'success' ? 'bg-primary-2 text-white' : 'bg-error text-white'
+  const bg = type === 'success' ? 'background-color: #87ceeb; color: #1b1c15;' : 'background-color: #ba1a1a; color: white;'
   t.textContent = msg
-  t.className = `fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-[300] px-6 py-3 rounded-full text-sm shadow-lg opacity-100 ${bg}`
+  t.style.cssText = bg
+  t.className = 'fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-[300] px-6 py-3 rounded-full text-sm shadow-lg opacity-100'
   setTimeout(() => t.classList.add('opacity-0'), 3500)
 }
 
@@ -104,7 +105,7 @@ function buildMobileNav() {
   const nav = document.getElementById('mobile-nav')
   if (!nav) return
   nav.innerHTML = PANELS.map((p, i) => `
-    <button type="button" class="admin-nav-item shrink-0 flex items-center gap-1 rounded-full px-3 py-2 text-xs ${i === 0 ? 'bg-primary-2 text-white' : 'bg-surface-container text-on-surface-variant'}" data-panel="${p.id}">
+    <button type="button" class="admin-nav-item shrink-0 flex items-center gap-1 rounded-full px-3 py-2 text-xs ${i === 0 ? 'bg-primary-2 text-ink' : 'bg-surface-container text-on-surface-variant'}" data-panel="${p.id}">
       <span class="material-symbols-outlined text-sm">${p.icon}</span>${p.label}
     </button>
   `).join('') + `<button id="logout-btn-mobile" type="button" class="ml-auto shrink-0 rounded-full border border-error/20 px-3 py-2 text-xs text-error">Keluar</button>`
@@ -118,10 +119,10 @@ function updateNav(panelId) {
     const mobile = btn.closest('#mobile-nav')
     if (mobile) {
       btn.className = active
-        ? 'admin-nav-item shrink-0 flex items-center gap-1 rounded-full px-3 py-2 text-xs bg-primary-2 text-white'
+        ? 'admin-nav-item shrink-0 flex items-center gap-1 rounded-full px-3 py-2 text-xs bg-primary-2 text-ink'
         : 'admin-nav-item shrink-0 flex items-center gap-1 rounded-full px-3 py-2 text-xs bg-surface-container text-on-surface-variant'
     } else {
-      btn.className = active ? NAV_ACTIVE : NAV_INACTIVE
+      btn.className = active ? NAV_ACTIVE + ' active' : NAV_INACTIVE
     }
   })
 }
@@ -133,7 +134,6 @@ function switchPanel(panelId) {
   })
   updateNav(panelId)
 
-  // Muat data khusus saat panel dibuka
   if (panelId === 'panel-dresscode') loadDresscode()
 }
 
@@ -416,12 +416,12 @@ async function loadSettings() {
 
 function guestFormFields(g = {}) {
   return `
-    <div><label class="text-xs text-on-surface-variant">Nama Lengkap</label><input name="full_name" required value="${escapeHtml(g.full_name || '')}" class="mt-1 w-full border-b py-2 outline-none focus:border-primary-3" /></div>
-    <div><label class="text-xs text-on-surface-variant">Slug URL</label><input name="slug" value="${escapeHtml(g.slug || '')}" placeholder="Terisi otomatis dari nama" class="mt-1 w-full border-b py-2 outline-none focus:border-primary-3" /><p class="mt-1 text-[10px] text-on-surface-variant">Otomatis dari nama. Jika slug sama, ditambah angka (mis. nama-2).</p></div>
+    <div><label class="text-xs text-on-surface-variant">Nama Lengkap</label><input name="full_name" required value="${escapeHtml(g.full_name || '')}" class="mt-1 w-full border-b py-2 outline-none focus:border-primary-2" /></div>
+    <div><label class="text-xs text-on-surface-variant">Slug URL</label><input name="slug" value="${escapeHtml(g.slug || '')}" placeholder="Terisi otomatis dari nama" class="mt-1 w-full border-b py-2 outline-none focus:border-primary-2" /><p class="mt-1 text-[10px] text-on-surface-variant">Otomatis dari nama. Jika slug sama, ditambah angka (mis. nama-2).</p></div>
     <div><label class="text-xs text-on-surface-variant">Kategori</label>
       <select name="category" class="mt-1 w-full border-b py-2">
         <option value="">-</option>
-        ${['Siswa','Guru','Orang Tua','Alumni','Tamu Undangan'].map((c) => `<option value="${c}" ${g.category === c ? 'selected' : ''}>${c}</option>`).join('')}
+        ${['Siswa', 'Guru', 'Orang Tua', 'Alumni', 'Tamu Undangan'].map((c) => `<option value="${c}" ${g.category === c ? 'selected' : ''}>${c}</option>`).join('')}
       </select>
     </div>`
 }
@@ -451,10 +451,10 @@ function galleryFormFields(item = {}) {
     <input type="hidden" name="image_path" value="${escapeHtml(item.image_path || '')}" />
     <div>
       <label class="text-xs text-on-surface-variant">Foto ${item.id ? '(kosongkan jika tidak ganti)' : '(wajib)'}</label>
-      <input type="file" id="gallery_image_file" name="gallery_image_file" accept="image/jpeg,image/png,image/webp,image/gif" class="mt-2 block w-full text-sm" ${item.id ? '' : 'required'} />
+      <input type="file" id="gallery_image_file" name="gallery_image_file" accept="image/jpeg,image/png,image/webp,image/gif" class="mt-2 block w-full text-sm file-input" ${item.id ? '' : 'required'} />
       ${previewUrl ? `<img src="${escapeHtml(previewUrl)}" alt="" class="mt-3 max-h-32 rounded-lg object-cover" data-gallery-preview />` : '<img alt="" class="mt-3 max-h-32 rounded-lg object-cover hidden" data-gallery-preview />'}
     </div>
-    <div><label class="text-xs text-on-surface-variant">Caption (opsional)</label><input name="caption" value="${escapeHtml(item.caption || '')}" class="mt-1 w-full border-b py-2 outline-none focus:border-primary-3" /></div>
+    <div><label class="text-xs text-on-surface-variant">Caption (opsional)</label><input name="caption" value="${escapeHtml(item.caption || '')}" class="mt-1 w-full border-b py-2 outline-none focus:border-primary-2" /></div>
     <div><label class="text-xs text-on-surface-variant">Urutan</label><input name="sort_order" type="number" value="${item.sort_order ?? 0}" class="mt-1 w-full border-b py-2" /></div>
     <div class="flex items-center gap-2"><input type="checkbox" name="is_active" ${item.is_active !== false ? 'checked' : ''} /><label class="text-sm">Aktif</label></div>`
 }
@@ -500,9 +500,9 @@ async function saveGuestModal() {
   const payload = { full_name, slug, category }
   let err
   if (modalMode === 'guest-edit') {
-    ;({ error: err } = await db.from('guests').update(payload).eq('id', modalId))
+    ; ({ error: err } = await db.from('guests').update(payload).eq('id', modalId))
   } else {
-    ;({ error: err } = await db.from('guests').insert(payload))
+    ; ({ error: err } = await db.from('guests').insert(payload))
   }
   if (err) { showToast(err.message, 'error'); return }
   closeModal()
@@ -545,9 +545,9 @@ async function saveRundownModal() {
   if (!payload.title) { showToast('Judul wajib', 'error'); return }
   let err
   if (modalMode === 'rundown-edit') {
-    ;({ error: err } = await db.from('event_rundown').update(payload).eq('id', modalId))
+    ; ({ error: err } = await db.from('event_rundown').update(payload).eq('id', modalId))
   } else {
-    ;({ error: err } = await db.from('event_rundown').insert(payload))
+    ; ({ error: err } = await db.from('event_rundown').insert(payload))
   }
   if (err) { showToast(err.message, 'error'); return }
   closeModal()
@@ -588,9 +588,9 @@ async function saveGuidelineModal() {
   if (!payload.title || !payload.description) { showToast('Judul & deskripsi wajib', 'error'); return }
   let err
   if (modalMode === 'guideline-edit') {
-    ;({ error: err } = await db.from('guidelines').update(payload).eq('id', modalId))
+    ; ({ error: err } = await db.from('guidelines').update(payload).eq('id', modalId))
   } else {
-    ;({ error: err } = await db.from('guidelines').insert(payload))
+    ; ({ error: err } = await db.from('guidelines').insert(payload))
   }
   if (err) { showToast(err.message, 'error'); return }
   closeModal()
@@ -650,9 +650,9 @@ async function saveGalleryModal() {
 
   let err
   if (modalMode === 'gallery-edit') {
-    ;({ error: err } = await db.from('gallery_images').update(payload).eq('id', modalId))
+    ; ({ error: err } = await db.from('gallery_images').update(payload).eq('id', modalId))
   } else {
-    ;({ error: err } = await db.from('gallery_images').insert(payload))
+    ; ({ error: err } = await db.from('gallery_images').insert(payload))
   }
   if (err) { showToast(err.message, 'error'); return }
   closeModal()
@@ -733,6 +733,7 @@ async function handleModalSave() {
 }
 
 async function loadData() {
+  console.log('🔄 loadData dipanggil');
   const [gRes, rRes, wRes, rdRes, glRes, galRes] = await Promise.all([
     db.from('guests').select('*').order('full_name'),
     db.from('rsvps').select('*').order('created_at', { ascending: false }),
@@ -740,7 +741,7 @@ async function loadData() {
     db.from('event_rundown').select('*').order('sort_order'),
     db.from('guidelines').select('*').order('sort_order'),
     db.from('gallery_images').select('*').order('sort_order'),
-  ])
+  ]);
 
   invitedGuests = gRes.data ?? []
   rsvps = rRes.data ?? []
@@ -748,6 +749,11 @@ async function loadData() {
   rundown = rdRes.data ?? []
   guidelines = glRes.data ?? []
   gallery = galRes.data ?? []
+
+  console.log('📊 Data tamu:', invitedGuests);
+  console.log('📊 Data rundown:', rundown);
+  console.log('📊 Data guidelines:', guidelines);
+  console.log('📊 Data gallery:', gallery);
 
   updateStats()
   renderInvitedGuests()
@@ -862,18 +868,25 @@ function initNavigation() {
   // Init Dresscode
   bindDresscodeSync()
   bindDresscodeForm()
+
+  document.getElementById('sidebar-toggle')?.addEventListener('click', () => {
+    document.getElementById('sidebar')?.classList.toggle('open');
+  });
 }
 
 function handleLogin(e) {
   e.preventDefault()
   const input = document.getElementById('admin-password')
+  console.log('🔑 Mencoba login dengan password:', input?.value);
   if (input?.value === adminPassword) {
+    console.log('✅ Password benar, masuk ke admin');
     sessionStorage.setItem(AUTH_KEY, 'true')
     showAdmin()
     initNavigation()
     loadData()
     return
   }
+  console.log('❌ Password salah');
   showToast('Password salah', 'error')
 }
 
