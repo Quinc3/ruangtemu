@@ -128,18 +128,22 @@ async function boot() {
       try {
         const [galleryRes, settingsRes] = await Promise.all([
           supabase.from("gallery_images").select("*").eq("is_active", true).order("sort_order"),
-          supabase.from("invitation_settings").select("event_starts_at, countdown_enabled").eq("id", 1).maybeSingle()
+          supabase.from("invitation_settings").select("event_starts_at, countdown_enabled, show_gallery").eq("id", 1).maybeSingle()
         ]);
         if (!galleryRes.error) galleryData = galleryRes.data;
         if (settingsRes.data) {
           initCountdown(settingsRes.data.event_starts_at, settingsRes.data.countdown_enabled !== false);
+          if (settingsRes.data.show_gallery !== false) {
+            renderGallery(galleryData);
+          } else {
+            document.getElementById('gallery')?.classList.add('hidden');
+          }
         }
       } catch (supaError) {
         console.warn("Gagal mengambil data dari Supabase:", supaError);
       }
     }
 
-    renderGallery(galleryData);
     await loadDresscodeForPublic();
     await loadWishes();
 

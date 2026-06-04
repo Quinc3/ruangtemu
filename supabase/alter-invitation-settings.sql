@@ -1,4 +1,5 @@
 ALTER TABLE invitation_settings 
+ADD COLUMN IF NOT EXISTS show_gallery BOOLEAN DEFAULT true;
 ADD COLUMN show_navbar BOOLEAN DEFAULT true,
 ADD COLUMN show_footer BOOLEAN DEFAULT true,
 ADD COLUMN show_story BOOLEAN DEFAULT true,

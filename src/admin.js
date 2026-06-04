@@ -68,15 +68,18 @@ function toDatetimeLocalValue(iso) {
 }
 
 function showToast(msg, type = 'success') {
-  const t = document.getElementById('toast')
-  if (!t) return
-  const bg = type === 'success' ? 'background-color: var(--color-primary-2); color: var(--color-ink);' : 'background-color: var(--color-error); color: white;'
-  t.textContent = msg
-  t.setAttribute('style', bg)
-  t.className = 'fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-[300] px-6 py-3 rounded-full text-sm shadow-lg opacity-100'
+  const t = document.getElementById('toast');
+  if (!t) return;
+  const bg = type === 'success'
+    ? 'background-color: #87ceeb; color: #1b1c15;'
+    : 'background-color: #dc2626; color: white;'; // merah solid
+  t.textContent = msg;
+  t.setAttribute('style', bg);
+  t.className = 'fixed bottom-20 md:bottom-8 left-1/2 -translate-x-1/2 z-[300] px-6 py-3 rounded-full text-sm shadow-lg opacity-100';
+  t.classList.remove('hidden');
   setTimeout(() => {
-    t.classList.add('opacity-0')
-  }, 3500)
+    t.classList.add('hidden');
+  }, 3500);
 }
 
 async function copyText(text) {
