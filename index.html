@@ -82,7 +82,8 @@
     </header>
 
     <!-- ========== MAIN CONTENT ========== -->
-    <main class="max-w-container-max mx-auto px-margin-mobile space-y-stack-lg py-stack-lg">
+    <!-- Jarak antar section seragam: space-y-20 (mobile) / md:space-y-28 (desktop) -->
+    <main class="max-w-container-max mx-auto px-margin-mobile pt-2 md:pt-4 space-y-12 md:space-y-16 pb-12 md:pb-16">
 
       <!-- Story Section -->
       <section id="story" class="reveal grid grid-cols-1 gap-gutter items-center">
@@ -106,7 +107,7 @@
 
       <!-- Galeri -->
       <section id="gallery" class="reveal hidden">
-        <div class="text-center mb-stack-md">
+        <div class="text-center mb-8">
           <h2 class="font-display-lg text-display-lg">Galeri Kebahagiaan</h2>
           <div class="w-24 h-2 bg-primary-2/40 mx-auto rounded-full"></div>
         </div>
@@ -114,34 +115,40 @@
       </section>
 
       <!-- Detail Acara -->
-      <section id="details" class="reveal space-y-gutter">
-        <div class="text-center mb-stack-md">
+      <section id="details" class="reveal space-y-8">
+        <div class="text-center mb-8">
           <h2 class="font-display-lg text-display-lg">Agenda Seru</h2>
           <div class="w-24 h-2 bg-brand-pink/40 mx-auto rounded-full"></div>
         </div>
-        <div id="rundown-grid" class="grid gap-gutter"></div>
+        <div id="rundown-grid" class="grid gap-6"></div>
 
         <!-- Peta -->
-        <div id="map-section"
-          class="mt-gutter h-[450px] rounded-super overflow-hidden relative card-bubble border-8 border-white">
-          <div id="map-fallback" class="absolute inset-0 bg-primary-2/5 flex items-center justify-center">
-            <div class="text-center p-8 bg-white/90 backdrop-blur-md rounded-super shadow-xl max-w-sm">
-              <span class="material-symbols-outlined text-5xl text-primary-2 mb-4">location_on</span>
-              <p class="font-display-lg-mobile text-xl mb-6">Yuk, lihat lokasi acaranya!</p>
-              <a id="gmaps-link-btn"
-                class="bg-primary-2 text-white px-8 py-3 btn-playful inline-flex items-center gap-2" href="#"
-                target="_blank" rel="noopener noreferrer">
-                Buka Google Maps <span class="material-symbols-outlined text-sm">open_in_new</span>
-              </a>
-            </div>
+        <div class="mt-14">
+          <div class="text-center mb-8">
+            <h2 class="font-display-lg text-display-lg">Lokasi Acara</h2>
+            <div class="w-24 h-2 bg-primary-2/40 mx-auto rounded-full"></div>
           </div>
-          <iframe id="gmaps-embed" class="absolute inset-0 w-full h-full border-0 hidden" loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade" title="Peta lokasi acara"></iframe>
+          <div id="map-section"
+            class="h-[450px] rounded-super overflow-hidden relative card-bubble border-8 border-white">
+            <div id="map-fallback" class="absolute inset-0 bg-primary-2/5 flex items-center justify-center">
+              <div class="text-center p-8 bg-white/90 backdrop-blur-md rounded-super shadow-xl max-w-sm">
+                <span class="material-symbols-outlined text-5xl text-primary-2 mb-4">location_on</span>
+                <p class="font-display-lg-mobile text-xl mb-6">Yuk, lihat lokasi acaranya!</p>
+                <a id="gmaps-link-btn"
+                  class="bg-primary-2 text-white px-8 py-3 btn-playful inline-flex items-center gap-2" href="#"
+                  target="_blank" rel="noopener noreferrer">
+                  Buka Google Maps <span class="material-symbols-outlined text-sm">open_in_new</span>
+                </a>
+              </div>
+            </div>
+            <iframe id="gmaps-embed" class="absolute inset-0 w-full h-full border-0 hidden" loading="lazy"
+              referrerpolicy="no-referrer-when-downgrade" title="Peta lokasi acara"></iframe>
+          </div>
         </div>
       </section>
 
       <!-- Panduan & Dresscode -->
-      <div id="guidelines-dresscode-row" class="grid gap-gutter hidden">
+      <div id="guidelines-dresscode-row" class="grid gap-6 hidden">
         <section id="guidelines" class="reveal hidden">
           <div class="card-bubble p-8 h-full" style="background: rgba(135,206,235,0.1);">
             <h2 class="font-display-lg text-display-lg-mobile mb-4">Tips Untukmu</h2>
@@ -200,41 +207,44 @@
         </div>
       </section>
 
-      <!-- RSVP & Ucapan -->
-      <section id="rsvp" class="reveal grid gap-gutter">
-        <div class="card-bubble py-4 px-4 text-white relative" style="background: var(--color-primary-2);">
-          <div class="absolute top-0 right-0 text-4xl rotate-[-40deg]">✍️</div>
-          <h2 class="font-display-lg text-display-lg-mobile pt-4 mb-6">Aku Mau Datang!</h2>
+      <!-- ========== RSVP + PESAN & DOA (Kartu Biru #87ceeb, Teks Putih) ========== -->
+      <section id="rsvp" class="reveal">
+        <div class="card-bubble p-8 md:p-12 rounded-super" style="background: #87ceeb; color: #1b1c15;">
+          <!-- Form RSVP -->
+          <h2 class="font-display-lg text-display-lg-mobile mb-6 text-white drop-shadow-md">Aku Mau Datang!</h2>
           <form id="rsvp-form" class="space-y-6">
             <div>
-              <label class="block text-sm font-bold uppercase tracking-wider mb-2" for="full_name">Siapa Namamu?</label>
+              <label class="block text-sm font-bold uppercase tracking-wider mb-2 text-white/90 drop-shadow-sm"
+                for="full_name">Siapa Namamu?</label>
               <input
-                class="w-full rounded-2xl border-none bg-white/20 focus:bg-white focus:ring-4 focus:ring-white/30 p-4 text-white placeholder-white/60 transition-all outline-none"
+                class="w-full rounded-2xl border-2 border-white/30 bg-white/20 focus:bg-white/30 focus:ring-4 focus:ring-white/30 p-4 text-white placeholder-white/60 transition-all outline-none"
                 id="full_name" name="full_name" placeholder="Tulis namamu di sini..." type="text" required />
             </div>
             <div>
-              <span class="block text-sm font-bold uppercase tracking-wider mb-3">Bisa Hadir Tidak?</span>
+              <span class="block text-sm font-bold uppercase tracking-wider mb-3 text-white/90 drop-shadow-sm">Bisa
+                Hadir Tidak?</span>
               <div class="flex flex-wrap gap-4">
                 <label
-                  class="flex items-center gap-3 cursor-pointer bg-white/10 px-6 py-3 rounded-full hover:bg-white/20 transition-all border-2 border-white/20">
+                  class="flex items-center gap-3 cursor-pointer bg-white/20 px-6 py-3 rounded-full hover:bg-white/30 transition-all border-2 border-white/30">
                   <input class="w-5 h-5 text-brand-pink border-none focus:ring-0" name="attend" type="radio"
                     value="yes" />
-                  <span class="font-bold">Ya, dong!</span>
+                  <span class="font-bold text-white">Ya, dong!</span>
                 </label>
                 <label
-                  class="flex items-center gap-3 cursor-pointer bg-white/10 px-6 py-3 rounded-full hover:bg-white/20 transition-all border-2 border-white/20">
+                  class="flex items-center gap-3 cursor-pointer bg-white/20 px-6 py-3 rounded-full hover:bg-white/30 transition-all border-2 border-white/30">
                   <input class="w-5 h-5 text-brand-pink border-none focus:ring-0" name="attend" type="radio"
                     value="no" />
-                  <span class="font-bold">Maaf, berhalangan</span>
+                  <span class="font-bold text-white">Maaf, berhalangan</span>
                 </label>
               </div>
             </div>
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <label class="block text-sm font-bold uppercase tracking-wider mb-2" for="guest_count">Berapa
+                <label class="block text-sm font-bold uppercase tracking-wider mb-2 text-white/90 drop-shadow-sm"
+                  for="guest_count">Berapa
                   Orang?</label>
                 <select
-                  class="w-full rounded-2xl border-none bg-white/20 focus:bg-white focus:ring-4 focus:ring-white/30 p-4 text-white"
+                  class="w-full rounded-2xl border-2 border-white/30 bg-white/20 focus:bg-white/30 focus:ring-4 focus:ring-white/30 p-4 text-white transition-all outline-none"
                   id="guest_count" name="guest_count">
                   <option class="text-ink" value="1">1 Teman</option>
                   <option class="text-ink" value="2">2 Teman</option>
@@ -242,10 +252,11 @@
                 </select>
               </div>
               <div>
-                <label class="block text-sm font-bold uppercase tracking-wider mb-2" for="meal_preference">Sebagai
+                <label class="block text-sm font-bold uppercase tracking-wider mb-2 text-white/90 drop-shadow-sm"
+                  for="meal_preference">Sebagai
                   Apa?</label>
                 <select
-                  class="w-full rounded-2xl border-none bg-white/20 focus:bg-white focus:ring-4 focus:ring-white/30 p-4 text-white"
+                  class="w-full rounded-2xl border-2 border-white/30 bg-white/20 focus:bg-white/30 focus:ring-4 focus:ring-white/30 p-4 text-white transition-all outline-none"
                   id="meal_preference" name="meal_preference">
                   <option class="text-ink">Siswa</option>
                   <option class="text-ink">Guru</option>
@@ -255,33 +266,32 @@
                 </select>
               </div>
             </div>
-            <button class="w-full bg-white text-primary-2 py-5 rounded-full font-bold text-lg btn-playful mt-4"
+            <button class="w-full bg-white text-[#87ceeb] py-5 rounded-full font-bold text-lg btn-playful mt-4"
               type="submit">
               Kirim Sekarang!
             </button>
-            <p id="rsvp-deadline" class="text-center text-xs opacity-70 italic mt-4"></p>
+            <p id="rsvp-deadline" class="text-center text-xs text-white/70 italic mt-4"></p>
           </form>
-        </div>
 
-        <div id="guestbook-section" class="card-bubble py-4 px-4 flex flex-col"
-          style="background: rgba(152,251,152,0.1);">
-          <h2 class="font-display-lg text-display-lg-mobile pt-4 mb-8" style="color: var(--color-tertiary);">Pesan &amp;
-            Doa</h2>
-          <div class="flex-grow space-y-6 max-h-[500px] overflow-y-auto pr-4 mb-8" id="guestbook-list">
-            <div class="p-6 text-center italic text-on-surface-variant">Memuat pesan manis...</div>
+          <!-- Bagian Pesan & Doa -->
+          <div class="mt-12 pt-12 border-t-2 border-dashed border-white/30">
+            <h2 class="font-display-lg text-display-lg-mobile mb-6 text-white drop-shadow-md">Pesan & Doa</h2>
+            <div id="guestbook-list" class="space-y-6 max-h-[500px] overflow-y-auto pr-4 mb-8">
+              <div class="p-6 text-center italic text-white/70">Memuat pesan manis...</div>
+            </div>
+            <button id="open-guestbook" type="button"
+              class="w-full bg-white/20 hover:bg-white/30 text-white py-5 rounded-full font-bold text-lg btn-playful flex items-center justify-center gap-2 transition-all">
+              Tulis Pesan <span class="material-symbols-outlined">edit_note</span>
+            </button>
           </div>
-          <button id="open-guestbook" type="button"
-            class="w-full text-white py-5 rounded-full font-bold text-lg btn-playful flex items-center justify-center gap-2"
-            style="background: var(--color-tertiary);">
-            Tulis Pesan <span class="material-symbols-outlined">edit_note</span>
-          </button>
         </div>
       </section>
+
     </main>
 
     <!-- ========== FOOTER ========== -->
     <footer id="footer"
-      class="bg-white border-t border-primary-2/10 w-full py-stack-lg flex flex-col items-center gap-6 text-center px-margin-mobile mt-stack-lg relative overflow-hidden">
+      class="bg-white border-t border-primary-2/10 w-full py-20 md:py-28 flex flex-col items-center gap-6 text-center px-margin-mobile relative overflow-hidden">
       <p id="footer-tagline" class="font-display-lg-mobile text-xl max-w-md"></p>
       <div class="w-16 h-1 bg-brand-yellow rounded-full mt-8"></div>
       <p class="text-[10px] tracking-[0.3em] uppercase opacity-50 mt-4">© 2026 Ruang Temu. All rights reserved.</p>
@@ -289,15 +299,11 @@
   </div>
 
   <!-- ========== GALLERY LIGHTBOX ========== -->
-  <!-- ========== GALLERY LIGHTBOX ========== -->
   <div id="gallery-lightbox" class="gallery-lightbox" aria-hidden="true">
-    <!-- Tombol close dikasih background hitam transparan biar tetep keliatan kalau pas fotonya warna putih -->
     <button id="gallery-lightbox-close" type="button"
       class="gallery-lightbox__close material-symbols-outlined text-4xl bg-black/40 rounded-full p-2"
       aria-label="Tutup">close</button>
-
     <div class="px-4 text-center w-full flex flex-col justify-center items-center">
-      <!-- w-auto dan max-h-[75vh] bikin gambar nggak kepotong tapi tetep mentok proporsional -->
       <img id="gallery-lightbox-img" alt=""
         class="w-auto h-auto max-w-full max-h-[75vh] object-contain rounded-super border-8 border-white shadow-2xl mx-auto" />
       <p id="gallery-lightbox-caption" class="mt-6 text-xl font-display-lg-mobile text-white hidden"></p>

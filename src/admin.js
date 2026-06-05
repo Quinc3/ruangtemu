@@ -380,6 +380,7 @@ function bindSettingsImageFileInputs() {
 function fillSettingsForm(s) {
   const form = document.getElementById('settings-form')
   if (!form || !s) return
+
   const skip = new Set(['hero_image_path', 'description_image_path', 'event_starts_at'])
   Object.keys(s).forEach(key => {
     if (skip.has(key)) return
@@ -403,6 +404,23 @@ function fillSettingsForm(s) {
   if (startsAt) startsAt.value = toDatetimeLocalValue(s.event_starts_at)
   setSettingsImagePreview('hero', s.hero_image_path || s.hero_image_url)
   setSettingsImagePreview('description', s.description_image_path || s.description_image_url)
+
+  // ★ Update urutan section dari database
+  if (s.section_order && Array.isArray(s.section_order) && s.section_order.length > 0) {
+    const orderList = document.getElementById('section-order')
+    if (orderList) {
+      const existingItems = {}
+      orderList.querySelectorAll('li').forEach(li => {
+        existingItems[li.dataset.section] = li
+      })
+      orderList.innerHTML = ''
+      s.section_order.forEach(id => {
+        if (existingItems[id]) {
+          orderList.appendChild(existingItems[id])
+        }
+      })
+    }
+  }
 }
 
 async function updateStorageStatus() {
