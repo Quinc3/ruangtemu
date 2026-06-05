@@ -598,3 +598,43 @@ body:not(.is-loading) #page-loader {
 .shadow-floating {
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
 }
+
+/* ========== PAKSA SEMUA JADI SATU KOLOM DI WRAPPER MOBILE ========== */
+#mobile-frame [class*="grid-cols-"] {
+  grid-template-columns: 1fr !important;
+}
+#mobile-frame .md\:flex-row,
+#mobile-frame .md\:flex-row-reverse {
+  flex-direction: column !important;
+}
+#mobile-frame .md\:flex-1,
+#mobile-frame .md\:flex-auto {
+  flex: none !important;
+  width: 100% !important;
+}
+#mobile-frame .md\:hidden {
+  display: block !important;
+}
+#mobile-frame .hidden.md\:flex,
+#mobile-frame .hidden.md\:block {
+  display: none !important;
+}
+#mobile-frame .md\:px-margin-desktop {
+  padding-left: var(--spacing-margin-mobile, 20px) !important;
+  padding-right: var(--spacing-margin-mobile, 20px) !important;
+}
+#mobile-frame .md\:p-12 {
+  padding: var(--spacing-stack-md, 24px) !important;
+}
+#mobile-frame .md\:px-8 {
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+/* Fallback: jangan ada elemen yang lebih lebar dari wrapper */
+#mobile-frame img,
+#mobile-frame video,
+#mobile-frame iframe,
+#mobile-frame table {
+  max-width: 100% !important;
+  height: auto !important;
+}
