@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <title id="page-title">Undangan Perpisahan</title>
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link
@@ -11,334 +11,281 @@
     rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
     rel="stylesheet" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="mobile-web-app-capable" content="yes" />
 </head>
 
-<!--responsive wrapper-->
-<!-- <body class="bg-surface font-body-md text-on-surface antialiased overflow-x-hidden is-loading">  -->
+<body class="bg-surface font-body-md text-on-surface antialiased overflow-x-hidden is-loading">
 
-<!-- Page Loader -->
-<!-- <div id="page-loader" aria-live="polite" aria-busy="true">
+  <!-- Page Loader -->
+  <div id="page-loader" aria-live="polite" aria-busy="true">
     <div class="loader-spinner" aria-hidden="true"></div>
     <p class="font-display-lg-mobile text-primary-2 mt-6 animate-pulse">Menyiapkan keseruan...</p>
-  </div> -->
+  </div>
 
-<body class="font-body-md text-on-surface antialiased is-loading" style="background-color: #f3e8ff;">
-  <!-- warna pinggiran (bisa diganti) -->
+  <div id="app-content">
 
-  <!-- WRAPPER MOBILE -->
-  <div id="mobile-frame" class="max-w-[480px] mx-auto min-h-screen relative shadow-2xl bg-surface overflow-x-hidden">
-
-    <!-- Page Loader -->
-    <div id="page-loader" aria-live="polite" aria-busy="true">
-      <div class="loader-spinner" aria-hidden="true"></div>
-      <p class="font-display-lg-mobile text-primary-2 mt-6 animate-pulse">Menyiapkan keseruan...</p>
-    </div>
-
-    <div id="app-content">
-
-      <!-- ========== NAVBAR ========== -->
-      <!-- <nav id="navbar" class="fixed top-0 w-full z-50 backdrop-blur-xl border-b border-white/20"> -->
-      <nav id="navbar" class="sticky top-0 z-50 backdrop-blur-xl border-b border-white/20">Z</nav>
-      <div
-        class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-4 max-w-container-max mx-auto">
-        <div id="nav-org-name" class="font-display-lg-mobile text-2xl text-primary-2 font-bold tracking-tight">...
-        </div>
-        <div class="hidden md:flex items-center gap-8">
-          <a class="font-medium hover:text-primary-2 transition-colors" href="#story">Kenangan</a>
-          <a class="font-medium hover:text-primary-2 transition-colors" href="#details">Acara</a>
-          <a class="font-medium hover:text-primary-2 transition-colors" href="#guidelines">Panduan</a>
-          <a class="bg-primary-2 text-white px-6 py-2 btn-playful" href="#rsvp">Ayo Hadir!</a>
-        </div>
-        <div class="md:hidden">
+    <!-- ========== NAVBAR ========== -->
+    <nav id="navbar" class="fixed top-0 w-full z-50 backdrop-blur-xl border-b border-white/20">
+      <div class="flex justify-between items-center px-margin-mobile py-4 max-w-container-max mx-auto">
+        <div id="nav-org-name" class="font-display-lg-mobile text-2xl text-primary-2 font-bold tracking-tight">...</div>
+        <div>
           <span class="material-symbols-outlined text-primary-2 text-3xl">celebration</span>
         </div>
       </div>
-      </nav>
+    </nav>
 
-      <!-- ========== HERO ========== -->
-      <header class="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-          <div class="absolute top-20 left-[10%] text-5xl md:text-8xl animate-bounce decorative"
-            style="animation-duration: 3s; color: var(--brand-pink);">★</div>
-          <div class="absolute bottom-40 right-[15%] text-6xl md:text-9xl animate-pulse decorative"
-            style="color: var(--brand-yellow);">🎈</div>
-          <div class="absolute top-1/3 right-[5%] text-4xl md:text-7xl opacity-40 decorative"
-            style="color: var(--brand-mint);">✨</div>
+    <!-- ========== HERO ========== -->
+    <header class="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-20 left-[10%] text-4xl animate-bounce decorative"
+          style="animation-duration: 3s; color: var(--brand-pink);">★</div>
+        <div class="absolute bottom-40 right-[15%] text-5xl animate-pulse decorative"
+          style="color: var(--brand-yellow);">🎈</div>
+        <div class="absolute top-1/3 right-[5%] text-4xl opacity-40 decorative" style="color: var(--brand-mint);">✨
         </div>
-        <img id="hero-image" alt="Hero background"
-          class="absolute inset-0 w-full h-full object-cover opacity-20 scale-105" src="" />
-        <div class="absolute inset-0 bg-primary-1/50 backdrop-blur-[2px]"></div>
-        <div class="relative z-10 text-center px-margin-mobile max-w-4xl">
-          <p id="hero-label"
-            class="font-display-lg-mobile text-primary-2 text-xl uppercase tracking-[0.2em] mb-4 font-semibold"></p>
-          <p id="guest-greeting" class="text-2xl mb-2 hidden"></p>
-          <h1 id="hero-title" class="font-display-lg text-display-lg md:text-8xl mb-6 leading-tight text-on-surface">
-          </h1>
-          <p id="hero-subtitle" class="text-xl md:text-2xl mb-10 text-on-surface-variant max-w-2xl mx-auto"></p>
-          <div class="flex items-center justify-center gap-4 mb-10">
-            <div class="h-1 w-12 bg-primary-2/30 rounded-full"></div>
-            <span id="hero-date" class="font-display-lg-mobile text-2xl md:text-4xl"></span>
-            <div class="h-1 w-12 bg-primary-2/30 rounded-full"></div>
-          </div>
-
-          <!-- Countdown -->
-          <div id="countdown-section" class="hidden mb-12">
-            <div id="event-countdown" class="event-countdown hidden" aria-live="polite">
-              <div class="event-countdown__grid">
-                <div class="event-countdown__unit"><span id="countdown-days">00</span><span
-                    class="event-countdown__label">Hari</span></div>
-                <div class="event-countdown__unit"><span id="countdown-hours">00</span><span
-                    class="event-countdown__label">Jam</span></div>
-                <div class="event-countdown__unit"><span id="countdown-minutes">00</span><span
-                    class="event-countdown__label">Menit</span></div>
-                <div class="event-countdown__unit"><span id="countdown-seconds">00</span><span
-                    class="event-countdown__label">Detik</span></div>
-              </div>
-            </div>
-            <p id="countdown-ended" class="hidden font-display-lg-mobile text-xl" style="color: var(--brand-pink);">
-              Yey! Acara sedang berlangsung!</p>
-          </div>
-
-          <!-- <a id="hero-button" class="inline-block bg-primary-2 text-white px-12 py-5 text-xl btn-playful" href="#rsvp">
-          Konfirmasi Sekarang
-        </a> -->
-        </div>
-      </header>
-
-      <!-- ========== MAIN CONTENT ========== -->
-      <main class="max-w-container-max mx-auto px-margin-mobile md:px-margin-desktop space-y-stack-lg py-stack-lg">
-
-        <!-- Story Section -->
-        <section id="story" class="reveal grid grid-cols-1 gap-gutter items-center">
-          <!-- Teks: Judul, Isi, Kutipan -->
-          <div class="space-y-6">
-            <h2 id="description-title" class="font-display-lg text-display-lg text-on-surface"></h2>
-            <p id="description-body" class="text-lg leading-relaxed text-on-surface-variant"></p>
-            <div class="p-6 border-l-4 rounded-r-3xl"
-              style="background: rgba(255,215,0,0.1); border-color: var(--brand-yellow);">
-              <p id="description-quote" class="italic font-medium hidden"></p>
-            </div>
-          </div>
-
-          <!-- Label di atas foto -->
-          <span id="description-label"
-            class="inline-block px-4 py-1 bg-primary-2-container/20 rounded-full font-bold text-sm uppercase tracking-widest text-primary-2 mb-4"></span>
-
-          <!-- Foto -->
-          <div class="relative">
-            <div class="absolute -inset-4 bg-brand-pink/10 rounded-super -rotate-3 z-0"></div>
-            <img id="description-image" alt="Kenangan"
-              class="rounded-super w-full aspect-[4/5] object-cover shadow-floating relative z-10 border-8 border-white"
-              src="" />
-          </div>
-        </section>
-
-        <!-- Galeri -->
-        <section id="gallery" class="reveal hidden">
-          <div class="text-center mb-stack-md">
-            <h2 class="font-display-lg text-display-lg">Galeri Kebahagiaan</h2>
-            <div class="w-24 h-2 bg-primary-2/40 mx-auto rounded-full"></div>
-          </div>
-          <div id="gallery-grid" class="grid grid-cols-2 gap-6 md:grid-cols-3"></div>
-        </section>
-
-        <!-- Detail Acara -->
-        <section id="details" class="reveal space-y-gutter">
-          <div class="text-center mb-stack-md">
-            <h2 class="font-display-lg text-display-lg">Agenda Seru</h2>
-            <div class="w-24 h-2 bg-brand-pink/40 mx-auto rounded-full"></div>
-          </div>
-          <div id="rundown-grid" class="grid md:grid-cols-3 gap-gutter"></div>
-
-          <!-- Peta -->
-          <div id="map-section"
-            class="mt-gutter h-[450px] rounded-super overflow-hidden relative card-bubble border-8 border-white">
-            <div id="map-fallback" class="absolute inset-0 bg-primary-2/5 flex items-center justify-center">
-              <div class="text-center p-8 bg-white/90 backdrop-blur-md rounded-super shadow-xl max-w-sm">
-                <span class="material-symbols-outlined text-5xl text-primary-2 mb-4">location_on</span>
-                <p class="font-display-lg-mobile text-xl mb-6">Yuk, lihat lokasi acaranya!</p>
-                <a id="gmaps-link-btn"
-                  class="bg-primary-2 text-white px-8 py-3 btn-playful inline-flex items-center gap-2" href="#"
-                  target="_blank" rel="noopener noreferrer">
-                  Buka Google Maps <span class="material-symbols-outlined text-sm">open_in_new</span>
-                </a>
-              </div>
-            </div>
-            <iframe id="gmaps-embed" class="absolute inset-0 w-full h-full border-0 hidden" loading="lazy"
-              referrerpolicy="no-referrer-when-downgrade" title="Peta lokasi acara"></iframe>
-          </div>
-        </section>
-
-        <!-- Panduan & Dresscode (Grid Container) -->
-        <div id="guidelines-dresscode-row" class="grid md:grid-cols-2 gap-gutter hidden">
-          <!-- Panduan Acara -->
-          <section id="guidelines" class="reveal hidden">
-            <div class="card-bubble p-8 h-full" style="background: rgba(135,206,235,0.1);">
-              <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-4">Tips Untukmu</h2>
-              <div id="guidelines-grid" class="space-y-6"></div>
-            </div>
-          </section>
-
-          <!-- Dresscode -->
-          <section id="dresscode" class="reveal hidden">
-            <div class="card-bubble p-8 h-full text-center" style="background: rgba(255,215,0,0.1);">
-              <div class="absolute top-0 right-0 text-2xl md:text-6xl rotate-[-40deg]">👕</div>
-              <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-4">Baju Warna-Warni</h2>
-              <p class="text-on-surface-variant mb-6 text-lg">Pakai baju dengan warna favorit ini ya!</p>
-              <div id="dresscode-colors" class="flex flex-wrap justify-center gap-6 w-full"></div>
-            </div>
-          </section>
+      </div>
+      <img id="hero-image" alt="Hero background"
+        class="absolute inset-0 w-full h-full object-cover opacity-20 scale-105" src="" />
+      <div class="absolute inset-0 bg-primary-1/50 backdrop-blur-[2px]"></div>
+      <div class="relative z-10 text-center px-margin-mobile max-w-4xl">
+        <p id="hero-label"
+          class="font-display-lg-mobile text-primary-2 text-xl uppercase tracking-[0.2em] mb-4 font-semibold"></p>
+        <p id="guest-greeting" class="text-2xl mb-2 hidden"></p>
+        <h1 id="hero-title" class="font-display-lg text-display-lg mb-6 leading-tight text-on-surface"></h1>
+        <p id="hero-subtitle" class="text-xl mb-10 text-on-surface-variant max-w-2xl mx-auto"></p>
+        <div class="flex items-center justify-center gap-4 mb-10">
+          <div class="h-1 w-12 bg-primary-2/30 rounded-full"></div>
+          <span id="hero-date" class="font-display-lg-mobile text-2xl"></span>
+          <div class="h-1 w-12 bg-primary-2/30 rounded-full"></div>
         </div>
 
-        <!-- Kas Kenangan -->
-        <section id="kas-kenangan" class="reveal max-w-3xl mx-auto text-center">
-          <div class="card-bubble p-12 relative overflow-hidden" style="background: rgba(255,182,193,0.1);">
-            <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full" style="background: rgba(255,182,193,0.2);">
-            </div>
-            <h2 class="font-display-lg text-display-lg-mobile md:text-display-lg mb-6">Kado Perpisahan</h2>
-            <p class="text-lg text-on-surface-variant mb-10 leading-relaxed">
-              Kehadiranmu adalah hadiah terindah. Namun jika ingin berbagi kasih melalui kas angkatan, silakan klik
-              tombol
-              di bawah ya!
-            </p>
-            <button id="toggle-bank" type="button"
-              class="bg-brand-pink text-ink px-10 py-4 btn-playful w-full md:w-auto">
-              Lihat Nomor Rekening
-            </button>
-            <div id="bank-details" class="hidden py-10 border-t-2 border-dashed mt-10"
-              style="border-color: rgba(255,182,193,0.3);">
-              <div class="grid md:grid-cols-2 gap-8 text-left items-center">
-                <div class="space-y-4">
-                  <div>
-                    <p class="text-xs font-bold uppercase tracking-widest" style="color: var(--brand-pink);">ATAS NAMA
-                    </p>
-                    <p class="font-display-lg-mobile text-xl">PANITIA XII CERIA</p>
-                  </div>
-                  <div>
-                    <p class="text-xs font-bold uppercase tracking-widest" style="color: var(--brand-pink);">NOMOR
-                      REKENING</p>
-                    <p class="font-display-lg-mobile text-2xl tracking-wider">1234 5678 9012</p>
-                  </div>
-                  <div>
-                    <p class="text-xs font-bold uppercase tracking-widest" style="color: var(--brand-pink);">BANK</p>
-                    <p class="font-display-lg-mobile text-xl">Bank BCA</p>
-                  </div>
-                </div>
-                <div class="flex flex-col items-center justify-center p-6 bg-white rounded-3xl shadow-inner border-2"
-                  style="border-color: rgba(255,182,193,0.1);">
-                  <span class="material-symbols-outlined text-7xl opacity-30"
-                    style="color: var(--brand-pink);">qr_code_2</span>
-                  <p class="text-xs mt-3 font-bold opacity-60" style="color: var(--brand-pink);">SCAN QR UNTUK DONASI
-                  </p>
-                </div>
-              </div>
+        <!-- Countdown -->
+        <div id="countdown-section" class="hidden mb-12">
+          <div id="event-countdown" class="event-countdown hidden" aria-live="polite">
+            <div class="event-countdown__grid">
+              <div class="event-countdown__unit"><span id="countdown-days">00</span><span
+                  class="event-countdown__label">Hari</span></div>
+              <div class="event-countdown__unit"><span id="countdown-hours">00</span><span
+                  class="event-countdown__label">Jam</span></div>
+              <div class="event-countdown__unit"><span id="countdown-minutes">00</span><span
+                  class="event-countdown__label">Menit</span></div>
+              <div class="event-countdown__unit"><span id="countdown-seconds">00</span><span
+                  class="event-countdown__label">Detik</span></div>
             </div>
           </div>
-        </section>
+          <p id="countdown-ended" class="hidden font-display-lg-mobile text-xl" style="color: var(--brand-pink);">
+            Yey! Acara sedang berlangsung!</p>
+        </div>
+      </div>
+    </header>
 
-        <!-- RSVP & Ucapan -->
-        <section id="rsvp" class="reveal grid md:grid-cols-2 gap-gutter">
-          <!-- RSVP Form Card -->
-          <div class="card-bubble py-4 px-4 md:p-12 text-white relative" style="background: var(--color-primary-2);">
-            <div class="absolute top-0 right-0 text-4xl md:text-6xl rotate-[-40deg]">✍️</div>
-            <h2 class="font-display-lg text-display-lg-mobile pt-4 mb-6">Aku Mau Datang!</h2>
-            <form id="rsvp-form" class="space-y-6">
-              <div>
-                <label class="block text-sm font-bold uppercase tracking-wider mb-2" for="full_name">Siapa
-                  Namamu?</label>
-                <input
-                  class="w-full rounded-2xl border-none bg-white/20 focus:bg-white focus:ring-4 focus:ring-white/30 p-4 text-white placeholder-white/60 transition-all outline-none"
-                  id="full_name" name="full_name" placeholder="Tulis namamu di sini..." type="text" required />
-              </div>
-              <div>
-                <span class="block text-sm font-bold uppercase tracking-wider mb-3">Bisa Hadir Tidak?</span>
-                <div class="flex flex-wrap gap-4">
-                  <label
-                    class="flex items-center gap-3 cursor-pointer bg-white/10 px-6 py-3 rounded-full hover:bg-white/20 transition-all border-2 border-white/20">
-                    <input class="w-5 h-5 text-brand-pink border-none focus:ring-0" name="attend" type="radio"
-                      value="yes" />
-                    <span class="font-bold">Ya, dong!</span>
-                  </label>
-                  <label
-                    class="flex items-center gap-3 cursor-pointer bg-white/10 px-6 py-3 rounded-full hover:bg-white/20 transition-all border-2 border-white/20">
-                    <input class="w-5 h-5 text-brand-pink border-none focus:ring-0" name="attend" type="radio"
-                      value="no" />
-                    <span class="font-bold">Maaf, berhalangan</span>
-                  </label>
-                </div>
-              </div>
-              <div class="grid grid-cols-2 gap-4">
+    <!-- ========== MAIN CONTENT ========== -->
+    <main class="max-w-container-max mx-auto px-margin-mobile space-y-stack-lg py-stack-lg">
+
+      <!-- Story Section -->
+      <section id="story" class="reveal grid grid-cols-1 gap-gutter items-center">
+        <div class="space-y-6">
+          <h2 id="description-title" class="font-display-lg text-display-lg text-on-surface"></h2>
+          <p id="description-body" class="text-lg leading-relaxed text-on-surface-variant"></p>
+          <div class="p-6 border-l-4 rounded-r-3xl"
+            style="background: rgba(255,215,0,0.1); border-color: var(--brand-yellow);">
+            <p id="description-quote" class="italic font-medium hidden"></p>
+          </div>
+        </div>
+        <span id="description-label"
+          class="inline-block px-4 py-1 bg-primary-2-container/20 rounded-full font-bold text-sm uppercase tracking-widest text-primary-2 mb-4"></span>
+        <div class="relative">
+          <div class="absolute -inset-4 bg-brand-pink/10 rounded-super -rotate-3 z-0"></div>
+          <img id="description-image" alt="Kenangan"
+            class="rounded-super w-full aspect-[4/5] object-cover shadow-floating relative z-10 border-8 border-white"
+            src="" />
+        </div>
+      </section>
+
+      <!-- Galeri -->
+      <section id="gallery" class="reveal hidden">
+        <div class="text-center mb-stack-md">
+          <h2 class="font-display-lg text-display-lg">Galeri Kebahagiaan</h2>
+          <div class="w-24 h-2 bg-primary-2/40 mx-auto rounded-full"></div>
+        </div>
+        <div id="gallery-grid" class="grid grid-cols-2 gap-6"></div>
+      </section>
+
+      <!-- Detail Acara -->
+      <section id="details" class="reveal space-y-gutter">
+        <div class="text-center mb-stack-md">
+          <h2 class="font-display-lg text-display-lg">Agenda Seru</h2>
+          <div class="w-24 h-2 bg-brand-pink/40 mx-auto rounded-full"></div>
+        </div>
+        <div id="rundown-grid" class="grid gap-gutter"></div>
+
+        <!-- Peta -->
+        <div id="map-section"
+          class="mt-gutter h-[450px] rounded-super overflow-hidden relative card-bubble border-8 border-white">
+          <div id="map-fallback" class="absolute inset-0 bg-primary-2/5 flex items-center justify-center">
+            <div class="text-center p-8 bg-white/90 backdrop-blur-md rounded-super shadow-xl max-w-sm">
+              <span class="material-symbols-outlined text-5xl text-primary-2 mb-4">location_on</span>
+              <p class="font-display-lg-mobile text-xl mb-6">Yuk, lihat lokasi acaranya!</p>
+              <a id="gmaps-link-btn"
+                class="bg-primary-2 text-white px-8 py-3 btn-playful inline-flex items-center gap-2" href="#"
+                target="_blank" rel="noopener noreferrer">
+                Buka Google Maps <span class="material-symbols-outlined text-sm">open_in_new</span>
+              </a>
+            </div>
+          </div>
+          <iframe id="gmaps-embed" class="absolute inset-0 w-full h-full border-0 hidden" loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade" title="Peta lokasi acara"></iframe>
+        </div>
+      </section>
+
+      <!-- Panduan & Dresscode -->
+      <div id="guidelines-dresscode-row" class="grid gap-gutter hidden">
+        <section id="guidelines" class="reveal hidden">
+          <div class="card-bubble p-8 h-full" style="background: rgba(135,206,235,0.1);">
+            <h2 class="font-display-lg text-display-lg-mobile mb-4">Tips Untukmu</h2>
+            <div id="guidelines-grid" class="space-y-6"></div>
+          </div>
+        </section>
+        <section id="dresscode" class="reveal hidden">
+          <div class="card-bubble p-8 h-full text-center" style="background: rgba(255,215,0,0.1);">
+            <div class="absolute top-0 right-0 text-2xl rotate-[-40deg]">👕</div>
+            <h2 class="font-display-lg text-display-lg-mobile mb-4">Baju Warna-Warni</h2>
+            <p class="text-on-surface-variant mb-6 text-lg">Pakai baju dengan warna favorit ini ya!</p>
+            <div id="dresscode-colors" class="flex flex-wrap justify-center gap-6 w-full"></div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Kas Kenangan -->
+      <section id="kas-kenangan" class="reveal max-w-3xl mx-auto text-center">
+        <div class="card-bubble p-12 relative overflow-hidden" style="background: rgba(255,182,193,0.1);">
+          <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full" style="background: rgba(255,182,193,0.2);">
+          </div>
+          <h2 class="font-display-lg text-display-lg-mobile mb-6">Kado Perpisahan</h2>
+          <p class="text-lg text-on-surface-variant mb-10 leading-relaxed">
+            Kehadiranmu adalah hadiah terindah. Namun jika ingin berbagi kasih melalui kas angkatan, silakan klik tombol
+            di bawah ya!
+          </p>
+          <button id="toggle-bank" type="button" class="bg-brand-pink text-ink px-10 py-4 btn-playful w-full">
+            Lihat Nomor Rekening
+          </button>
+          <div id="bank-details" class="hidden py-10 border-t-2 border-dashed mt-10"
+            style="border-color: rgba(255,182,193,0.3);">
+            <div class="grid gap-8 text-left items-center">
+              <div class="space-y-4">
                 <div>
-                  <label class="block text-sm font-bold uppercase tracking-wider mb-2" for="guest_count">Berapa
-                    Orang?</label>
-                  <select
-                    class="w-full rounded-2xl border-none bg-white/20 focus:bg-white focus:ring-4 focus:ring-white/30 p-4 text-white"
-                    id="guest_count" name="guest_count">
-                    <option class="text-ink" value="1">1 Teman</option>
-                    <option class="text-ink" value="2">2 Teman</option>
-                    <option class="text-ink" value="3">3 Teman</option>
-                  </select>
+                  <p class="text-xs font-bold uppercase tracking-widest" style="color: var(--brand-pink);">ATAS NAMA</p>
+                  <p class="font-display-lg-mobile text-xl">PANITIA XII CERIA</p>
                 </div>
                 <div>
-                  <label class="block text-sm font-bold uppercase tracking-wider mb-2" for="meal_preference">Sebagai
-                    Apa?</label>
-                  <select
-                    class="w-full rounded-2xl border-none bg-white/20 focus:bg-white focus:ring-4 focus:ring-white/30 p-4 text-white"
-                    id="meal_preference" name="meal_preference">
-                    <option class="text-ink">Siswa</option>
-                    <option class="text-ink">Guru</option>
-                    <option class="text-ink">Orang Tua</option>
-                    <option class="text-ink">Alumni</option>
-                    <option class="text-ink">Tamu Undangan</option>
-                  </select>
+                  <p class="text-xs font-bold uppercase tracking-widest" style="color: var(--brand-pink);">NOMOR
+                    REKENING</p>
+                  <p class="font-display-lg-mobile text-2xl tracking-wider">1234 5678 9012</p>
+                </div>
+                <div>
+                  <p class="text-xs font-bold uppercase tracking-widest" style="color: var(--brand-pink);">BANK</p>
+                  <p class="font-display-lg-mobile text-xl">Bank BCA</p>
                 </div>
               </div>
-              <button class="w-full bg-white text-primary-2 py-5 rounded-full font-bold text-lg btn-playful mt-4"
-                type="submit">
-                Kirim Sekarang!
-              </button>
-              <p id="rsvp-deadline" class="text-center text-xs opacity-70 italic mt-4"></p>
-            </form>
-          </div>
-
-          <!-- Guestbook Card -->
-          <div id="guestbook-section" class="card-bubble py-4 px-4 md:p-12 flex flex-col"
-            style="background: rgba(152,251,152,0.1);">
-            <h2 class="font-display-lg text-display-lg-mobile pt-4 mb-8" style="color: var(--color-tertiary);">Pesan
-              &amp;
-              Doa</h2>
-            <div class="flex-grow space-y-6 max-h-[500px] overflow-y-auto pr-4 mb-8" id="guestbook-list">
-              <div class="p-6 text-center italic text-on-surface-variant">Memuat pesan manis...</div>
+              <div class="flex flex-col items-center justify-center p-6 bg-white rounded-3xl shadow-inner border-2"
+                style="border-color: rgba(255,182,193,0.1);">
+                <span class="material-symbols-outlined text-7xl opacity-30"
+                  style="color: var(--brand-pink);">qr_code_2</span>
+                <p class="text-xs mt-3 font-bold opacity-60" style="color: var(--brand-pink);">SCAN QR UNTUK DONASI</p>
+              </div>
             </div>
-            <button id="open-guestbook" type="button"
-              class="w-full text-white py-5 rounded-full font-bold text-lg btn-playful flex items-center justify-center gap-2"
-              style="background: var(--color-tertiary);">
-              Tulis Pesan <span class="material-symbols-outlined">edit_note</span>
-            </button>
           </div>
-        </section>
-      </main>
-
-      <!-- ========== FOOTER ========== -->
-      <footer id="footer"
-        class="bg-white border-t border-primary-2/10 w-full py-stack-lg flex flex-col items-center gap-6 text-center px-margin-mobile mt-stack-lg relative overflow-hidden">
-        <div id="footer-links" class="flex flex-wrap justify-center gap-8 my-6">
-          <a id="footer-link-jadwal" class="font-bold hover:text-primary-2 transition-colors hidden"
-            href="#details">Jadwal</a>
-          <a id="footer-link-panduan" class="font-bold hover:text-primary-2 transition-colors hidden"
-            href="#guidelines">Panduan</a>
-          <a id="footer-link-konfirmasi" class="font-bold hover:text-primary-2 transition-colors hidden"
-            href="#rsvp">Konfirmasi</a>
-          <a id="footer-link-galeri" class="font-bold hover:text-primary-2 transition-colors hidden"
-            href="#gallery">Galeri</a>
-          <a id="footer-link-kas" class="font-bold hover:text-primary-2 transition-colors hidden"
-            href="#kas-kenangan">Kas</a>
         </div>
-        <p id="footer-tagline" class="font-display-lg-mobile text-xl max-w-md"></p>
-        <div class="w-16 h-1 bg-brand-yellow rounded-full mt-8"></div>
-        <p class="text-[10px] tracking-[0.3em] uppercase opacity-50 mt-4">© 2026 Ruang Temu. All rights reserved.</p>
-      </footer>
-    </div>
+      </section>
+
+      <!-- RSVP & Ucapan -->
+      <section id="rsvp" class="reveal grid gap-gutter">
+        <div class="card-bubble py-4 px-4 text-white relative" style="background: var(--color-primary-2);">
+          <div class="absolute top-0 right-0 text-4xl rotate-[-40deg]">✍️</div>
+          <h2 class="font-display-lg text-display-lg-mobile pt-4 mb-6">Aku Mau Datang!</h2>
+          <form id="rsvp-form" class="space-y-6">
+            <div>
+              <label class="block text-sm font-bold uppercase tracking-wider mb-2" for="full_name">Siapa Namamu?</label>
+              <input
+                class="w-full rounded-2xl border-none bg-white/20 focus:bg-white focus:ring-4 focus:ring-white/30 p-4 text-white placeholder-white/60 transition-all outline-none"
+                id="full_name" name="full_name" placeholder="Tulis namamu di sini..." type="text" required />
+            </div>
+            <div>
+              <span class="block text-sm font-bold uppercase tracking-wider mb-3">Bisa Hadir Tidak?</span>
+              <div class="flex flex-wrap gap-4">
+                <label
+                  class="flex items-center gap-3 cursor-pointer bg-white/10 px-6 py-3 rounded-full hover:bg-white/20 transition-all border-2 border-white/20">
+                  <input class="w-5 h-5 text-brand-pink border-none focus:ring-0" name="attend" type="radio"
+                    value="yes" />
+                  <span class="font-bold">Ya, dong!</span>
+                </label>
+                <label
+                  class="flex items-center gap-3 cursor-pointer bg-white/10 px-6 py-3 rounded-full hover:bg-white/20 transition-all border-2 border-white/20">
+                  <input class="w-5 h-5 text-brand-pink border-none focus:ring-0" name="attend" type="radio"
+                    value="no" />
+                  <span class="font-bold">Maaf, berhalangan</span>
+                </label>
+              </div>
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-bold uppercase tracking-wider mb-2" for="guest_count">Berapa
+                  Orang?</label>
+                <select
+                  class="w-full rounded-2xl border-none bg-white/20 focus:bg-white focus:ring-4 focus:ring-white/30 p-4 text-white"
+                  id="guest_count" name="guest_count">
+                  <option class="text-ink" value="1">1 Teman</option>
+                  <option class="text-ink" value="2">2 Teman</option>
+                  <option class="text-ink" value="3">3 Teman</option>
+                </select>
+              </div>
+              <div>
+                <label class="block text-sm font-bold uppercase tracking-wider mb-2" for="meal_preference">Sebagai
+                  Apa?</label>
+                <select
+                  class="w-full rounded-2xl border-none bg-white/20 focus:bg-white focus:ring-4 focus:ring-white/30 p-4 text-white"
+                  id="meal_preference" name="meal_preference">
+                  <option class="text-ink">Siswa</option>
+                  <option class="text-ink">Guru</option>
+                  <option class="text-ink">Orang Tua</option>
+                  <option class="text-ink">Alumni</option>
+                  <option class="text-ink">Tamu Undangan</option>
+                </select>
+              </div>
+            </div>
+            <button class="w-full bg-white text-primary-2 py-5 rounded-full font-bold text-lg btn-playful mt-4"
+              type="submit">
+              Kirim Sekarang!
+            </button>
+            <p id="rsvp-deadline" class="text-center text-xs opacity-70 italic mt-4"></p>
+          </form>
+        </div>
+
+        <div id="guestbook-section" class="card-bubble py-4 px-4 flex flex-col"
+          style="background: rgba(152,251,152,0.1);">
+          <h2 class="font-display-lg text-display-lg-mobile pt-4 mb-8" style="color: var(--color-tertiary);">Pesan &amp;
+            Doa</h2>
+          <div class="flex-grow space-y-6 max-h-[500px] overflow-y-auto pr-4 mb-8" id="guestbook-list">
+            <div class="p-6 text-center italic text-on-surface-variant">Memuat pesan manis...</div>
+          </div>
+          <button id="open-guestbook" type="button"
+            class="w-full text-white py-5 rounded-full font-bold text-lg btn-playful flex items-center justify-center gap-2"
+            style="background: var(--color-tertiary);">
+            Tulis Pesan <span class="material-symbols-outlined">edit_note</span>
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer id="footer"
+      class="bg-white border-t border-primary-2/10 w-full py-stack-lg flex flex-col items-center gap-6 text-center px-margin-mobile mt-stack-lg relative overflow-hidden">
+      <p id="footer-tagline" class="font-display-lg-mobile text-xl max-w-md"></p>
+      <div class="w-16 h-1 bg-brand-yellow rounded-full mt-8"></div>
+      <p class="text-[10px] tracking-[0.3em] uppercase opacity-50 mt-4">© 2026 Ruang Temu. All rights reserved.</p>
+    </footer>
   </div>
 
   <!-- ========== GALLERY LIGHTBOX ========== -->

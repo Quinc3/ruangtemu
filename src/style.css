@@ -599,42 +599,45 @@ body:not(.is-loading) #page-loader {
   box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.08);
 }
 
-/* ========== PAKSA SEMUA JADI SATU KOLOM DI WRAPPER MOBILE ========== */
-#mobile-frame [class*="grid-cols-"] {
-  grid-template-columns: 1fr !important;
+/* ==============================================================
+   KUNCI TAMPILAN MOBILE DI DESKTOP 
+   ============================================================== */
+
+/* 1. Memberi background polos untuk area kosong di Desktop */
+html {
+  background-color: #e9e9dd;
 }
-#mobile-frame .md\:flex-row,
-#mobile-frame .md\:flex-row-reverse {
-  flex-direction: column !important;
+
+/* 2. Mengunci ukuran body layaknya layar HP */
+body {
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  position: relative;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+  overflow-x: hidden;
+
+  /* Background asli lu diteruskan ke dalam kotak HP */
+  background-color: var(--color-canvas);
+  color: var(--color-body);
 }
-#mobile-frame .md\:flex-1,
-#mobile-frame .md\:flex-auto {
-  flex: none !important;
-  width: 100% !important;
+
+/* 3. Mencegah elemen fixed melebar keluar dari body 480px */
+nav.fixed,
+#page-loader,
+.gallery-lightbox,
+.modal-overlay {
+  max-width: 480px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
 }
-#mobile-frame .md\:hidden {
-  display: block !important;
+
+/* 4. Penanganan khusus Toast karena Toast punya animasi vertikal bawaan */
+.toast {
+  max-width: 480px !important;
+  left: 50% !important;
+  transform: translateX(-50%) translateY(100px) !important;
 }
-#mobile-frame .hidden.md\:flex,
-#mobile-frame .hidden.md\:block {
-  display: none !important;
-}
-#mobile-frame .md\:px-margin-desktop {
-  padding-left: var(--spacing-margin-mobile, 20px) !important;
-  padding-right: var(--spacing-margin-mobile, 20px) !important;
-}
-#mobile-frame .md\:p-12 {
-  padding: var(--spacing-stack-md, 24px) !important;
-}
-#mobile-frame .md\:px-8 {
-  padding-left: 1rem !important;
-  padding-right: 1rem !important;
-}
-/* Fallback: jangan ada elemen yang lebih lebar dari wrapper */
-#mobile-frame img,
-#mobile-frame video,
-#mobile-frame iframe,
-#mobile-frame table {
-  max-width: 100% !important;
-  height: auto !important;
+.toast.show {
+  transform: translateX(-50%) translateY(0) !important;
 }
