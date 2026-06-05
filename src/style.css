@@ -623,12 +623,15 @@ body {
 }
 
 /* 3. Mencegah elemen fixed melebar keluar dari body 480px */
+/* 3. Mencegah elemen fixed melebar keluar dari body 480px */
 nav.fixed,
 #page-loader,
 .gallery-lightbox,
 .modal-overlay {
+  width: 100% !important;
   max-width: 480px !important;
   left: 50% !important;
+  right: auto !important;
   transform: translateX(-50%) !important;
 }
 

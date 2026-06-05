@@ -289,12 +289,18 @@
   </div>
 
   <!-- ========== GALLERY LIGHTBOX ========== -->
+  <!-- ========== GALLERY LIGHTBOX ========== -->
   <div id="gallery-lightbox" class="gallery-lightbox" aria-hidden="true">
-    <button id="gallery-lightbox-close" type="button" class="gallery-lightbox__close material-symbols-outlined text-5xl"
+    <!-- Tombol close dikasih background hitam transparan biar tetep keliatan kalau pas fotonya warna putih -->
+    <button id="gallery-lightbox-close" type="button"
+      class="gallery-lightbox__close material-symbols-outlined text-4xl bg-black/40 rounded-full p-2"
       aria-label="Tutup">close</button>
-    <div class="max-w-4xl px-6 text-center">
-      <img id="gallery-lightbox-img" alt="" class="rounded-super border-8 border-white shadow-2xl" />
-      <p id="gallery-lightbox-caption" class="mt-8 text-xl font-display-lg-mobile text-white hidden"></p>
+
+    <div class="px-4 text-center w-full flex flex-col justify-center items-center">
+      <!-- w-auto dan max-h-[75vh] bikin gambar nggak kepotong tapi tetep mentok proporsional -->
+      <img id="gallery-lightbox-img" alt=""
+        class="w-auto h-auto max-w-full max-h-[75vh] object-contain rounded-super border-8 border-white shadow-2xl mx-auto" />
+      <p id="gallery-lightbox-caption" class="mt-6 text-xl font-display-lg-mobile text-white hidden"></p>
     </div>
   </div>
 
