@@ -50,7 +50,8 @@ export function hidePageLoader() {
 
 /* ---------- GUEST ---------- */
 export async function resolveGuest() {
-  const slug = new URLSearchParams(window.location.search).get("to")?.trim() || null;
+  const slug =
+    new URLSearchParams(window.location.search).get("to")?.trim() || null;
   if (!slug || !isSupabaseConfigured) return null;
   const { data, error } = await supabase
     .from("guests")
@@ -69,7 +70,9 @@ export function applyGuestToForm(guest) {
   nameInput.readOnly = true;
   nameInput.classList.add("opacity-80", "cursor-not-allowed");
   if (categorySelect && guest.category) {
-    const option = [...categorySelect.options].find(o => o.value === guest.category);
+    const option = [...categorySelect.options].find(
+      (o) => o.value === guest.category,
+    );
     if (option) categorySelect.value = guest.category;
   }
 }
@@ -93,12 +96,14 @@ export function renderSettings(s) {
   const heroImg = document.getElementById("hero-image");
   if (heroImg && heroSrc) heroImg.src = heroSrc;
 
-  const heroBtn = document.getElementById('hero-button');
+  const heroBtn = document.getElementById("hero-button");
   if (heroBtn) {
-    heroBtn.classList.toggle('hidden', s.show_hero_button === false);
+    heroBtn.classList.toggle("hidden", s.show_hero_button === false);
   }
 
-  const descSrc = resolveImageUrl(s.description_image_path || s.description_image_url);
+  const descSrc = resolveImageUrl(
+    s.description_image_path || s.description_image_url,
+  );
   const descImg = document.getElementById("description-image");
   if (descImg && descSrc) descImg.src = descSrc;
 
@@ -131,83 +136,98 @@ export function renderSettings(s) {
 
   // ===== VISIBILITAS SECTION =====
   const visibilityMap = {
-    'navbar': s.show_navbar !== false,
-    'story': s.show_story !== false,
-    'kas-kenangan': s.show_kas_kenangan !== false,
-    'rsvp': s.show_rsvp !== false,
-    'guestbook-section': s.show_guestbook !== false,
-    'countdown-section': s.show_countdown !== false,
-    'gallery': s.show_gallery !== false,
-    'details': s.show_rundown !== false,
-    'map-section': s.show_map !== false,
-    'guidelines': s.show_guidelines !== false,
-    'dresscode': s.show_dresscode !== false,
-    'footer': s.show_footer !== false,
+    navbar: s.show_navbar !== false,
+    story: s.show_story !== false,
+    "kas-kenangan": s.show_kas_kenangan !== false,
+    rsvp: s.show_rsvp !== false,
+    "guestbook-section": s.show_guestbook !== false,
+    "countdown-section": s.show_countdown !== false,
+    gallery: s.show_gallery !== false,
+    details: s.show_rundown !== false,
+    "map-section": s.show_map !== false,
+    guidelines: s.show_guidelines !== false,
+    dresscode: s.show_dresscode !== false,
+    footer: s.show_footer !== false,
   };
 
   // Grid container Panduan & Dresscode
-  const guidelinesRow = document.getElementById('guidelines-dresscode-row');
-  const guidelinesSection = document.getElementById('guidelines');
-  const dresscodeSection = document.getElementById('dresscode');
+  const guidelinesRow = document.getElementById("guidelines-dresscode-row");
+  const guidelinesSection = document.getElementById("guidelines");
+  const dresscodeSection = document.getElementById("dresscode");
 
   const showGuidelines = s.show_guidelines !== false;
   const showDresscode = s.show_dresscode !== false;
 
   if (guidelinesRow) {
     if (showGuidelines || showDresscode) {
-      guidelinesRow.classList.remove('hidden');
+      guidelinesRow.classList.remove("hidden");
     } else {
-      guidelinesRow.classList.add('hidden');
+      guidelinesRow.classList.add("hidden");
     }
   }
 
   if (guidelinesSection) {
     if (showGuidelines) {
-      guidelinesSection.classList.remove('hidden');
+      guidelinesSection.classList.remove("hidden");
     } else {
-      guidelinesSection.classList.add('hidden');
+      guidelinesSection.classList.add("hidden");
     }
   }
 
   if (dresscodeSection) {
     if (showDresscode) {
-      dresscodeSection.classList.remove('hidden');
+      dresscodeSection.classList.remove("hidden");
     } else {
-      dresscodeSection.classList.add('hidden');
+      dresscodeSection.classList.add("hidden");
     }
   }
 
   // Terapkan visibilityMap untuk semua section lain
   Object.entries(visibilityMap).forEach(([id, isVisible]) => {
-    if (id === 'guidelines' || id === 'dresscode') return; // sudah ditangani di atas
+    if (id === "guidelines" || id === "dresscode") return; // sudah ditangani di atas
     const el = document.getElementById(id);
     if (el) {
       if (isVisible) {
-        el.classList.remove('hidden');
+        el.classList.remove("hidden");
       } else {
-        el.classList.add('hidden');
+        el.classList.add("hidden");
       }
     }
   });
 
   // Urutan section (drag-and-drop)
-  const sectionOrder = s.section_order || ['story', 'gallery', 'details', 'guidelines-dresscode-row', 'kas-kenangan', 'rsvp'];
-  const main = document.querySelector('main');
+  const sectionOrder = s.section_order || [
+    "story",
+    "gallery",
+    "details",
+    "guidelines-dresscode-row",
+    "kas-kenangan",
+    "rsvp",
+  ];
+  const main = document.querySelector("main");
   if (main) {
-    sectionOrder.forEach(id => {
+    sectionOrder.forEach((id) => {
       const section = document.getElementById(id);
       if (section) main.appendChild(section);
     });
   }
 
   // Visibilitas link di footer
-  const footerLinkJadwal = document.getElementById('footer-link-jadwal');
-  const footerLinkPanduan = document.getElementById('footer-link-panduan');
-  const footerLinkKonfirmasi = document.getElementById('footer-link-konfirmasi');
+  const footerLinkJadwal = document.getElementById("footer-link-jadwal");
+  const footerLinkPanduan = document.getElementById("footer-link-panduan");
+  const footerLinkKonfirmasi = document.getElementById(
+    "footer-link-konfirmasi",
+  );
 
-  if (footerLinkJadwal) footerLinkJadwal.classList.toggle('hidden', !(s.show_rundown !== false));
-  if (footerLinkPanduan) footerLinkPanduan.classList.toggle('hidden', !(s.show_guidelines !== false));
-  if (footerLinkKonfirmasi) footerLinkKonfirmasi.classList.toggle('hidden', !(s.show_rsvp !== false));
+  if (footerLinkJadwal)
+    footerLinkJadwal.classList.toggle("hidden", !(s.show_rundown !== false));
+  if (footerLinkPanduan)
+    footerLinkPanduan.classList.toggle(
+      "hidden",
+      !(s.show_guidelines !== false),
+    );
+  if (footerLinkKonfirmasi)
+    footerLinkKonfirmasi.classList.toggle("hidden", !(s.show_rsvp !== false));
 
   return {
     heroUrl: heroSrc,
@@ -220,22 +240,32 @@ export function renderRundown(items) {
   const grid = document.getElementById("rundown-grid");
   if (!grid) return;
   if (!items?.length) {
-    grid.innerHTML = '<p class="col-span-3 text-center text-on-surface-variant italic h-40 flex items-center justify-center">Belum ada rundown acara.</p>';
+    grid.innerHTML =
+      '<p class="col-span-3 text-center text-on-surface-variant italic h-40 flex items-center justify-center">Belum ada rundown acara.</p>';
     return;
   }
-  grid.innerHTML = items.map((item, i) => {
-    // Ambil warna dari database, fallback ke default kalau kosong
-    const bg = item.bg_color || '#FFB6C1';
-    const text = item.text_color || '#1b1c15';
-    return `
-      <div class="p-10 text-center space-y-4 rounded-xl" style="background-color: ${bg}; color: ${text};">
-        <span class="material-symbols-outlined text-4xl">${escapeHtml(item.icon)}</span>
-        <h3 class="font-headline-sm text-headline-sm">${escapeHtml(item.title)}</h3>
-        ${item.time_range ? `<p class="font-body-md text-body-md">${escapeHtml(item.time_range)}</p>` : ""}
-        ${item.note ? `<p class="font-label-caps text-label-caps">${escapeHtml(item.note)}</p>` : ""}
+  const rundownItems = items
+    .map((item, i) => {
+      // Ambil warna dari database, fallback ke default kalau kosong
+      const bg = item.bg_color || "#FFB6C1";
+      const text = item.text_color || "#1b1c15";
+      return `
+      <div class="py-3 text-center rounded-md flex " style="background-color: ${bg}; color: ${text};">
+        <div class="flex w-1/3 items-center justify-center">
+        <span class="material-symbols-outlined !text-4xl">${escapeHtml(item.icon)}</span>
+        </div>
+        <div class="flex w-2/3 flex-col text-start px-2">
+          <h3 class="font-headline-sm text-md font-bold leading-4 mb-3">${escapeHtml(item.title)}</h3>
+          ${item.time_range ? `<p class="font-body-md text-body-md">${escapeHtml(item.time_range)}</p>` : ""}
+          ${item.note ? `<p class="font-label-caps text-label-caps">${escapeHtml(item.note)}</p>` : ""}
+        </div>
       </div>
     `;
-  }).join("");
+    })
+    .join("");
+
+  grid.insertAdjacentHTML("beforeend", rundownItems);
+
   // Re-observasi kartu agar animasi reveal tetap berfungsi
   observeRundownCards();
 }
@@ -245,53 +275,70 @@ export function renderGuidelines(items) {
   const grid = document.getElementById("guidelines-grid");
   if (!grid) return;
   if (!items?.length) {
-    grid.innerHTML = '<p class="col-span-2 text-on-surface-variant italic text-sm">Belum ada panduan acara.</p>';
+    grid.innerHTML =
+      '<p class="col-span-2 text-on-surface-variant italic text-sm">Belum ada panduan acara.</p>';
     return;
   }
-  grid.innerHTML = items.map(g => `
-    <div class="flex gap-4 rounded-xl">
-      <span class="material-symbols-outlined text-primary-4">${escapeHtml(g.icon)}</span>
-      <div>
-        <h4 class="font-headline-sm text-lg mb-1">${escapeHtml(g.title)}</h4>
+  grid.innerHTML = items
+    .map(
+      (g) => `
+    <div class="flex gap-4 p-3 items-center rounded-xl justify-center bg-primary-2/10 mx-auto border-2 border-primary-2">
+    <div class="w-1/4 inline-flex">
+      <span class=" material-symbols-outlined text-primary-4 mx-auto">${escapeHtml(g.icon)}</span>
+    </div>
+      <div class="w-3/4">
+        <h4 class="text-primary-2 font-bold text-lg mb-1">${escapeHtml(g.title)}</h4>
         <p class="text-on-surface-variant text-sm">${escapeHtml(g.description)}</p>
       </div>
     </div>
-  `).join("");
+  `,
+    )
+    .join("");
 }
 
 /* ---------- DRESSCODE ---------- */
 export async function loadDresscodeForPublic() {
-  const dressSection = document.getElementById('dresscode');
-  const container = document.getElementById('dresscode-colors');
+  const dressSection = document.getElementById("dresscode");
+  const container = document.getElementById("dresscode-colors");
   if (!dressSection || !container) return;
 
   const { data, error } = await supabase
-    .from('dresscode_palette')
-    .select('is_active, color1, color2, color3, color4')
-    .eq('id', 1)
+    .from("dresscode_palette")
+    .select("is_active, color1, color2, color3, color4")
+    .eq("id", 1)
     .maybeSingle();
 
   if (error || !data || !data.is_active) {
-    dressSection.classList.add('hidden');
+    dressSection.classList.add("hidden");
     return;
   }
 
-  dressSection.classList.remove('hidden');
+  dressSection.classList.remove("hidden");
   const colors = [data.color1, data.color2, data.color3, data.color4];
   container.innerHTML = `
     <div class="grid grid-cols-2 gap-4 w-full max-w-xs mx-auto">
-      ${colors.map(color => `
+      ${colors
+        .map(
+          (color) => `
         <div class="flex flex-col items-center gap-1">
           <div class="w-full aspect-square rounded-xl border-2 border-white shadow-md" style="background-color: ${color}"></div>
           <span class="text-[11px] font-mono text-on-surface-variant">${color}</span>
         </div>
-      `).join('')}
+      `,
+        )
+        .join("")}
     </div>
   `;
 }
 
 /* ---------- WISHES ---------- */
-const borderColors = ["border-l-pink-500", "border-l-teal-600", "border-l-lavender", "border-l-peach", "border-l-ochre"];
+const borderColors = [
+  "border-l-pink-500",
+  "border-l-teal-600",
+  "border-l-lavender",
+  "border-l-peach",
+  "border-l-ochre",
+];
 function renderWish(wish, index) {
   const border = borderColors[index % borderColors.length];
   return `
@@ -355,9 +402,18 @@ export async function handleRsvpSubmit(e) {
   const submitBtn = form.querySelector('[type="submit"]');
   const name = form.full_name.value.trim();
   const attend = form.querySelector('input[name="attend"]:checked');
-  if (!name) { showToast("Mohon isi nama lengkap.", "error"); return; }
-  if (!attend) { showToast("Mohon pilih konfirmasi kehadiran.", "error"); return; }
-  if (!isSupabaseConfigured) { showToast("Supabase belum dikonfigurasi.", "error"); return; }
+  if (!name) {
+    showToast("Mohon isi nama lengkap.", "error");
+    return;
+  }
+  if (!attend) {
+    showToast("Mohon pilih konfirmasi kehadiran.", "error");
+    return;
+  }
+  if (!isSupabaseConfigured) {
+    showToast("Supabase belum dikonfigurasi.", "error");
+    return;
+  }
   submitBtn.disabled = true;
   submitBtn.textContent = "Mengirim...";
   const payload = {
@@ -370,7 +426,10 @@ export async function handleRsvpSubmit(e) {
   const { error } = await supabase.from("rsvps").insert(payload);
   submitBtn.disabled = false;
   submitBtn.textContent = "Kirim Konfirmasi";
-  if (error) { showToast("Gagal mengirim konfirmasi. Coba lagi.", "error"); return; }
+  if (error) {
+    showToast("Gagal mengirim konfirmasi. Coba lagi.", "error");
+    return;
+  }
   if (!currentGuest) form.reset();
   showToast("Konfirmasi kehadiran berhasil dikirim. Terima kasih!");
 }
@@ -381,14 +440,23 @@ export async function handleWishSubmit(e) {
   const submitBtn = form.querySelector('[type="submit"]');
   const name = form.wish_name.value.trim();
   const message = form.wish_message.value.trim();
-  if (!name || !message) { showToast("Mohon isi nama dan ucapan.", "error"); return; }
-  if (!isSupabaseConfigured) { showToast("Supabase belum dikonfigurasi.", "error"); return; }
+  if (!name || !message) {
+    showToast("Mohon isi nama dan ucapan.", "error");
+    return;
+  }
+  if (!isSupabaseConfigured) {
+    showToast("Supabase belum dikonfigurasi.", "error");
+    return;
+  }
   submitBtn.disabled = true;
   submitBtn.textContent = "Mengirim...";
   const { error } = await supabase.from("wishes").insert({ name, message });
   submitBtn.disabled = false;
   submitBtn.textContent = "Kirim Ucapan";
-  if (error) { showToast("Gagal mengirim ucapan. Coba lagi.", "error"); return; }
+  if (error) {
+    showToast("Gagal mengirim ucapan. Coba lagi.", "error");
+    return;
+  }
   if (!currentGuest) form.reset();
   closeGuestbookModal();
   showToast("Ucapan berhasil dikirim!");
@@ -396,23 +464,28 @@ export async function handleWishSubmit(e) {
 }
 
 /* ---------- REVEAL OBSERVER ---------- */
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const delay = entry.target.dataset.delay || 0;
-      setTimeout(() => entry.target.classList.add("active"), delay);
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+const revealObserver = new IntersectionObserver(
+  (entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const delay = entry.target.dataset.delay || 0;
+        setTimeout(() => entry.target.classList.add("active"), delay);
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  },
+  { threshold: 0.15, rootMargin: "0px 0px -40px 0px" },
+);
 
 export function observeReveal() {
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  document
+    .querySelectorAll(".reveal")
+    .forEach((el) => revealObserver.observe(el));
 }
 
 export function observeRundownCards() {
-  document.querySelectorAll('#rundown-grid > div').forEach((card, i) => {
-    card.classList.add('reveal', 'fade-up');
+  document.querySelectorAll("#rundown-grid > div").forEach((card, i) => {
+    card.classList.add("reveal", "fade-up");
     card.dataset.delay = i * 150;
     revealObserver.observe(card);
   });
@@ -435,8 +508,16 @@ export async function loadInvitationData() {
   if (currentGuest) applyGuestToForm(currentGuest);
   const [settingsRes, rundownRes, guidelinesRes] = await Promise.all([
     supabase.from("invitation_settings").select("*").eq("id", 1).maybeSingle(),
-    supabase.from("event_rundown").select("*").eq("is_active", true).order("sort_order"),
-    supabase.from("guidelines").select("*").eq("is_active", true).order("sort_order"),
+    supabase
+      .from("event_rundown")
+      .select("*")
+      .eq("is_active", true)
+      .order("sort_order"),
+    supabase
+      .from("guidelines")
+      .select("*")
+      .eq("is_active", true)
+      .order("sort_order"),
   ]);
   let urls = { heroUrl: null, descUrl: null };
   if (settingsRes.data) urls = renderSettings(settingsRes.data) ?? urls;

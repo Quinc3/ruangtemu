@@ -13,12 +13,15 @@
   --brand-mint: #98fb98;
   --brand-orange: #ffb347;
 
-  --color-primary-2: #87ceeb; /* Sky Blue */
+  --color-primary-2: #3f63ad; /* Sky Blue */
+  --color-primary-2-shadow: #274578;
   --color-primary-2-container: #bfefff;
-  --color-on-primary-2: #1b1c15;
+  --color-on-primary-2: #ffffff;
 
   --color-primary-3: #fcd400; /* Sunny Yellow */
   --color-on-primary-3: #1b1c15;
+
+  --color-accent: #87ceeb; /* Sky Blue */
 
   --color-tertiary: #78d97a; /* Mint Green */
   --color-on-tertiary: #1b1c15;
@@ -41,14 +44,14 @@
   --color-on-error-container: #93000a;
 
   /* ========== TIPOGRAFI ========== */
-  --font-display-lg: "Fredoka", sans-serif;
-  --font-display-lg-mobile: "Fredoka", sans-serif;
-  --font-headline-sm: "Fredoka", sans-serif;
-  --font-headline-md: "Fredoka", sans-serif;
-  --font-button: "Poppins", sans-serif;
-  --font-label-caps: "Poppins", sans-serif;
-  --font-body-lg: "Poppins", sans-serif;
-  --font-body-md: "Poppins", sans-serif;
+  --font-display-lg: "Nunito", sans-serif;
+  --font-display-lg-mobile: "Nunito", sans-serif;
+  --font-headline-sm: "Nunito", sans-serif;
+  --font-headline-md: "Nunito", sans-serif;
+  --font-button: "Nunito", sans-serif;
+  --font-label-caps: "Nunito", sans-serif;
+  --font-body-lg: "Nunito", sans-serif;
+  --font-body-md: "Nunito", sans-serif;
 
   --text-display-lg: 48px;
   --text-display-lg--line-height: 1.1;
@@ -101,6 +104,102 @@
   --spacing-stack-md: 48px;
   --spacing-stack-lg: 80px;
   --spacing-container-max: 1100px;
+
+  /* Keep invitation on mobile layout even on wide screens */
+  --breakpoint-md: 624.9375rem;
+}
+
+/* ========== MOBILE DEFAULT VIEW ========== */
+html.mobile-view {
+  --mobile-shell-max: 430px;
+}
+
+@media (min-width: 431px) {
+  html.mobile-view {
+    background-color: #303030;
+  }
+
+  html.mobile-view body {
+    max-width: var(--mobile-shell-max);
+    margin-inline: auto;
+  }
+
+  html.mobile-view #navbar,
+  html.mobile-view #page-loader,
+  html.mobile-view .gallery-lightbox,
+  html.mobile-view .modal-overlay {
+    left: calc(50% - var(--mobile-shell-max) / 2);
+    right: auto;
+    width: var(--mobile-shell-max);
+  }
+}
+
+.wave-divider {
+  background-image: url("./assets//images/Wave\ Divider.png");
+  width: 100%;
+  height: 100px;
+  background-size: cover;
+  position: relative;
+  top: -2rem;
+  z-index: 100;
+}
+
+.line-divider {
+  background-image: url("./assets//images/Line\ Divider.png");
+  width: 100%;
+  height: 20px;
+  background-size: cover;
+  position: relative;
+  z-index: 100;
+}
+
+.object-circular {
+  border-radius: 100%;
+  width: 2rem;
+  height: 2rem;
+  background-color: var(--color-primary-2);
+}
+
+.object-star {
+  background-image: url("./assets//images/Asset\ 7.png");
+  width: 2rem;
+  height: 2rem;
+  background-size: cover;
+}
+
+.object-circular-wavy-red {
+  background-image: url("./assets//images/Asset\ 11.png");
+  width: 2rem;
+  height: 2rem;
+  background-size: cover;
+}
+
+.object-circular-wavy-pink {
+  background-image: url("./assets//images/Asset\ 13.png");
+  width: 2rem;
+  height: 2rem;
+  background-size: cover;
+}
+
+.object-circular-wavy-green {
+  background-image: url("./assets//images/Asset\ 12.png");
+  width: 2rem;
+  height: 2rem;
+  background-size: cover;
+}
+
+.object-leaf-pink {
+  background-image: url("./assets//images/Asset\ 8.png");
+  width: 2rem;
+  height: 2rem;
+  background-size: cover;
+}
+
+.object-leaf-green {
+  background-image: url("./assets//images/Asset\ 9.png");
+  width: 2rem;
+  height: 2rem;
+  background-size: cover;
 }
 
 /* ========== GLOBAL ========== */
@@ -137,17 +236,8 @@ header {
 }
 
 header .absolute.inset-0.bg-primary-1\/50 {
-  background: rgba(0, 0, 0, 0.15) !important;
+  background: rgba(209, 209, 209, 0.5) !important;
   backdrop-filter: blur(2px);
-}
-
-#hero-label,
-#guest-greeting,
-#hero-title,
-#hero-subtitle,
-#hero-date {
-  color: white !important;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.75);
 }
 
 #hero-label {
@@ -157,6 +247,57 @@ header .absolute.inset-0.bg-primary-1\/50 {
 header a.bg-primary-2,
 header a.inline-block {
   margin-top: 0.5rem;
+}
+
+.title {
+  font-family: var(--font-display-lg);
+  font-weight: 900;
+  font-size: var(--text-6xl);
+  color: var(--color-white);
+  letter-spacing: var(--tracking-tighter);
+  -webkit-text-stroke: 6px var(--color-primary-2);
+  paint-order: stroke fill;
+  text-shadow:
+    4px 5px 0 var(--color-primary-2-shadow),
+    4px 8px 14px
+      color-mix(in srgb, var(--color-primary-2-shadow) 45%, transparent);
+  line-height: 1;
+}
+
+.sub-title {
+  font-weight: var(--font-weight-extrabold);
+  font-size: var(--text-6xl);
+  color: var(--color-primary-2);
+  letter-spacing: var(--tracking-tight);
+}
+
+.sub-title-container {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sub-title-container::before {
+  content: "✨";
+  font-size: var(--text-4xl);
+}
+.sub-title-container::after {
+  content: "✨";
+  font-size: var(--text-4xl);
+}
+
+.sub-title-hero {
+  font-weight: var(--font-weight-extrabold);
+  font-size: var(--text-xl);
+  color: var(--color-primary-2);
+  letter-spacing: var(--tracking-tight);
+}
+
+.badge-primary-2 {
+  background-color: var(--color-primary-2);
+  color: var(--color-on-primary-2);
+  padding: calc(var(--spacing-base) * 0.4) calc(var(--spacing-base) * 1);
+  border-radius: var(--radius-sm);
 }
 
 /* ========== KARTU (card-bubble) – TANPA ROTASI MIRING ========== */
@@ -251,6 +392,8 @@ header a.inline-block {
 }
 .btn-playful:hover {
   transform: scale(1.08);
+  background-color: var(--color-primary-2);
+  color: var(--color-on-primary-2);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 .btn-playful:active {
@@ -261,18 +404,20 @@ header a.inline-block {
 .event-countdown__grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 0.75rem;
+  gap: var(--spacing);
   max-width: 24rem;
   margin: 0 auto;
 }
 
 .event-countdown__unit {
+  width: calc(var(--spacing-base) * 10);
+  height: calc(var(--spacing-base) * 10);
   min-width: 0;
   padding: 0.75rem 0.5rem;
   background: white;
   border-radius: 1.5rem;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.03);
-  border: 3px solid var(--color-primary-2-container);
+  border: 3px solid var(--color-primary-2);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -282,7 +427,7 @@ header a.inline-block {
 .event-countdown__unit span:first-child {
   font-size: 1.75rem;
   font-weight: 700;
-  color: var(--color-ink);
+  color: var(--color-primary-2);
   font-family: var(--font-display-lg);
   line-height: 1;
 }
